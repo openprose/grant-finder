@@ -13,9 +13,10 @@ may describe a startup, academic lab, PI-led research group, nonprofit research
 team, or technical project. This is the agent-side translation step: people talk
 in sentences, the CLI takes structured input.
 
-The Research Assignment schema lives at
-`schemas/research-assignment.schema.json` in the public grant-finder repo. The
-service must validate its output against that schema before publishing it.
+The Research Assignment schema lives at the canonical
+[`research-assignment.schema.json`](https://github.com/openprose/grant-finder/blob/main/schemas/research-assignment.schema.json)
+in the public grant-finder repo. The service must validate its output against
+that schema before publishing it.
 
 ### Requires
 
@@ -25,9 +26,8 @@ service must validate its output against that schema before publishing it.
 
 ### Ensures
 
-- `research_assignment`: JSON conforming to
-  `schemas/research-assignment.schema.json`, with these fields filled
-  conservatively:
+- `research_assignment`: JSON conforming to the canonical Research Assignment
+  schema, with these fields filled conservatively:
   - `assignment_id`: a stable slug derived from the organization/project name
     and date
   - `research_question`: a single sentence restating the funding question
@@ -48,8 +48,10 @@ service must validate its output against that schema before publishing it.
 
 ### Strategies
 
-- Read `schemas/research-assignment.schema.json` once before drafting so field
-  names, required keys, and types are exact.
+- Read the canonical Research Assignment schema once before drafting so field
+  names, required keys, and types are exact. If the host cannot fetch that URL,
+  use the field list above and rely on the CLI boundary validation in
+  `run-research` to catch schema mistakes.
 - Pull `focus_areas` from explicit nouns in the brief, not adjacent
   associations. *"EV charging"* belongs; *"clean energy"* belongs only if the
   brief actually uses those words or a near synonym.
