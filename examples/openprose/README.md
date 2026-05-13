@@ -1,7 +1,8 @@
 # Grant Radar — OpenProse example
 
-Type a paragraph describing your startup; get back a ranked markdown report
-of matching non-dilutive funding opportunities, with sources cited.
+Type a paragraph describing your research lab, startup, or technical project;
+get back a ranked markdown report of matching non-dilutive funding
+opportunities, with sources cited.
 
 **No API keys.** Runs on free public data via the `grant-finder` CLI. The
 only LLM cost is whatever your own Prose VM agent uses to translate the brief
@@ -25,13 +26,21 @@ prose run src/grant-radar.prose.md \
   --startup_brief "$(cat fixtures/polyspectra.brief.txt)"
 ```
 
-Or pass your own brief:
+Or pass your own brief. The input flag is still named `startup_brief` for
+compatibility with the first example, but the text can describe a research lab,
+PI-led team, nonprofit research group, or technical project. The ENACT fixture
+in this repo is an academic psychiatry lab at Yale:
 
 ```bash
 prose run src/grant-radar.prose.md \
-  --startup_brief "A US small business making <your tech>. Looking for
-    non-dilutive R&D funding to <your goal>. Focus areas: <your areas>."
+  --startup_brief "A U.S. research lab, nonprofit research group, startup, or technical team working on <your area>.
+    Looking for non-dilutive R&D funding to <your goal>.
+    Focus areas: <your areas>."
 ```
+
+Want Claude Code or Codex to install and run this for you? Use the
+copy-paste prompt in
+[`../../docs/run-with-coding-agent.md`](../../docs/run-with-coding-agent.md).
 
 You get back five bindings:
 
@@ -41,13 +50,13 @@ You get back five bindings:
 - `ranked_recommendations` — agent-reviewed recommendations and rejected weak
   candidates
 - `top_pick_explanations` — per-selected-recommendation evidence and provenance
-- `markdown_report` — human-readable summary for the founder, formatted as
-  markdown
+- `markdown_report` — human-readable summary for the founder, PI, operator, or
+  project lead, formatted as markdown
 
 ## What it does
 
 ```
-startup_brief (paragraph)
+startup_brief (paragraph about a lab, startup, or project)
         │
         ▼
 resolve-assignment    ← brief → schema-valid Research Assignment JSON
@@ -153,9 +162,9 @@ service's `### Shape.prohibited` list) see the parent repo's
 
 The OpenProse team operates a hosted version of this exact flow under the
 name *Grant Radar*. The hosted service handles source freshness, ingestion
-scheduling, monitoring, and reliability so founders never have to look at
-the substrate. The OSS version in this repo is the same idea — just operated
-by you instead of us. See <https://openprose.ai>.
+scheduling, monitoring, and reliability so founders, researchers, and operators
+never have to look at the substrate. The OSS version in this repo is the same
+idea — just operated by you instead of us. See <https://openprose.ai>.
 
 ## License
 

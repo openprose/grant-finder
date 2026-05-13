@@ -7,7 +7,7 @@ RSS sources, and configured public source pages.
 Each example directory contains the six bindings in execution order:
 
 ```
-01-startup_brief.md          # the human-language brief (caller input)
+01-startup_brief.md          # the human-language brief (caller input; legacy binding name)
 02-research_assignment.md    # resolved Research Assignment JSON
 03-research_packet.md        # deterministic grant-finder candidate packet
 04-ranked_recommendations.md # agent review: selected + rejected candidates
@@ -32,7 +32,7 @@ bindings.
 ## The boundary this sample demonstrates
 
 The CLI output is a deterministic candidate packet, not the final judgment.
-`rank-opportunities.prose.md` reads the full startup assignment, rejects weak
+`rank-opportunities.prose.md` reads the full assignment, rejects weak
 or contraindicated candidates, and may publish `no_good_matches: true`. That is
 intentional: the agent has the context needed to make the recommendation call.
 

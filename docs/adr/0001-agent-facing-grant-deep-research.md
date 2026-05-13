@@ -12,17 +12,17 @@ The first prototype drifted toward a human-facing source-operations CLI:
 `feeds smoke`, `sources smoke`, `grants xml`, and `federal-register hydrate`
 were treated as product commands. That framing is wrong for OpenProse.
 
-The upstream OpenProse agent already knows the startup, customer, technology,
-geography, constraints, and current user goal. Grant Finder exists so that
-agent can answer "find grants for this startup" quickly from reusable evidence
-and deterministic source work, rather than rebuilding a grant research process
-from scratch on every request.
+The upstream OpenProse agent already knows the organization, applicant type,
+technology or research area, geography, constraints, and current user goal.
+Grant Finder exists so that agent can answer "find grants for this lab,
+startup, or project" quickly from reusable evidence and deterministic source
+work, rather than rebuilding a grant research process from scratch on every
+request.
 
-A representative deep-tech-startup grant-radar contract defines the product
-shape: scan funding sources, surface evidence-backed candidate opportunities,
-and let the upstream agent compile a prioritized report with deadlines, fit,
-effort, links, application outlines, and explicit negative evidence for
-must-check sources.
+A representative grant-radar contract defines the product shape: scan funding
+sources, surface evidence-backed candidate opportunities, and let the upstream
+agent compile a prioritized report with deadlines, fit, effort, links,
+application outlines, and explicit negative evidence for must-check sources.
 
 ## Decision
 
@@ -60,7 +60,7 @@ commands, but they are not the primary product surface.
   work but does not make final fit judgments.
 - Source-specific actions are internal capabilities unless they are needed for
 debugging the research substrate.
-- The CLI must not ask the human user to provide the company profile. The
+- The CLI must not ask the human user to provide the organization profile. The
 upstream agent passes that context in the assignment payload.
 - Product acceptance requires a sample Research Packet, not just successful
 source ingestion.

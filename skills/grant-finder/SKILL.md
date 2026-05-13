@@ -1,6 +1,6 @@
 ---
 name: grant-finder
-description: Use the `grant-finder` CLI to return source-cited candidate non-dilutive funding opportunities for a startup. Returns evidence-backed Research Packets and per-candidate provenance. Triggers on `grant-finder research`, `grant-finder explain`, `grant-finder status`, or any need to find SBIR/STTR/federal-grant opportunities matching a startup brief.
+description: Use the `grant-finder` CLI to return source-cited candidate non-dilutive funding opportunities for a research lab, startup, nonprofit research group, or technical team. Returns evidence-backed Research Packets and per-candidate provenance. Triggers on `grant-finder research`, `grant-finder explain`, `grant-finder status`, or any need to find federal-grant, SBIR/STTR, topic-page, or public-source funding opportunities matching an organization brief.
 ---
 
 # grant-finder
@@ -14,8 +14,9 @@ calling agent.
 
 ## When to use
 
-- An upstream task gave you a startup brief or a Research Assignment JSON and
-  you need to surface matching funding opportunities.
+- An upstream task gave you a lab, startup, nonprofit, or technical-project
+  brief, or a Research Assignment JSON, and you need to surface matching funding
+  opportunities.
 - You need source-cited evidence for one candidate (`explain`).
 - You need to check ledger freshness or source-lane coverage (`status`).
 

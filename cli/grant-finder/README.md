@@ -1,8 +1,8 @@
 # grant-finder
 
 The CLI binary. Returns source-cited candidate non-dilutive funding
-opportunities for a startup. Final ranking and recommendation judgment belong
-to the calling agent. Top-level repo docs are at
+opportunities for a research lab, startup, or technical project. Final ranking
+and recommendation judgment belong to the calling agent. Top-level repo docs are at
 [`../../README.md`](../../README.md); contributor docs at
 [`../../AGENTS.md`](../../AGENTS.md).
 
@@ -16,7 +16,7 @@ go build -o "$HOME/.local/bin/grant-finder" ./cmd/grant-finder
 
 | Command | What it does |
 |---|---|
-| `research` | Returns candidate grants for a startup assignment, with evidence and provenance |
+| `research` | Returns candidate grants for an organization or project assignment, with evidence and provenance |
 | `explain` | Shows the source trail behind one recommendation |
 | `status` | Reports ledger freshness and source-lane coverage |
 | `doctor` | Checks the CLI's local health (SQLite, FTS5, optional `usearch`) |

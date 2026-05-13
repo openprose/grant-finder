@@ -10,11 +10,12 @@ instructions product-user oriented; keep this file contributor oriented.
 
 ## What this repo is
 
-A Go CLI (`grant-finder`) that an upstream AI agent calls to turn a startup's
-context into a deterministic, evidence-backed Research Packet of candidate
-non-dilutive funding opportunities. The CLI does ledger, retrieval, and
-provenance work; ranking and recommendation judgment live on the caller side,
-never inside the CLI.
+A Go CLI (`grant-finder`) that an upstream AI agent calls to turn a research
+lab, startup, nonprofit research group, or technical team's context into a
+deterministic, evidence-backed Research Packet of candidate non-dilutive
+funding opportunities. The CLI does ledger, retrieval, and provenance work;
+ranking and recommendation judgment live on the caller side, never inside the
+CLI.
 
 ## Where things live
 
@@ -25,7 +26,7 @@ never inside the CLI.
 | `cli/grant-finder/internal/cli/` | Cobra command tree (`research`, `explain`, `status`, `debug` subtree) |
 | `cli/grant-finder/internal/grantfinder/` | Domain logic: SQLite store, FTS5/usearch retrieval, Grants.gov/Federal Register collectors, provenance |
 | `schemas/` | JSON Schema for Research Assignment input and Research Packet output |
-| `fixtures/` | Sample assignment + opportunities (generic deep-tech startup) used by the harness |
+| `fixtures/` | Sample assignments + opportunities for startup and research-lab harness cases |
 | `docs/adr/` | Architecture Decision Records. `0001-agent-facing-grant-deep-research.md` is the foundational one — read it before changing the public command surface |
 | `docs/product-surface.json` | Machine-checked public command-surface contract used by `validate-product-cli` |
 | `examples/openprose/` | A runnable OpenProse `kind: system` system that drives the CLI end-to-end |

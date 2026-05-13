@@ -22,6 +22,7 @@
     },
     "company_profile": {
       "type": "object",
+      "description": "Profile of the organization or project seeking funding. The field name is historical; this may describe a company, research lab, university team, nonprofit research group, or other technical organization.",
       "additionalProperties": true,
       "required": ["description"],
       "properties": {

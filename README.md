@@ -1,15 +1,17 @@
 # grant-finder
 
-Find non-dilutive funding for your U.S. startup from the command line.
-SBIR/STTR solicitations, federal agency grants, state economic development
-programs — surfaced as source-cited candidates for an upstream agent to rank.
+Find non-dilutive funding for your U.S. research lab, startup, or technical team
+from the command line. Federal research grants, SBIR/STTR solicitations, state
+economic development programs, and other funding calls are surfaced as
+source-cited candidates for an upstream agent to rank.
 
 **No API keys.** Runs on free public data (Grants.gov, the Federal Register,
 public agency RSS feeds, and authoritative public source pages). Self-hostable.
 
-**For founders, the engineers working with them, and the AI agents driving
-both.** Describe your startup in a paragraph; get back a source-cited candidate
-packet that an agent can rank, reject, and turn into a concise funding report.
+**For researchers, founders, operators, the engineers working with them, and the
+AI agents driving the workflow.** Describe the lab, startup, or project in a
+paragraph; get back a source-cited candidate packet that an agent can rank,
+reject, and turn into a concise funding report.
 
 > Looking for a hosted, fully-managed version? See
 > [Hosted service](#hosted-service) below.
@@ -60,42 +62,52 @@ explicit negative-evidence rows like *"no current ARPA-E programs match"*).
 ## What you can ask it
 
 ```bash
-# Retrieve candidate opportunities for a specific startup context
-grant-finder research --assignment my-startup.json --json
+# Retrieve candidate opportunities for a specific organization or project
+grant-finder research --assignment my-organization.json --json
 
 # Show evidence and provenance for one candidate
 grant-finder explain rec-12 --json
 
 # Check ledger freshness and source-lane coverage
-grant-finder status --assignment my-startup.json --json
+grant-finder status --assignment my-organization.json --json
 
 # Inspect health
 grant-finder doctor --json
 ```
 
-A `my-startup.json` looks like this — see the schema at
+A `my-organization.json` looks like this — see the schema at
 [`schemas/research-assignment.schema.json`](./schemas/research-assignment.schema.json):
 
 ```json
 {
-  "assignment_id": "acme-deeptech-2026-05-13",
-  "research_question": "Find non-dilutive funding for autonomous EV fleet infrastructure.",
+  "assignment_id": "enact-lab-2026-05-13",
+  "research_question": "Find non-dilutive research funding for an academic clinical-neuroscience lab studying psychedelic compounds for treatment-resistant psychiatric conditions.",
   "company_profile": {
-    "name": "Acme Deep-Tech",
-    "description": "A deep-tech startup building autonomous fleet-servicing infrastructure...",
-    "stage": "startup",
-    "location": "United States",
-    "technologies": ["autonomous vehicles", "ev infrastructure", "robotics"]
+    "name": "ENACT Lab",
+    "description": "An academic research laboratory at Yale School of Medicine, Department of Psychiatry...",
+    "stage": "academic research lab",
+    "location": "New Haven, Connecticut",
+    "technologies": ["psychiatry", "clinical neuroscience", "psychedelic medicine"],
+    "constraints": ["Academic lab; SBIR/STTR is not the right vehicle"]
   },
-  "focus_areas": ["ev infrastructure", "autonomous vehicles", "robotics"],
-  "target_geographies": ["United States", "California"],
+  "focus_areas": ["psychiatry", "clinical neuroscience", "clinical trials"],
+  "target_geographies": ["United States", "Connecticut"],
   "known_grants": []
 }
 ```
 
+The schema field is named `company_profile` for compatibility with the first
+small-business use case, but it can describe a research lab, university team,
+nonprofit research group, or other technical organization. The checked-in ENACT
+fixture is an academic psychiatry lab at Yale, not a startup.
+
 If you want an AI agent to fill this in from a paragraph-length brief, see
 [the OpenProse example](./examples/openprose/) — it shows a complete
 brief-to-report flow.
+
+Want Claude Code or Codex to run the whole flow for you? Paste the prompt in
+[`docs/run-with-coding-agent.md`](./docs/run-with-coding-agent.md) into your
+coding assistant.
 
 ## How it works
 
@@ -134,7 +146,7 @@ feeds, and configured public source pages.
   `--refresh auto` can change as time passes and public sources update.
 - **Agents make the judgment call.** The CLI is a ledger and provenance engine,
   not the final grant strategist. The bundled OpenProse example ranks,
-  rejects, and formats the candidate packet with the full startup context.
+  rejects, and formats the candidate packet with the full organization context.
 - **No paid API keys.** Grants.gov, Federal Register, public agency feeds, and
   authoritative public source pages cover the core federal sources. The CLI
   will work offline against a populated ledger.
@@ -185,8 +197,9 @@ from a shell or a script.
 |---|---|
 | `cli/grant-finder/` | The Go CLI source |
 | `schemas/` | JSON Schema for assignment input and Research Packet output |
-| `fixtures/` | Sample assignment + opportunities (generic deep-tech startup) |
+| `fixtures/` | Sample assignments + opportunities (deep-tech startup and research-lab examples) |
 | `examples/openprose/` | A runnable OpenProse system that turns a natural-language brief into a ranked report by driving the CLI |
+| `docs/run-with-coding-agent.md` | Copy-paste prompt for product users who want Claude Code or Codex to run Grant Finder for them |
 | [`AGENTS.md`](./AGENTS.md) | Architecture and conventions for contributors and AI agents working on this repo |
 
 ## Limitations
@@ -230,7 +243,7 @@ A: The default manifest is at
 `cli/grant-finder/internal/grantfinder/data/{sources.json,feeds.json}`. PRs
 that add public, key-free sources are welcome.
 
-**Q: Will this work for non-U.S. startups?**
+**Q: Will this work for non-U.S. organizations?**
 A: Not well, today. The source manifest is U.S.-focused. International
 expansion is a known limitation, not a permanent decision.
 

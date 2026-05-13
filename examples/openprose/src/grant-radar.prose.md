@@ -7,13 +7,13 @@ kind: system
 
 ### Description
 
-Turn a natural-language startup brief into an evidence-backed grant radar
-report by combining deterministic ledger work with agent-side judgment. The
-public `grant-finder` Go CLI does source ingestion, dedupe, FTS5/usearch
-retrieval, source coverage, and provenance. This OpenProse system turns a
-human brief into a Research Assignment, invokes the CLI, reviews the candidate
-packet, ranks only credible opportunities, explains selected picks, and formats
-a readable report.
+Turn a natural-language lab, startup, or project brief into an evidence-backed
+grant radar report by combining deterministic ledger work with agent-side
+judgment. The public `grant-finder` Go CLI does source ingestion, dedupe,
+FTS5/usearch retrieval, source coverage, and provenance. This OpenProse system
+turns a human brief into a Research Assignment, invokes the CLI, reviews the
+candidate packet, ranks only credible opportunities, explains selected picks,
+and formats a readable report.
 
 The CLI itself never calls an LLM. All LLM work happens in this system, on the
 agent side. That boundary — agent-language in, deterministic evidence work,
@@ -21,9 +21,10 @@ then agent judgment out — is the point of the example.
 
 ### Requires
 
-- `startup_brief`: free-form description of the startup, its technology focus,
-  geography, stage, and funding question. Anything an agent would already
-  know after a conversation with a founder.
+- `startup_brief`: free-form description of the lab, startup, research team, or
+  technical project; its focus area; geography; stage; and funding question.
+  Anything an agent would already know after a conversation with a founder, PI,
+  operator, or project lead.
 
 ### Ensures
 
@@ -38,7 +39,7 @@ then agent judgment out — is the point of the example.
 - `top_pick_explanations`: per-recommendation evidence and provenance for the
   agent-selected grants, returned by `grant-finder explain`
 - `markdown_report`: human-readable summary of the packet — for showing the
-  founder or pasting into a Notion/Linear doc
+  founder, PI, operator, or project lead, or for pasting into a Notion/Linear doc
 
 ### Services
 

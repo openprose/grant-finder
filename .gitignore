@@ -32,5 +32,8 @@ cli/**/dogfood-results.json
 .prose/runs/
 .prose/agents/
 
+# Local SLB approval state
+.slb/
+
 # Codex SDK sentinel files (0-byte markers dropped by codex-sdk in workspace-write sandbox)
 .codex

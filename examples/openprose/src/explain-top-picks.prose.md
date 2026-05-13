@@ -43,7 +43,8 @@ candidate; `explain` returns the full source trail that the report should cite.
 
 - If `ranked_recommendations.recommendations` is empty, publish an empty array.
   Do not fall back to retrieval-ordered candidates; weak candidates belong in
-  `rejected_candidates`, not in the founder-facing recommendation set.
+  `rejected_candidates`, not in the recommendation set shown to the founder, PI,
+  operator, or project lead.
 - Cap explanation work at 5 recommendations. The ranker should already enforce
   this, but keep the bound here too.
 - For each selected grant, invoke:

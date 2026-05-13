@@ -7,10 +7,11 @@ kind: service
 
 ### Description
 
-Compose a concise founder-readable markdown report from the deterministic
-Research Packet, the agent-reviewed recommendations, and the CLI provenance
-records. `rank-opportunities` has already made the judgment call about what is
-worth recommending; this service renders that decision clearly.
+Compose a concise markdown report for the founder, PI, operator, or project lead
+from the deterministic Research Packet, the agent-reviewed recommendations, and
+the CLI provenance records. `rank-opportunities` has already made the judgment
+call about what is worth recommending; this service renders that decision
+clearly.
 
 ### Requires
 
@@ -21,7 +22,7 @@ worth recommending; this service renders that decision clearly.
 ### Ensures
 
 - `markdown_report`: a markdown document with these sections:
-  - `# Funding Pipeline — <company name>` header
+  - `# Funding Pipeline — <organization or project name>` header
   - `## Summary`: total potential funding, count of high-fit grants, nearest
     deadline, one-line note on retrieval backend and `no_llm` status
   - `## Recommended Opportunities`: one concise subsection per

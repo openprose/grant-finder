@@ -8,7 +8,8 @@ kind: service
 ### Description
 
 Review the deterministic candidate packet from `grant-finder research` and
-decide which opportunities, if any, should be recommended to the founder.
+decide which opportunities, if any, should be recommended to the founder, PI,
+operator, or project lead.
 
 The CLI is intentionally conservative and mechanical: it refreshes deterministic
 public sources, retrieves ledger records, attaches evidence, reports source
@@ -34,7 +35,7 @@ concise, evidence-grounded recommendation rationales.
     - `why_this_fits`: concise rationale grounded in assignment facts and
       packet evidence
     - `caveats`: concrete eligibility or freshness concerns
-    - `next_step`: one practical action for the founder or upstream agent
+    - `next_step`: one practical action for the organization or upstream agent
   - `rejected_candidates`: array of candidates that looked superficially
     plausible but should not be recommended, each with
     `recommendation_id`, `program_name`, and `reason`
@@ -62,7 +63,7 @@ concise, evidence-grounded recommendation rationales.
 - Review every candidate in `research_packet.grants`. For each candidate,
   decide whether the packet evidence proves all of these:
   - entity fit: the applicant type is plausible for this organization
-  - domain fit: the source text mentions the company's technology, market,
+  - domain fit: the source text mentions the organization's technology, market,
     research area, or application lane
   - actionability: the record is a live or monitor-worthy funding path, not
     only historical context or broad ecosystem news
@@ -70,7 +71,7 @@ concise, evidence-grounded recommendation rationales.
 - Reject SBIR/STTR records for academic labs or any assignment that says
   SBIR/STTR is not the right vehicle.
 - Reject generic small-business programs when the evidence does not mention
-  the company's domain, technology, geography, or application lane.
+  the organization's domain, technology, geography, or application lane.
 - Treat broad umbrella records, parent announcements, and news items as
   `watch` at best unless the evidence points to a concrete live solicitation.
 - Use `confidence: high` only for a live, source-backed opportunity with clear
@@ -80,7 +81,7 @@ concise, evidence-grounded recommendation rationales.
   credible fit, set `recommendations: []`, `no_good_matches: true`, and explain
   what source lanes were checked.
 - Put important near-misses in `rejected_candidates`. A good rejection is often
-  more useful than a bad recommendation because it tells the founder what not
-  to waste time on.
-- Keep rationales short. A founder should be able to scan the whole object in
-  under a minute.
+  more useful than a bad recommendation because it tells the organization what
+  not to waste time on.
+- Keep rationales short. A founder, PI, operator, or project lead should be
+  able to scan the whole object in under a minute.
