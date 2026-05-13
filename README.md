@@ -79,18 +79,33 @@ research_packet + ranked_recommendations + top_pick_explanations + markdown_repo
 
 ## Prerequisites
 
-Two-step install — both are required for this example to wire cleanly:
+Two-step install — both are required for this example to wire cleanly. Run
+these commands from the `grant-finder` repository root after cloning or
+pulling. The skill install step is intentionally update-safe because a stale
+installed skill can make an agent follow old instructions.
 
 ```bash
-# 1. The grant-finder CLI on PATH
-go install github.com/openprose/grant-finder/cli/grant-finder/cmd/grant-finder@latest
-grant-finder version
+# 1. Build the grant-finder CLI from this clone.
+mkdir -p "$HOME/.local/bin"
+(cd cli/grant-finder && go build -o "$HOME/.local/bin/grant-finder" ./cmd/grant-finder)
+"$HOME/.local/bin/grant-finder" version
 
-# 2. The grant-finder host-harness skill, installed for your agent harness.
-#    From this repo:
-ln -s "$PWD/skills/grant-finder" ~/.claude/skills/grant-finder
-#    Codex:  ~/.codex/skills/grant-finder
-#    Gemini: ~/.agents/skills/grant-finder
+# 2. Install or refresh the host-harness skill for your agent harness.
+install_skill_link() {
+  skills_dir="$1"
+  target="$skills_dir/grant-finder"
+  mkdir -p "$skills_dir"
+  if [ -e "$target" ] && [ ! -L "$target" ]; then
+    echo "Existing non-symlink skill path: $target"
+    echo "Leaving it untouched. Move it yourself if you want this repo's skill."
+    return 1
+  fi
+  ln -sfn "$PWD/skills/grant-finder" "$target"
+}
+
+install_skill_link "$HOME/.claude/skills"  # Claude Code
+install_skill_link "$HOME/.codex/skills"   # Codex
+install_skill_link "$HOME/.agents/skills"  # Gemini / other harnesses
 ```
 
 The skill is wired into the OpenProse system via `### Skills: - grant-finder`.
@@ -117,6 +132,7 @@ PROSE_CODEX_SANDBOX_MODE=workspace-write \
 PROSE_CODEX_APPROVAL_POLICY=never \
 PROSE_CODEX_ADD_DIR=$HOME/.local/share/grant-finder \
 PROSE_CODEX_NETWORK=true \
+GRANT_FINDER_BIN=$HOME/.local/bin/grant-finder \
 prose run src/grant-radar.prose.md \
   --startup_brief "$(cat fixtures/polyspectra.brief.txt)"
 ```
@@ -126,6 +142,7 @@ prose run src/grant-radar.prose.md \
 ```bash
 PROSE_CODEX_SANDBOX_MODE=danger-full-access \
 PROSE_CODEX_APPROVAL_POLICY=never \
+GRANT_FINDER_BIN=$HOME/.local/bin/grant-finder \
 prose run src/grant-radar.prose.md \
   --startup_brief "$(cat fixtures/polyspectra.brief.txt)"
 ```

@@ -41,6 +41,8 @@ concise, evidence-grounded recommendation rationales.
     `recommendation_id`, `program_name`, and `reason`
   - `no_good_matches`: boolean, true when no candidate is good enough to
     recommend
+  - `search_inconclusive`: optional boolean, true when the packet indicates
+    source refresh failed or key source lanes were not checked
   - `review_notes`: brief notes on source coverage and search limitations
 
 ### Shape
@@ -80,6 +82,11 @@ concise, evidence-grounded recommendation rationales.
 - Prefer fewer recommendations over noisy recommendations. If nothing is a
   credible fit, set `recommendations: []`, `no_good_matches: true`, and explain
   what source lanes were checked.
+- If `research_packet.summary.notes` says source refresh was inconclusive, or
+  coverage rows are `not_checked` because refresh failed, set
+  `search_inconclusive: true`. In that case, do not describe the result as
+  evidence that no matching opportunities exist; describe it as an incomplete
+  search and name the setup/source problem.
 - Put important near-misses in `rejected_candidates`. A good rejection is often
   more useful than a bad recommendation because it tells the organization what
   not to waste time on.
