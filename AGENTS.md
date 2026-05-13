@@ -146,15 +146,27 @@ changes to `examples/openprose/`):
 git branch -D examples-mirror 2>/dev/null
 git subtree split --prefix=examples/openprose -b examples-mirror
 
-# Push the refreshed branch (force-with-lease since it's a rewritten history)
-git push --force-with-lease origin examples-mirror
+# Push the refreshed branch
+safe-push origin examples-mirror --force-with-lease
 ```
 
-Downstream `openprose/prose` then refreshes via:
+Downstream `openprose/prose` consumes via a **pull request**, not a direct
+push to main. The flow there is:
 
 ```bash
+# First-time mirror (run once in openprose/prose):
+git checkout -b feat/mirror-grant-radar-example
+git subtree add --prefix=skills/open-prose/examples/grant-radar \
+  https://github.com/openprose/grant-finder examples-mirror --squash
+# Add a MIRROR.md at skills/open-prose/examples/grant-radar/ noting the
+# upstream and refresh command, plus a CODEOWNERS entry for the path.
+# Open a PR against openprose/prose main.
+
+# Subsequent refresh (run in openprose/prose):
+git checkout -b chore/refresh-grant-radar-example
 git subtree pull --prefix=skills/open-prose/examples/grant-radar \
   https://github.com/openprose/grant-finder examples-mirror --squash
+# Open a PR against openprose/prose main.
 ```
 
 The grant-finder Go CLI itself is **not** mirrored — `openprose/prose` only
