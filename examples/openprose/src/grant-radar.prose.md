@@ -69,9 +69,10 @@ then agent judgment out — is the point of the example.
   agent judgment lives in `resolve-assignment`, `rank-opportunities`, and
   `format-report`.
 - `resolve-assignment` validates output against
-  `schemas/research-assignment.schema.json` before publishing it. The CLI
-  rejects invalid assignments at the boundary; this system rejects them at
-  composition time.
+  the canonical
+  [`research-assignment.schema.json`](https://github.com/openprose/grant-finder/blob/main/schemas/research-assignment.schema.json)
+  before publishing it. The CLI rejects invalid assignments at the boundary;
+  this system rejects them at composition time.
 - `run-research` passes the assignment to the CLI via stdin
   (`--assignment -`) and reads JSON from stdout. The system never writes the
   resolved assignment to a shared location it does not control.
@@ -86,14 +87,22 @@ above). Forme refuses to wire the system if the skill is not installed,
 returning `skill_unresolved` before any service runs. That guarantees the
 dependency is satisfied at wiring time rather than failing mid-run.
 
-**Two-step install:** run this from the `grant-finder` repository root after
-cloning or pulling. The skill install step refreshes old symlinks because a
-stale installed skill can make the host agent follow old instructions.
+**Two-step install:** the `grant-finder` CLI and host-harness skill live in the
+[`openprose/grant-finder`](https://github.com/openprose/grant-finder) repo even
+when this system is mirrored inside `openprose/prose`. The skill install step
+refreshes old symlinks because a stale installed skill can make the host agent
+follow old instructions.
 
 ```bash
-# 1. Build the grant-finder CLI binary from this clone
-git clone https://github.com/openprose/grant-finder
-cd grant-finder
+# 1. Clone or update the grant-finder source, then build the CLI.
+GF_SRC="${GF_SRC:-$HOME/src/grant-finder}"
+mkdir -p "$(dirname "$GF_SRC")"
+if [ -d "$GF_SRC/.git" ]; then
+  git -C "$GF_SRC" pull --ff-only
+else
+  git clone https://github.com/openprose/grant-finder.git "$GF_SRC"
+fi
+cd "$GF_SRC"
 mkdir -p "$HOME/.local/bin"
 (cd cli/grant-finder && go build -o "$HOME/.local/bin/grant-finder" ./cmd/grant-finder)
 
@@ -132,6 +141,9 @@ to a read-only `$HOME` and blocks outbound network. The CLI cannot run
 under those defaults — it needs to create its SQLite ledger under
 `~/.local/share/grant-finder/` and reach public APIs (Grants.gov, Federal
 Register), agency RSS feeds, and configured public source pages.
+Run the commands below from this example directory: `examples/openprose` in
+`openprose/grant-finder`, or `skills/open-prose/examples/grant-radar` in the
+`openprose/prose` mirror.
 
 **Recommended (granular permissions)** — requires
 [openprose/prose#78](https://github.com/openprose/prose/pull/78) (or any
@@ -144,8 +156,8 @@ PROSE_CODEX_APPROVAL_POLICY=never \
 PROSE_CODEX_ADD_DIR=$HOME/.local/share/grant-finder \
 PROSE_CODEX_NETWORK=true \
 GRANT_FINDER_BIN=$HOME/.local/bin/grant-finder \
-prose run examples/openprose/src/grant-radar.prose.md \
-  --startup_brief "$(cat examples/openprose/fixtures/polyspectra.brief.txt)"
+prose run src/grant-radar.prose.md \
+  --startup_brief "$(cat fixtures/polyspectra.brief.txt)"
 ```
 
 **Fallback (no sandbox)** — works on any prose version, including 0.13.1:
@@ -154,8 +166,8 @@ prose run examples/openprose/src/grant-radar.prose.md \
 PROSE_CODEX_SANDBOX_MODE=danger-full-access \
 PROSE_CODEX_APPROVAL_POLICY=never \
 GRANT_FINDER_BIN=$HOME/.local/bin/grant-finder \
-prose run examples/openprose/src/grant-radar.prose.md \
-  --startup_brief "$(cat examples/openprose/fixtures/polyspectra.brief.txt)"
+prose run src/grant-radar.prose.md \
+  --startup_brief "$(cat fixtures/polyspectra.brief.txt)"
 ```
 
 The granular form is strictly less broad — it grants only the specific
@@ -191,7 +203,8 @@ network.outbound:
   - api.grants.gov                  # Grants.gov search + fetchOpportunity
   - www.federalregister.gov         # Federal Register document hydration
   - grants.gov                      # XML bulk extract page
-  # plus the RSS and public source-page URLs declared in cli/grant-finder/internal/grantfinder/data/feeds.json
+  # plus the RSS and public source-page URLs declared in:
+  # https://github.com/openprose/grant-finder/tree/main/cli/grant-finder/internal/grantfinder/data
 
 exec:
   - grant-finder                    # the CLI binary itself

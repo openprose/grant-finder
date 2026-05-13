@@ -13,15 +13,21 @@ and format the report.
 The example ships with a real sample brief — for polySpectra, an industrial
 3D printing materials company — at `fixtures/polyspectra.brief.txt`:
 
-```bash
-prose run examples/openprose/src/grant-radar.prose.md \
-  --startup_brief "$(cat examples/openprose/fixtures/polyspectra.brief.txt)"
-```
-
-From inside this example's directory:
+Open this example directory first. In `openprose/grant-finder`, that is:
 
 ```bash
 cd examples/openprose
+```
+
+In the `openprose/prose` mirror, that is:
+
+```bash
+cd skills/open-prose/examples/grant-radar
+```
+
+Then run:
+
+```bash
 prose run src/grant-radar.prose.md \
   --startup_brief "$(cat fixtures/polyspectra.brief.txt)"
 ```
@@ -40,7 +46,7 @@ prose run src/grant-radar.prose.md \
 
 Want Claude Code or Codex to install and run this for you? Use the
 copy-paste prompt in
-[`../../docs/run-with-coding-agent.md`](../../docs/run-with-coding-agent.md).
+[`docs/run-with-coding-agent.md`](https://github.com/openprose/grant-finder/blob/main/docs/run-with-coding-agent.md).
 
 You get back five bindings:
 
@@ -79,13 +85,23 @@ research_packet + ranked_recommendations + top_pick_explanations + markdown_repo
 
 ## Prerequisites
 
-Two-step install — both are required for this example to wire cleanly. Run
-these commands from the `grant-finder` repository root after cloning or
-pulling. The skill install step is intentionally update-safe because a stale
-installed skill can make an agent follow old instructions.
+Two-step install — both are required for this example to wire cleanly. The
+`grant-finder` CLI and host-harness skill live in the
+[`openprose/grant-finder`](https://github.com/openprose/grant-finder) repo even
+when you are reading this mirrored example inside `openprose/prose`. The skill
+install step is intentionally update-safe because a stale installed skill can
+make an agent follow old instructions.
 
 ```bash
-# 1. Build the grant-finder CLI from this clone.
+# 1. Clone or update the grant-finder source, then build the CLI.
+GF_SRC="${GF_SRC:-$HOME/src/grant-finder}"
+mkdir -p "$(dirname "$GF_SRC")"
+if [ -d "$GF_SRC/.git" ]; then
+  git -C "$GF_SRC" pull --ff-only
+else
+  git clone https://github.com/openprose/grant-finder.git "$GF_SRC"
+fi
+cd "$GF_SRC"
 mkdir -p "$HOME/.local/bin"
 (cd cli/grant-finder && go build -o "$HOME/.local/bin/grant-finder" ./cmd/grant-finder)
 "$HOME/.local/bin/grant-finder" version
@@ -172,8 +188,8 @@ end. LLM work is bounded to `resolve-assignment`, `rank-opportunities`, and
 `format-report`. The CLI remains deterministic and never calls an LLM.
 
 For the architectural rationale (and the load-bearing constraints behind each
-service's `### Shape.prohibited` list) see the parent repo's
-[`AGENTS.md`](../../AGENTS.md).
+service's `### Shape.prohibited` list) see
+[`openprose/grant-finder/AGENTS.md`](https://github.com/openprose/grant-finder/blob/main/AGENTS.md).
 
 ## Hosted version
 
@@ -185,4 +201,4 @@ idea — just operated by you instead of us. See <https://openprose.ai>.
 
 ## License
 
-Same as the parent repository (`grant-finder`): MIT.
+Same as the upstream `openprose/grant-finder` repository: MIT.

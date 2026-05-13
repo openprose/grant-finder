@@ -12,6 +12,7 @@ validate-product-cli:
 
 validate-examples:
 	python3 scripts/validate_example_outputs.py
+	python3 scripts/validate_openprose_mirror_portability.py
 
 validate-recall: validate-product-cli
 	python3 scripts/validate_recall_audit.py --binary /tmp/grant-finder
