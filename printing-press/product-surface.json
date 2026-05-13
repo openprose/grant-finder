@@ -105,6 +105,6 @@
   "prototype_cli": {
     "path": "cli/grant-finder",
     "status": "agent-surface-prototype",
-    "reason": "The current CLI has research/explain/status and source plumbing under debug, but automatic collectors and Printing Press ship acceptance are not complete."
+    "reason": "The current CLI has research/explain/status, source plumbing under debug, Grants.gov API/XML ingestion, Federal Register hydration, and a passing agent dogfood harness. Ship hardening remains focused on freshness scheduling, richer source-lane coverage, and Printing Press acceptance."
   }
 }

@@ -37,9 +37,10 @@ judgment lives on the caller side, never inside the CLI.
    Register) and public agency RSS feeds. SAM.gov is intentionally gated off
    pending a key path. Do not introduce a service that requires Exa, OpenAI,
    Anthropic, Stripe, browser automation, or any paid third party.
-3. **Agent-facing command surface stays minimal.** Public commands are
-   `research`, `explain`, `status`, `doctor`, `agent-context`, `version`.
-   Source plumbing lives under `debug`. See `docs/adr/0001-...md`.
+3. **Agent-facing command surface stays minimal.** Agent-facing product
+   commands are `research`, `explain`, and `status`. Public utility commands
+   are `doctor`, `agent-context`, and `version`. Source plumbing lives under
+   `debug`. See `docs/adr/0001-...md`.
 4. **Provenance is non-negotiable.** Every opportunity in the ledger has source
    refs; every recommendation has evidence items; explain returns the source
    trail. Do not introduce paths that produce ranked output without provenance.
@@ -56,9 +57,12 @@ make dogfood-agent         # end-to-end: seed fixture → research → explain �
 make fuzz-smoke            # optional Go fuzz smoke for parsers/projection/read-only SQL guard
 ```
 
-All three must pass before merging anything that touches the public command
-surface or domain logic. `dogfood-agent` verifies the Aeseon-style behavioral
-contract (ranked opportunities, ARPA-E negative evidence row, `no_llm: true`).
+The first three gates must pass before merging anything that touches the public
+command surface or domain logic. `dogfood-agent` validates schema-shaped
+Research Packet output plus the Aeseon-style behavioral contract: ranked
+opportunities, provenance-bearing evidence, ARPA-E negative evidence, and
+`no_llm: true`.
+
 Run `make fuzz-smoke FUZZTIME=10s` when changing assignment parsing, feed/XML
 parsing, Federal Register hydration, JSON projection, or debug SQL validation.
 
