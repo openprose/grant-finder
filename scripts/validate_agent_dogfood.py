@@ -93,27 +93,30 @@ def assert_research_contract(packet: dict, limit: int) -> None:
         raise SystemExit(f"research returned {len(grants)} grants, expected <= {limit}")
 
     seen_recommendations: set[str] = set()
+    fit_levels: set[str] = set()
     for grant in grants:
         rec_id = str(grant.get("recommendation_id", "")).strip()
         if not rec_id:
-            raise SystemExit("recommendation missing recommendation_id")
+            raise SystemExit("candidate missing recommendation_id")
         if rec_id in seen_recommendations:
             raise SystemExit(f"duplicate recommendation_id: {rec_id}")
         seen_recommendations.add(rec_id)
+        fit_levels.add(str(grant.get("eligibility_fit", {}).get("level", "")))
+        if "score" in grant:
+            raise SystemExit(f"{rec_id}: research packet must not expose CLI recommendation score")
 
         if not str(grant.get("url", "")).strip():
-            raise SystemExit(f"{rec_id}: recommendation missing URL")
+            raise SystemExit(f"{rec_id}: candidate missing URL")
         evidence = grant.get("evidence", [])
         if not evidence:
-            raise SystemExit(f"{rec_id}: recommendation has no evidence")
+            raise SystemExit(f"{rec_id}: candidate has no evidence")
         for item in evidence:
             for key in ("source_id", "url", "claim"):
                 if not str(item.get(key, "")).strip():
                     raise SystemExit(f"{rec_id}: evidence item missing {key}")
 
-    first = grants[0]
-    if first.get("eligibility_fit", {}).get("level") not in {"high", "medium"}:
-        raise SystemExit(f"unexpected fit level: {first.get('eligibility_fit')}")
+    if not (fit_levels & {"high", "medium"}):
+        raise SystemExit(f"expected at least one high or medium preliminary fit signal, got {fit_levels}")
 
     coverage = packet.get("coverage", [])
     arpa = [row for row in coverage if row.get("source_lane") == "ARPA-E"]

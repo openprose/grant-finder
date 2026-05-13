@@ -10,14 +10,14 @@
       "role": "agent-facing",
       "input": "Resolved Agent Request / Research Assignment JSON",
       "output": "Research Packet JSON",
-      "description": "Return ranked funding opportunities with fit, evidence, provenance, negative evidence, freshness, and next actions."
+      "description": "Return candidate funding opportunities with evidence, provenance, preliminary fit signals, negative evidence, and freshness."
     },
     {
       "name": "explain",
       "role": "agent-facing",
-      "input": "recommendation ID or opportunity ID",
+      "input": "candidate recommendation_id or opportunity ID",
       "output": "Evidence and provenance JSON",
-      "description": "Explain why an opportunity was recommended and show the source trail behind it."
+      "description": "Explain why a candidate surfaced and show the source trail behind it."
     },
     {
       "name": "status",

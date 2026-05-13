@@ -1,30 +1,31 @@
 ---
 name: grant-finder
-description: Use the `grant-finder` CLI to return ranked non-dilutive funding opportunities for a startup. Returns evidence-backed Research Packets and per-recommendation provenance. Triggers on `grant-finder research`, `grant-finder explain`, `grant-finder status`, or any need to find SBIR/STTR/federal-grant opportunities matching a startup brief.
+description: Use the `grant-finder` CLI to return source-cited candidate non-dilutive funding opportunities for a startup. Returns evidence-backed Research Packets and per-candidate provenance. Triggers on `grant-finder research`, `grant-finder explain`, `grant-finder status`, or any need to find SBIR/STTR/federal-grant opportunities matching a startup brief.
 ---
 
 # grant-finder
 
-A deterministic Go CLI that turns a Research Assignment JSON into a ranked,
-evidence-backed list of non-dilutive funding opportunities. The CLI does not
-call an LLM; it operates on a local SQLite ledger refreshed from Grants.gov,
-the Federal Register, and public agency RSS feeds.
+A deterministic Go CLI that turns a Research Assignment JSON into an
+evidence-backed candidate list of non-dilutive funding opportunities. The CLI
+does not call an LLM; it operates on a local SQLite ledger refreshed from
+Grants.gov, the Federal Register, and public agency RSS feeds. Final ranking
+and recommendation judgment belong to the calling agent.
 
 ## When to use
 
 - An upstream task gave you a startup brief or a Research Assignment JSON and
   you need to surface matching funding opportunities.
-- You need source-cited evidence for one recommendation (`explain`).
+- You need source-cited evidence for one candidate (`explain`).
 - You need to check ledger freshness or source-lane coverage (`status`).
 
 ## Public commands
 
 ```bash
-# Return ranked recommendations for a Research Assignment
+# Return candidate opportunities for a Research Assignment
 grant-finder research --assignment <path|-> --json
 
-# Show evidence and provenance for one recommendation
-grant-finder explain <recommendation-id> --json
+# Show evidence and provenance for one candidate
+grant-finder explain <recommendation-id|opportunity-id> --json
 
 # Report ledger freshness and source-lane coverage
 grant-finder status --assignment <path> --json

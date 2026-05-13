@@ -7,9 +7,10 @@ For AI coding agents and contributors working **on** this repo (as opposed to
 ## What this repo is
 
 A Go CLI (`grant-finder`) that an upstream AI agent calls to turn a startup's
-context into a deterministic, evidence-backed Research Packet of ranked
-non-dilutive funding opportunities. The CLI does the ledger work; agent
-judgment lives on the caller side, never inside the CLI.
+context into a deterministic, evidence-backed Research Packet of candidate
+non-dilutive funding opportunities. The CLI does ledger, retrieval, and
+provenance work; ranking and recommendation judgment live on the caller side,
+never inside the CLI.
 
 ## Where things live
 
@@ -18,7 +19,7 @@ judgment lives on the caller side, never inside the CLI.
 | `cli/grant-finder/` | The Go CLI source. Module: `github.com/openprose/grant-finder/cli/grant-finder` |
 | `cli/grant-finder/cmd/grant-finder/` | Binary entry point |
 | `cli/grant-finder/internal/cli/` | Cobra command tree (`research`, `explain`, `status`, `debug` subtree) |
-| `cli/grant-finder/internal/grantfinder/` | Domain logic: SQLite store, FTS5/usearch retrieval, Grants.gov/Federal Register collectors, ranking |
+| `cli/grant-finder/internal/grantfinder/` | Domain logic: SQLite store, FTS5/usearch retrieval, Grants.gov/Federal Register collectors, provenance |
 | `schemas/` | JSON Schema for Research Assignment input and Research Packet output |
 | `fixtures/` | Sample assignment + opportunities (generic deep-tech startup) used by the harness |
 | `docs/adr/` | Architecture Decision Records. `0001-agent-facing-grant-deep-research.md` is the foundational one — read it before changing the public command surface |
@@ -42,8 +43,9 @@ judgment lives on the caller side, never inside the CLI.
    are `doctor`, `agent-context`, and `version`. Source plumbing lives under
    `debug`. See `docs/adr/0001-...md`.
 4. **Provenance is non-negotiable.** Every opportunity in the ledger has source
-   refs; every recommendation has evidence items; explain returns the source
-   trail. Do not introduce paths that produce ranked output without provenance.
+   refs; every candidate has evidence items; explain returns the source trail.
+   Do not introduce paths that produce candidate or ranked output without
+   provenance.
 5. **Schemas are the contract.** `schemas/research-assignment.schema.json` and
    `schemas/research-packet.schema.json` are the boundary between the CLI and
    its callers. Bump the schema version before changing required fields.
@@ -51,8 +53,9 @@ judgment lives on the caller side, never inside the CLI.
 ## Verification gates
 
 ```bash
-make validate              # go test ./...
+make validate              # go test ./... + sample-output contract checks
 make validate-product-cli  # build CLI + python3 scripts/validate_product_surface.py (checks command surface)
+make validate-examples     # validate checked-in OpenProse sample outputs
 make dogfood-agent         # end-to-end: seed fixture → research → explain → status
 make fuzz-smoke            # optional Go fuzz smoke for parsers/projection/read-only SQL guard
 make secret-scan           # gitleaks scan of history plus working tree
@@ -60,7 +63,7 @@ make secret-scan           # gitleaks scan of history plus working tree
 
 The first three gates must pass before merging anything that touches the public
 command surface or domain logic. `dogfood-agent` validates schema-shaped
-Research Packet output plus the Aeseon-style behavioral contract: ranked
+Research Packet output plus the Aeseon-style behavioral contract: candidate
 opportunities, provenance-bearing evidence, ARPA-E negative evidence, and
 `no_llm: true`.
 
@@ -113,9 +116,10 @@ mycelium.sh note <file> -k decision -t "Title" -m "Why this matters"
 Retrieve all notes with `mycelium.sh dump`. Notable ones:
 
 - `examples/openprose/src/grant-radar.prose.md` — skill-wrapped CLI dep + no-API-key invariant
-- `examples/openprose/src/format-report.prose.md` — render-only constraint (no re-ranking)
+- `examples/openprose/src/rank-opportunities.prose.md` — agent-side ranking and rejection judgment
+- `examples/openprose/src/format-report.prose.md` — render-only constraint (no new ranking)
 - `examples/openprose/fixtures/polyspectra.brief.txt` — canonical sample brief, public info only
-- `cli/grant-finder/internal/grantfinder/research.go` — evidenceScore weights + academic-stage routing
+- `cli/grant-finder/internal/grantfinder/research.go` — candidate retrieval, multi-keyword refresh, academic-stage routing
 - `cli/grant-finder/internal/grantfinder/grants.go` — forecasted|posted default
 - `cli/grant-finder/internal/grantfinder/store.go` — CoverageMatch ledger-level check
 - `skills/grant-finder/SKILL.md` — agent-facing contract for the CLI
@@ -127,8 +131,9 @@ mycelium note so the next agent does not relearn the lesson.
 
 `examples/openprose/` is a runnable OpenProse `kind: system` system
 (`grant-radar`) that demonstrates how an upstream AI agent drives the CLI.
-Four services: `resolve-assignment`, `run-research`, `explain-top-picks`,
-`format-report`, plus the top-level system that wires them.
+Five services: `resolve-assignment`, `run-research`, `rank-opportunities`,
+`explain-top-picks`, `format-report`, plus the top-level system that wires
+them.
 
 The CLI binary is wired as a Forme dependency via the `grant-finder`
 **host-harness skill** at `skills/grant-finder/SKILL.md`, declared in the

@@ -15,8 +15,8 @@ func newExplainCmd() *cobra.Command {
 	var selectFields string
 	cmd := &cobra.Command{
 		Use:   "explain <recommendation-id|opportunity-id|dedupe-key>",
-		Short: "Explain evidence and provenance for a recommendation",
-		Long:  "Explain evidence and provenance for a recommendation or opportunity. The command is deterministic and does not call an LLM.",
+		Short: "Explain evidence and provenance for a candidate opportunity",
+		Long:  "Explain evidence and provenance for a candidate opportunity. The command is deterministic and does not call an LLM.",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if len(args) != 1 {
 				return cmd.Help()

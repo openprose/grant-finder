@@ -11,9 +11,9 @@ func newAgentContextCmd() *cobra.Command {
 				"name":        "grant-finder",
 				"description": "Agent-facing grant deep-research substrate. The upstream LLM uses this CLI; the CLI itself does not call an LLM. Retrieval prefers local usearch semantic search and falls back to SQLite FTS5.",
 				"commands": []map[string]string{
-					{"command": "research --assignment assignment.json --json", "purpose": "Return a deterministic Research Packet: ranked opportunities, evidence, provenance, fit, effort, deadlines, coverage, and negative evidence."},
+					{"command": "research --assignment assignment.json --json", "purpose": "Return a deterministic Research Packet: candidate opportunities, evidence, provenance, preliminary fit signals, deadlines, coverage, and negative evidence."},
 					{"command": "research --assignment assignment.json --semantic usearch --json", "purpose": "Force local usearch semantic retrieval over the opportunity corpus, with FTS5 supplement/fallback."},
-					{"command": "explain rec-123 --json", "purpose": "Explain the source evidence and provenance behind a recommendation or opportunity."},
+					{"command": "explain rec-123 --json", "purpose": "Explain the source evidence and provenance behind a candidate opportunity."},
 					{"command": "status --assignment assignment.json --json", "purpose": "Report ledger freshness and source-lane coverage for an assignment."},
 					{"command": "debug sync --db /tmp/grants.sqlite --limit 30 --json", "purpose": "Maintainer-only deterministic refresh; normal agents should prefer research --refresh auto."},
 				},

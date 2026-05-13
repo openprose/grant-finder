@@ -19,9 +19,10 @@ and deterministic source work, rather than rebuilding a grant research process
 from scratch on every request.
 
 A representative deep-tech-startup grant-radar contract defines the product
-shape: scan funding sources, match opportunities to a company profile, and
-compile a prioritized report with deadlines, fit, effort, links, application
-outlines, and explicit negative evidence for must-check sources.
+shape: scan funding sources, surface evidence-backed candidate opportunities,
+and let the upstream agent compile a prioritized report with deadlines, fit,
+effort, links, application outlines, and explicit negative evidence for
+must-check sources.
 
 ## Decision
 
@@ -31,17 +32,19 @@ wrapper and not a human operator console.
 The public product interface accepts a Resolved Agent Request or Research
 Assignment and returns a Research Packet:
 
-- ranked funding opportunities
-- eligibility fit and explanation
+- candidate funding opportunities in retrieval order
+- preliminary eligibility signals and explanation
 - amount and deadline with confirmed/projected status
-- evidence and provenance for each recommendation
+- evidence and provenance for each candidate
 - negative evidence for must-check sources
 - freshness and coverage notes
-- application outline for high-fit opportunities
+- application outline hints for high-fit candidates
 
 The upstream LLM agent uses this CLI. The CLI itself does not call an LLM. It
 may use deterministic retrieval and local semantic search, with `usearch` as the
-preferred semantic backend and SQLite FTS5 as fallback.
+preferred semantic backend and SQLite FTS5 as fallback. Final ranking,
+rejection, and "no good match" judgment belong in the upstream agent program,
+not in the CLI.
 
 Deterministic collectors, resolvers, smoke checks, source hydration, API/XML
 ingestion, dedupe, FTS5 indexing, and change detection are background machinery.

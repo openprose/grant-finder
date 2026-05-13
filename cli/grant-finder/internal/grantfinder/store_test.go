@@ -4,6 +4,7 @@ import (
 	"archive/zip"
 	"bytes"
 	"context"
+	"encoding/json"
 	"os/exec"
 	"path/filepath"
 	"strings"
@@ -119,6 +120,13 @@ func TestResearchBuildsDeterministicPacket(t *testing.T) {
 	}
 	if len(packet.Grants[0].Evidence) == 0 {
 		t.Fatal("expected evidence")
+	}
+	packetJSON, err := json.Marshal(packet)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if strings.Contains(string(packetJSON), `"score"`) {
+		t.Fatalf("research packet should not expose a numeric recommendation score: %s", packetJSON)
 	}
 }
 
@@ -275,6 +283,126 @@ func TestAssessActivityDateParsingAndRollingWindows(t *testing.T) {
 				t.Fatalf("expected %s, got %+v", tt.want, got)
 			}
 		})
+	}
+}
+
+func TestAssessFitDoesNotPromoteGenericSBIR(t *testing.T) {
+	assignment := Assignment{
+		ResearchQuestion: "Find R&D funding for photonic coatings and advanced materials.",
+		CompanyProfile: CompanyProfile{
+			Stage:        "small business",
+			Description:  "A small business developing structural color coatings.",
+			Technologies: []string{"photonic coatings", "advanced materials"},
+		},
+		FocusAreas: []string{"photonic coatings", "advanced materials"},
+	}
+	genericSBIR := OpportunityRecord{Opportunity: Opportunity{
+		RecordType: "grant",
+		Title:      "Small Business Innovation Research (SBIR) program, Phase I",
+		Sponsor:    "Example Agency",
+		Summary:    "Forecasted small business innovation research program.",
+		RawSignals: []string{"sbir", "forecasted"},
+	}}
+	got := AssessFit(assignment, genericSBIR)
+	if got.Level != "low" {
+		t.Fatalf("generic SBIR-only record should be low fit, got %+v", got)
+	}
+
+	domainSBIR := OpportunityRecord{Opportunity: Opportunity{
+		RecordType: "grant",
+		Title:      "SBIR photonic coatings advanced materials grant",
+		Sponsor:    "Example Agency",
+		Summary:    "Supports small businesses developing photonic coatings and advanced materials.",
+		RawSignals: []string{"sbir", "photonic coatings", "advanced materials"},
+	}}
+	got = AssessFit(assignment, domainSBIR)
+	if got.Level != "high" {
+		t.Fatalf("domain-matched SBIR record should stay high fit, got %+v", got)
+	}
+}
+
+func TestAssessFitRespectsAcademicNotSBIRConstraint(t *testing.T) {
+	assignment := Assignment{
+		ResearchQuestion: "Find clinical neuroscience funding for an academic lab.",
+		CompanyProfile: CompanyProfile{
+			Stage:        "academic research lab",
+			Description:  "Academic group; SBIR/STTR is not the right vehicle.",
+			Technologies: []string{"clinical neuroscience", "psychiatry"},
+			Constraints:  []string{"academic R-mechanism funding; not SBIR/STTR"},
+		},
+		FocusAreas: []string{"clinical neuroscience", "psychiatry"},
+	}
+	rec := OpportunityRecord{Opportunity: Opportunity{
+		RecordType: "grant",
+		Title:      "NIH Small Business Innovation Research Grant",
+		Sponsor:    "National Institutes of Health",
+		Summary:    "SBIR funding for clinical neuroscience companies.",
+		RawSignals: []string{"sbir", "clinical neuroscience"},
+	}}
+	got := AssessFit(assignment, rec)
+	if got.Level != "low" {
+		t.Fatalf("SBIR record should be low when assignment excludes SBIR/STTR, got %+v", got)
+	}
+	if !strings.Contains(got.Explanation, "exclude SBIR/STTR") {
+		t.Fatalf("expected explanation to mention SBIR/STTR exclusion, got %q", got.Explanation)
+	}
+}
+
+func TestKeywordsForAssignmentSeedsDomainTerms(t *testing.T) {
+	assignment := Assignment{
+		ResearchQuestion: "Find non-dilutive R&D funding for industrial 3D printing materials.",
+		CompanyProfile: CompanyProfile{
+			Stage:        "small business",
+			Description:  "A small business developing rugged photopolymer resins.",
+			Technologies: []string{"photopolymer chemistry", "3D printing resin chemistry"},
+		},
+		FocusAreas: []string{"additive manufacturing", "advanced materials", "advanced manufacturing"},
+	}
+	got := strings.Join(KeywordsForAssignment(assignment), "\n")
+	for _, want := range []string{"additive manufacturing", "advanced materials", "photopolymer chemistry", "SBIR"} {
+		if !strings.Contains(got, want) {
+			t.Fatalf("expected keyword %q in:\n%s", want, got)
+		}
+	}
+}
+
+func TestKeywordsForAssignmentDoesNotSeedSBIRWhenExcluded(t *testing.T) {
+	assignment := Assignment{
+		ResearchQuestion: "Find clinical neuroscience funding for an academic lab.",
+		CompanyProfile: CompanyProfile{
+			Stage:        "academic research lab",
+			Description:  "Academic group; SBIR/STTR is not the right vehicle.",
+			Technologies: []string{"clinical neuroscience", "psychiatry"},
+			Constraints:  []string{"not SBIR/STTR"},
+		},
+		FocusAreas: []string{"psychiatry", "clinical neuroscience"},
+	}
+	got := KeywordsForAssignment(assignment)
+	joined := strings.Join(got, "\n")
+	if strings.Contains(joined, "SBIR") {
+		t.Fatalf("excluded assignment should not seed SBIR keyword: %v", got)
+	}
+	for _, want := range []string{"psychiatry", "clinical neuroscience"} {
+		if !strings.Contains(joined, want) {
+			t.Fatalf("expected keyword %q in %v", want, got)
+		}
+	}
+}
+
+func TestBuildAssignmentQueryPrioritizesDomainTerms(t *testing.T) {
+	assignment := Assignment{
+		ResearchQuestion: "Find non-dilutive R&D funding for an industrial 3D printing materials small business specializing in rugged photopolymer resins.",
+		CompanyProfile: CompanyProfile{
+			Description:  "Long company profile text that should not push the crisp domain terms out of the bounded FTS query.",
+			Technologies: []string{"photopolymer chemistry"},
+		},
+		FocusAreas: []string{"additive manufacturing", "advanced materials"},
+	}
+	fts := BuildFTSQuery(BuildAssignmentQuery(assignment))
+	for _, want := range []string{"additive", "manufacturing", "advanced", "materials", "photopolymer"} {
+		if !strings.Contains(fts, want) {
+			t.Fatalf("expected FTS query to retain %q, got %q", want, fts)
+		}
 	}
 }
 

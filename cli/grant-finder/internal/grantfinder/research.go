@@ -81,7 +81,6 @@ type GrantRecommendation struct {
 	URL                string         `json:"url"`
 	ApplicationOutline []string       `json:"application_outline,omitempty"`
 	Evidence           []EvidenceItem `json:"evidence"`
-	Score              int            `json:"score,omitempty"`
 }
 
 type FitAssessment struct {
@@ -174,15 +173,9 @@ func Research(ctx context.Context, opts ResearchOptions, assignment Assignment) 
 		seen[record.ID] = true
 		rec := BuildRecommendation(assignment, record, activity)
 		recs = append(recs, rec)
-	}
-	sort.SliceStable(recs, func(i, j int) bool {
-		if recs[i].Score != recs[j].Score {
-			return recs[i].Score > recs[j].Score
+		if len(recs) >= opts.Limit {
+			break
 		}
-		return deadlineSortKey(recs[i].Deadline) < deadlineSortKey(recs[j].Deadline)
-	})
-	if len(recs) > opts.Limit {
-		recs = recs[:opts.Limit]
 	}
 	packet := ResearchPacket{
 		AssignmentID: assignment.AssignmentID,
@@ -230,10 +223,11 @@ func Explain(ctx context.Context, dbPath, idOrKey string) (ExplainPacket, error)
 }
 
 func BuildAssignmentQuery(a Assignment) string {
-	parts := []string{a.ResearchQuestion, a.CompanyProfile.Description, a.CompanyProfile.Stage, a.CompanyProfile.Location}
-	parts = append(parts, a.CompanyProfile.Technologies...)
+	var parts []string
 	parts = append(parts, a.FocusAreas...)
+	parts = append(parts, a.CompanyProfile.Technologies...)
 	parts = append(parts, a.TargetGeographies...)
+	parts = append(parts, a.ResearchQuestion, a.CompanyProfile.Description, a.CompanyProfile.Stage, a.CompanyProfile.Location)
 	return strings.Join(parts, " ")
 }
 
@@ -246,7 +240,6 @@ func BuildRecommendation(a Assignment, rec OpportunityRecord, activity FitAssess
 		d := rec.DeadlineText
 		deadline = &d
 	}
-	score := fitScore(fit.Level)*100 + evidenceScore(rec) - effortPenalty(effort.Level)
 	recommendation := GrantRecommendation{
 		RecommendationID:  fmt.Sprintf("rec-%d", rec.ID),
 		OpportunityID:     rec.ID,
@@ -260,7 +253,6 @@ func BuildRecommendation(a Assignment, rec OpportunityRecord, activity FitAssess
 		ActivityStatus:    activity,
 		URL:               rec.URL,
 		Evidence:          evidenceForOpportunity(rec),
-		Score:             score,
 	}
 	if fit.Level == "high" {
 		recommendation.ApplicationOutline = []string{
@@ -381,12 +373,24 @@ func AssessFit(a Assignment, rec OpportunityRecord) FitAssessment {
 		rec.Title, rec.Sponsor, rec.RecordType, rec.Summary, rec.Eligibility,
 		strings.Join(rec.RawSignals, " "),
 	}, " "))
+	assignmentText := strings.ToLower(strings.Join([]string{
+		a.ResearchQuestion,
+		a.CompanyProfile.Description,
+		a.CompanyProfile.Stage,
+		strings.Join(a.CompanyProfile.Constraints, " "),
+	}, " "))
+	recordIsSBIR := strings.Contains(haystack, "sbir") || strings.Contains(haystack, "sttr") || strings.Contains(haystack, "small business innovation")
+	if recordIsSBIR && assignmentExcludesSBIR(assignmentText) {
+		return FitAssessment{Level: "low", Explanation: "Assignment constraints exclude SBIR/STTR; this record appears to be an SBIR/STTR vehicle."}
+	}
 	score := 0
 	var matched []string
+	domainScore := 0
 	for _, term := range append(a.FocusAreas, a.CompanyProfile.Technologies...) {
 		term = strings.ToLower(strings.TrimSpace(term))
 		if term != "" && strings.Contains(haystack, term) {
 			score += 2
+			domainScore += 2
 			matched = append(matched, term)
 		}
 	}
@@ -397,18 +401,45 @@ func AssessFit(a Assignment, rec OpportunityRecord) FitAssessment {
 			matched = append(matched, geo)
 		}
 	}
-	if strings.Contains(haystack, "sbir") || strings.Contains(haystack, "sttr") {
-		score += 2
+	if recordIsSBIR && assignmentAllowsSmallBusinessFunding(assignmentText) {
+		score++
 		matched = append(matched, "SBIR/STTR")
 	}
 	switch {
 	case score >= 5:
 		return FitAssessment{Level: "high", Explanation: "Matched strong assignment signals: " + strings.Join(uniqueStrings(matched), ", ")}
-	case score >= 2:
+	case score >= 2 && domainScore > 0:
 		return FitAssessment{Level: "medium", Explanation: "Some assignment signals matched; agent should verify eligibility details against the official source."}
 	default:
 		return FitAssessment{Level: "low", Explanation: "Few explicit assignment signals matched in current ledger evidence."}
 	}
+}
+
+func assignmentExcludesSBIR(text string) bool {
+	for _, phrase := range []string{
+		"not sbir",
+		"not sttr",
+		"not an sbir",
+		"not an sttr",
+		"not sbir/sttr",
+		"sbir/sttr is not",
+		"sbir is not",
+		"sttr is not",
+		"not the right vehicle",
+		"not an appropriate vehicle",
+	} {
+		if strings.Contains(text, phrase) {
+			return true
+		}
+	}
+	return false
+}
+
+func assignmentAllowsSmallBusinessFunding(text string) bool {
+	return strings.Contains(text, "small business") ||
+		strings.Contains(text, "startup") ||
+		strings.Contains(text, "company") ||
+		strings.Contains(text, "commercialization")
 }
 
 func EstimateEffort(rec OpportunityRecord) FitAssessment {
@@ -449,7 +480,7 @@ func BuildSummary(recs []GrantRecommendation, includeInactive bool) ResearchSumm
 			nearest = &d
 		}
 	}
-	notes := []string{"ranking is deterministic; no LLM call was made inside the CLI"}
+	notes := []string{"candidate retrieval is deterministic; no LLM call was made inside the CLI"}
 	if !includeInactive {
 		notes = append(notes, "inactive opportunities are filtered by default; pass --include-inactive for historical comps")
 	}
@@ -465,8 +496,8 @@ func BuildSummary(recs []GrantRecommendation, includeInactive bool) ResearchSumm
 //
 // The truthful question is "did the ledger get any records from this lane
 // during the most recent refresh?" — not "did we surface a record from this
-// lane in the top-N recommendations?" A lane can be well-covered but lose
-// the ranking race; that is not the same thing as "checked_no_match."
+// lane in the returned candidate set?" A lane can be well-covered but miss a
+// particular retrieval query; that is not the same thing as "checked_no_match."
 //
 // When store is nil (e.g., a hypothetical preflight before any refresh) every
 // lane reports "not_checked".
@@ -557,14 +588,34 @@ func refreshIfEmpty(ctx context.Context, opts ResearchOptions, assignment Assign
 	if stats.Opportunities > 0 {
 		return nil
 	}
-	_, err = RunSync(ctx, SyncOptions{
-		DBPath:        opts.DBPath,
-		Limit:         25,
-		Keyword:       KeywordForAssignment(assignment),
-		IncludeFeeds:  true,
-		IncludeGrants: true,
-	})
-	return err
+	grantRefreshLimit := opts.Limit
+	if grantRefreshLimit <= 0 {
+		grantRefreshLimit = 10
+	}
+	if grantRefreshLimit < 5 {
+		grantRefreshLimit = 5
+	}
+	if grantRefreshLimit > 25 {
+		grantRefreshLimit = 25
+	}
+	if _, err = RunSync(ctx, SyncOptions{
+		DBPath:       opts.DBPath,
+		Limit:        25,
+		IncludeFeeds: true,
+	}); err != nil {
+		return err
+	}
+	for _, keyword := range KeywordsForAssignment(assignment) {
+		if _, err = RunSync(ctx, SyncOptions{
+			DBPath:        opts.DBPath,
+			Limit:         grantRefreshLimit,
+			Keyword:       keyword,
+			IncludeGrants: true,
+		}); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 // KeywordForAssignment picks a Grants.gov search keyword from a Research
@@ -595,54 +646,64 @@ func KeywordForAssignment(a Assignment) string {
 	}
 }
 
-func fitScore(level string) int {
-	switch level {
-	case "high":
-		return 3
-	case "medium":
-		return 2
-	default:
-		return 1
+// KeywordsForAssignment returns the bounded set of Grants.gov keyword searches
+// used to seed an empty ledger. The CLI should retrieve a broad candidate pool
+// from deterministic public sources; final fit judgment belongs to the
+// upstream agent.
+func KeywordsForAssignment(a Assignment) []string {
+	const maxKeywords = 6
+	var keywords []string
+	seen := map[string]bool{}
+	add := func(value string) {
+		value = normalizeKeyword(value)
+		if value == "" || isWeakRefreshKeyword(value) {
+			return
+		}
+		key := strings.ToLower(value)
+		if seen[key] {
+			return
+		}
+		seen[key] = true
+		keywords = append(keywords, value)
 	}
+
+	for _, value := range a.FocusAreas {
+		add(value)
+	}
+	for _, value := range a.CompanyProfile.Technologies {
+		add(value)
+	}
+	add(KeywordForAssignment(a))
+
+	assignmentText := strings.ToLower(strings.Join([]string{
+		a.ResearchQuestion,
+		a.CompanyProfile.Description,
+		a.CompanyProfile.Stage,
+		strings.Join(a.CompanyProfile.Constraints, " "),
+	}, " "))
+	if assignmentAllowsSmallBusinessFunding(assignmentText) && !assignmentExcludesSBIR(assignmentText) {
+		add("SBIR")
+	}
+	if len(keywords) == 0 {
+		keywords = append(keywords, "grant")
+	}
+	if len(keywords) > maxKeywords {
+		return keywords[:maxKeywords]
+	}
+	return keywords
 }
 
-func effortPenalty(level string) int {
-	switch level {
-	case "high":
-		return 30
-	case "medium":
-		return 10
-	default:
-		return 0
-	}
+func normalizeKeyword(value string) string {
+	return strings.Join(strings.Fields(strings.TrimSpace(value)), " ")
 }
 
-func evidenceScore(rec OpportunityRecord) int {
-	score := len(rec.SourceRefs) * 5
-	// Real grant listings carry an opportunity number or Federal Register
-	// document number. These records exist on a canonical funding surface
-	// (Grants.gov, the Federal Register). Weight them so they dominate
-	// fit-level differences against text-matched ecosystem/media noise.
-	if rec.OpportunityNumber != "" || rec.DocumentNumber != "" {
-		score += 100
+func isWeakRefreshKeyword(value string) bool {
+	switch strings.ToLower(strings.TrimSpace(value)) {
+	case "", "united states", "usa", "us", "startup", "company", "small business", "funding", "grant", "grants":
+		return true
+	default:
+		return false
 	}
-	switch rec.Canonicality {
-	case "authoritative":
-		score += 60
-	case "authoritative_or_corroborating", "state_authoritative", "authoritative_replacement":
-		score += 40
-	case "corroborating", "enrichment", "curated_lead", "cross_agency_index", "state_program":
-		score += 20
-	case "deadline_signal":
-		score += 10
-	case "early_warning", "human_qa_alert":
-		score -= 20
-	case "context", "ecosystem_media", "community_lead", "search_generated_lead", "commercial_lead":
-		// Not opportunity records — these are leads, context, or news. Penalize
-		// so they only surface when nothing more authoritative matches.
-		score -= 100
-	}
-	return score
 }
 
 func deadlineSortKey(deadline *string) string {

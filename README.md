@@ -2,15 +2,14 @@
 
 Find non-dilutive funding for your U.S. startup from the command line.
 SBIR/STTR solicitations, federal agency grants, state economic development
-programs — ranked by fit, with every recommendation cited back to its source.
+programs — surfaced as source-cited candidates for an upstream agent to rank.
 
 **No API keys.** Runs on free public data (Grants.gov, the Federal Register,
 public agency RSS feeds). Self-hostable.
 
 **For founders, the engineers working with them, and the AI agents driving
-both.** Describe your startup in a paragraph; get back a ranked list of
-funding opportunities with deadlines, fit rationale, and application outlines,
-backed by source-cited evidence.
+both.** Describe your startup in a paragraph; get back a source-cited candidate
+packet that an agent can rank, reject, and turn into a concise funding report.
 
 > Looking for a hosted, fully-managed version? See
 > [Hosted service](#hosted-service) below.
@@ -43,7 +42,7 @@ grant-finder research --assignment fixtures/acme-deeptech-assignment.sample.json
 ```
 
 On first run the CLI refreshes its local ledger from public sources
-(~30 seconds), then prints a ranked table:
+(~30 seconds), then prints a candidate table:
 
 ```
 FIT     PROGRAM                                              AGENCY                       DEADLINE     URL
@@ -54,17 +53,17 @@ medium  DOE EERE Vehicle Technologies SBIR                   U.S. Department of 
 ```
 
 Pass `--json` for the machine-readable Research Packet that an agent would
-consume, including per-recommendation evidence, provenance, deadline
-certainty, effort estimate, and source-lane coverage (including explicit
-negative-evidence rows like *"no current ARPA-E programs match"*).
+consume, including per-candidate evidence, provenance, deadline certainty,
+effort estimate, preliminary fit signals, and source-lane coverage (including
+explicit negative-evidence rows like *"no current ARPA-E programs match"*).
 
 ## What you can ask it
 
 ```bash
-# Rank opportunities for a specific startup context
+# Retrieve candidate opportunities for a specific startup context
 grant-finder research --assignment my-startup.json --json
 
-# Show evidence and provenance for one recommendation
+# Show evidence and provenance for one candidate
 grant-finder explain rec-12 --json
 
 # Check ledger freshness and source-lane coverage
@@ -112,13 +111,13 @@ your assignment (JSON)
  │   ├─ retrieve candidates (usearch semantic when available, │
  │   │   FTS5 fallback)                                       │
  │   ├─ dedupe against your known grants                      │
- │   ├─ score fit, effort, deadline certainty, activity       │
+ │   ├─ attach evidence, provenance, deadlines, and signals   │
  │   ├─ filter out closed / archived / past-due (by default)  │
- │   └─ rank                                                  │
+ │   └─ return a bounded candidate packet                     │
  └────────────────────────────────────────────────────────────┘
         │
         ▼
- ranked recommendations + per-result evidence + source-lane coverage
+ candidate opportunities + per-result evidence + source-lane coverage
 ```
 
 The CLI keeps a local SQLite ledger at
@@ -129,14 +128,17 @@ RSS feeds.
 
 ## Design choices worth knowing
 
-- **The CLI doesn't call an LLM.** Ranking, fit scoring, dedupe, and
-  source-lane coverage are deterministic for a fixed assignment, options, and
-  ledger state. Fields such as `generated_at` and results after
+- **The CLI doesn't call an LLM.** Candidate retrieval, dedupe, preliminary
+  signals, and source-lane coverage are deterministic for a fixed assignment,
+  options, and ledger state. Fields such as `generated_at` and results after
   `--refresh auto` can change as time passes and public sources update.
+- **Agents make the judgment call.** The CLI is a ledger and provenance engine,
+  not the final grant strategist. The bundled OpenProse example ranks,
+  rejects, and formats the candidate packet with the full startup context.
 - **No paid API keys.** Grants.gov, Federal Register, and public agency feeds
   cover the core federal sources. The CLI will work offline against a
   populated ledger.
-- **Provenance over completeness.** Every recommendation cites its source.
+- **Provenance over completeness.** Every candidate cites its source.
   When a must-check lane (like ARPA-E) has no current match, the CLI says so
   explicitly rather than silently omitting the lane.
 - **Self-hostable. Always.** This repo is the whole product. Hosting is the
