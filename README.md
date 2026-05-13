@@ -97,8 +97,9 @@ the CLI falls back to SQLite FTS5 automatically.
 `prose run` uses the codex-sdk harness by default, which sandboxes the
 spawned agent to read-only `$HOME` and blocks outbound network. The CLI
 needs both: it writes a SQLite ledger at `~/.local/share/grant-finder/`
-and fetches from Grants.gov and the Federal Register. Pick one of the
-invocations below depending on your prose version.
+and fetches from Grants.gov, the Federal Register, configured RSS feeds, and
+configured public source pages. Pick one of the invocations below depending on
+your prose version.
 
 **Granular (recommended once your prose CLI supports the env passthrough):**
 

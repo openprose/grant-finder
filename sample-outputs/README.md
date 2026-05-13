@@ -1,8 +1,8 @@
 # Sample outputs
 
 Real outputs from running `grant-radar` against the three example briefs.
-Captured 2026-05-13 against live Grants.gov, Federal Register, and public
-agency RSS sources.
+Captured 2026-05-13 against live Grants.gov, Federal Register, public agency
+RSS sources, and configured public source pages.
 
 Each example directory contains the six bindings in execution order:
 
@@ -25,9 +25,9 @@ bindings.
 
 | Example | Brief | Outcome |
 |---|---|---|
-| [`polyspectra/`](./polyspectra/) | US small business making rugged photopolymer resins for industrial 3D printing | Two additive-manufacturing/advanced-materials watch leads; broad news and unrelated BAAs are rejected |
-| [`cypris/`](./cypris/) | Berkeley-based advanced materials company developing structural color coatings | Two photonics/advanced-materials watch leads; generic manufacturing/news records are rejected |
-| [`enact-lab/`](./enact-lab/) | Yale academic clinical psychiatry lab studying psychedelics | One medium NIH psychotropic-drug clinical-trials lead plus one neuroscience watch lead; SBIR/STTR remains rejected |
+| [`polyspectra/`](./polyspectra/) | US small business making rugged photopolymer resins for industrial 3D printing | NSF Seed Fund manufacturing/materials, America Makes, and NASA materials leads surface; broad defense/energy records are rejected |
+| [`cypris/`](./cypris/) | Berkeley-based advanced materials company developing structural color coatings | NSF Seed Fund photonics, chemical technologies, advanced materials, and EPA SBIR surface; false structural-biology/manufacturing matches are rejected |
+| [`enact-lab/`](./enact-lab/) | Yale academic clinical psychiatry lab studying psychedelics | NIH psilocybin highlighted topic, NIH PAR mechanisms, and CDMRP watch lane surface; SBIR/STTR remains rejected |
 
 ## The boundary this sample demonstrates
 

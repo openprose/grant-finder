@@ -1,15 +1,15 @@
 {
   "assignment_id": "polyspectra-2026-05-13",
-  "generated_at": "2026-05-13T17:07:05Z",
+  "generated_at": "2026-05-13T18:07:31Z",
   "retrieval": {
     "backend": "fts5",
-    "query": "additive manufacturing advanced materials advanced manufacturing manufacturing R\u0026D dual-use technology aerospace materials energy materials additive manufacturing photopolymer chemistry advanced materials 3d printing resin chemistry United States Find non-dilutive R\u0026D funding for an industrial 3D printing materials small business specializing in rugged photopolymer resins. A U.S. small business making COR (cyclic olefin resin) rugged photopolymer resins for industrial DLP/LCD 3D printing. We sell to engineers in industrial, manufacturing, and laboratory facilities for end-use parts that need durability, heat resistance, and chemical resistance. small business United States",
+    "query": "advanced materials additive manufacturing photopolymer chemistry industrial 3D printing manufacturing R&D aerospace applications defense applications energy applications Cyclic Olefin Resin rugged photopolymer resins industrial 3D printing DLP resin printing LCD resin printing advanced materials additive manufacturing photopolymer chemistry manufacturing R&D United States Find non-dilutive R&D funding opportunities that polySpectra, a US small business developing rugged COR photopolymer resins for industrial additive manufacturing, can credibly win and execute. US small business making COR (Cyclic Olefin Resin) rugged photopolymer resins for industrial 3D printing, enabling durable, heat-resistant, chemically resistant end-use parts on standard DLP and LCD resin printers for industrial, manufacturing, and laboratory customers. small business United States",
     "no_llm": true
   },
   "summary": {
     "total_potential_funding": "unknown from current evidence",
-    "high_fit_count": 0,
-    "nearest_deadline": "04/30/2028",
+    "high_fit_count": 9,
+    "nearest_deadline": "06/20/2026",
     "notes": [
       "candidate retrieval is deterministic; no LLM call was made inside the CLI",
       "inactive opportunities are filtered by default; pass --include-inactive for historical comps"
@@ -17,16 +17,16 @@
   },
   "grants": [
     {
-      "recommendation_id": "rec-22",
-      "opportunity_id": 22,
-      "program_name": "President Trump Secures $200B Investment from Micron Technology for Memory Chip Manufacturing in the United States",
-      "agency": "NIST manufacturing RSS",
+      "recommendation_id": "rec-1",
+      "opportunity_id": 1,
+      "program_name": "NSF America's Seed Fund: Advanced Manufacturing",
+      "agency": "NSF America's Seed Fund: Advanced Manufacturing",
       "amount": "unknown from current evidence",
       "deadline": null,
       "deadline_certainty": "unknown",
       "eligibility_fit": {
-        "level": "low",
-        "explanation": "Few explicit assignment signals matched in current ledger evidence."
+        "level": "high",
+        "explanation": "Matched strong assignment signals: SBIR/STTR, additive manufacturing, advanced materials, manufacturing r&d"
       },
       "effort_estimate": {
         "level": "low",
@@ -36,22 +36,65 @@
         "level": "active",
         "explanation": "No closed, archived, expired, or past-due signal was found."
       },
-      "url": "https://www.nist.gov/news-events/news/2025/06/president-trump-secures-200b-investment-micron-technology-memory-chip",
+      "url": "https://seedfund.nsf.gov/topics/advanced-manufacturing/",
+      "application_outline": [
+        "Company and technology overview",
+        "Problem, deployment context, and public benefit",
+        "Technical approach and work plan",
+        "Commercialization or deployment plan",
+        "Budget, milestones, and partner commitments"
+      ],
       "evidence": [
         {
-          "source_id": "nist-manufacturing-rss",
-          "url": "https://www.nist.gov/news-events/manufacturing/rss.xml",
-          "claim": "Trump Administration restores chipmaking leadership in the United States with historic investment in Idaho, New York, and Virginia."
+          "source_id": "nsf-seed-advanced-manufacturing-topic",
+          "url": "https://seedfund.nsf.gov/topics/advanced-manufacturing/",
+          "claim": "NSF funds startups. Use a research and development grant to create an advanced manufacturing technology."
         }
       ]
     },
     {
-      "recommendation_id": "rec-128",
-      "opportunity_id": 128,
-      "program_name": "UNITED STATES ARMY RESEARCH INSTITUTE FOR THE BEHAVIORAL AND SOCIAL SCIENCES (ARI) BROAD AGENCY ANNOUNCEMENT FOR BASIC, APPLIED, AND ADVANCED SCIENTIFIC RESEARCH",
-      "agency": "Dept of the Army -- Materiel Command",
+      "recommendation_id": "rec-15",
+      "opportunity_id": 15,
+      "program_name": "America Makes open project calls",
+      "agency": "America Makes open project calls",
       "amount": "unknown from current evidence",
-      "deadline": "04/30/2028",
+      "deadline": null,
+      "deadline_certainty": "unknown",
+      "eligibility_fit": {
+        "level": "high",
+        "explanation": "Matched strong assignment signals: additive manufacturing, manufacturing r&d"
+      },
+      "effort_estimate": {
+        "level": "low",
+        "explanation": "No high-effort application signals found in current evidence."
+      },
+      "activity_status": {
+        "level": "active",
+        "explanation": "No closed, archived, expired, or past-due signal was found."
+      },
+      "url": "https://www.americamakes.us/our-focus/open-project-calls/",
+      "application_outline": [
+        "Company and technology overview",
+        "Problem, deployment context, and public benefit",
+        "Technical approach and work plan",
+        "Commercialization or deployment plan",
+        "Budget, milestones, and partner commitments"
+      ],
+      "evidence": [
+        {
+          "source_id": "america-makes-open-project-calls",
+          "url": "https://www.americamakes.us/our-focus/open-project-calls/",
+          "claim": "Public source page for America Makes open project calls."
+        }
+      ]
+    },
+    {
+      "recommendation_id": "rec-49",
+      "opportunity_id": 49,
+      "program_name": "Advancing NATO&rsquo;s Collective Defense and Industrial Capacity",
+      "agency": "U.S. Mission to Belgium",
+      "amount": "unknown from current evidence",
+      "deadline": "06/20/2026",
       "deadline_certainty": "confirmed",
       "eligibility_fit": {
         "level": "low",
@@ -63,57 +106,28 @@
       },
       "activity_status": {
         "level": "active",
-        "explanation": "Deadline is current: 2028-04-30."
+        "explanation": "Deadline is current: 2026-06-20."
       },
-      "url": "https://www.grants.gov/search-results-detail/347858",
+      "url": "https://www.grants.gov/search-results-detail/362095",
       "evidence": [
         {
           "source_id": "grants-gov-api",
-          "url": "https://www.grants.gov/search-results-detail/347858",
-          "claim": "UNITED STATES ARMY RESEARCH INSTITUTE FOR THE BEHAVIORAL AND SOCIAL SCIENCES (ARI) BROAD AGENCY ANNOUNCEMENT FOR BASIC, APPLIED, AND ADVANCED SCIENTIFIC RESEARCH Dept of the Army -- Materiel Command posted"
+          "url": "https://www.grants.gov/search-results-detail/362095",
+          "claim": "Advancing NATO&rsquo;s Collective Defense and Industrial Capacity U.S. Mission to Belgium posted"
         }
       ]
     },
     {
-      "recommendation_id": "rec-8",
-      "opportunity_id": 8,
-      "program_name": "Advanced Metrology for Defect Management in Ceramic Additive Manufacturing",
-      "agency": "NIST manufacturing RSS",
+      "recommendation_id": "rec-2",
+      "opportunity_id": 2,
+      "program_name": "NSF America's Seed Fund: Advanced Materials",
+      "agency": "NSF America's Seed Fund: Advanced Materials",
       "amount": "unknown from current evidence",
       "deadline": null,
       "deadline_certainty": "unknown",
       "eligibility_fit": {
-        "level": "medium",
-        "explanation": "Some assignment signals matched; agent should verify eligibility details against the official source."
-      },
-      "effort_estimate": {
-        "level": "low",
-        "explanation": "No high-effort application signals found in current evidence."
-      },
-      "activity_status": {
-        "level": "active",
-        "explanation": "No closed, archived, expired, or past-due signal was found."
-      },
-      "url": "https://www.nist.gov/news-events/events/2026/06/advanced-metrology-defect-management-ceramic-additive-manufacturing",
-      "evidence": [
-        {
-          "source_id": "nist-manufacturing-rss",
-          "url": "https://www.nist.gov/news-events/manufacturing/rss.xml",
-          "claim": "Additive manufacturing (AM) of ceramic components suffers from inconsistent quality and high defect rates due to a lack of standardized feedstock characterization and handling protocols, inadequate in-process monitoring capabilities, and insufficient"
-        }
-      ]
-    },
-    {
-      "recommendation_id": "rec-17",
-      "opportunity_id": 17,
-      "program_name": "NIST Issues Broad Agency Announcement for Proposals to Advance Microelectronics Technologies",
-      "agency": "NIST manufacturing RSS",
-      "amount": "unknown from current evidence",
-      "deadline": null,
-      "deadline_certainty": "unknown",
-      "eligibility_fit": {
-        "level": "low",
-        "explanation": "Few explicit assignment signals matched in current ledger evidence."
+        "level": "high",
+        "explanation": "Matched strong assignment signals: SBIR/STTR, advanced materials"
       },
       "effort_estimate": {
         "level": "medium",
@@ -123,26 +137,33 @@
         "level": "active",
         "explanation": "No closed, archived, expired, or past-due signal was found."
       },
-      "url": "https://www.nist.gov/news-events/news/2025/09/nist-issues-broad-agency-announcement-proposals-advance-microelectronics",
+      "url": "https://seedfund.nsf.gov/topics/advanced-materials/",
+      "application_outline": [
+        "Company and technology overview",
+        "Problem, deployment context, and public benefit",
+        "Technical approach and work plan",
+        "Commercialization or deployment plan",
+        "Budget, milestones, and partner commitments"
+      ],
       "evidence": [
         {
-          "source_id": "nist-manufacturing-rss",
-          "url": "https://www.nist.gov/news-events/manufacturing/rss.xml",
-          "claim": "The CHIPS for America funding opportunity will support critical research, prototyping and commercial solutions that advance microelectronics technology in the United States."
+          "source_id": "nsf-seed-advanced-materials-topic",
+          "url": "https://seedfund.nsf.gov/topics/advanced-materials/",
+          "claim": "NSF provides startups with grant funding for advanced materials applications."
         }
       ]
     },
     {
-      "recommendation_id": "rec-13",
-      "opportunity_id": 13,
-      "program_name": "Department of Commerce Awards CHIPS Incentives to a Subsidiary of Korea Zinc (Crucible Metals) to Support a State-of-the-Art Smelter and Critical Minerals Processing Facility in the United States",
-      "agency": "NIST manufacturing RSS",
+      "recommendation_id": "rec-17",
+      "opportunity_id": 17,
+      "program_name": "CalTestBed Apply",
+      "agency": "CalTestBed Apply",
       "amount": "unknown from current evidence",
       "deadline": null,
       "deadline_certainty": "unknown",
       "eligibility_fit": {
-        "level": "low",
-        "explanation": "Few explicit assignment signals matched in current ledger evidence."
+        "level": "high",
+        "explanation": "Matched strong assignment signals: advanced materials, manufacturing r&d"
       },
       "effort_estimate": {
         "level": "low",
@@ -152,157 +173,199 @@
         "level": "active",
         "explanation": "No closed, archived, expired, or past-due signal was found."
       },
-      "url": "https://www.nist.gov/news-events/news/2025/12/department-commerce-awards-chips-incentives-subsidiary-korea-zinc-crucible",
+      "url": "https://www.caltestbed.com/apply/",
+      "application_outline": [
+        "Company and technology overview",
+        "Problem, deployment context, and public benefit",
+        "Technical approach and work plan",
+        "Commercialization or deployment plan",
+        "Budget, milestones, and partner commitments"
+      ],
       "evidence": [
         {
-          "source_id": "nist-manufacturing-rss",
-          "url": "https://www.nist.gov/news-events/manufacturing/rss.xml",
-          "claim": "The Department of Commerce’s CHIPS Program awarded $210 million in direct funding under the CHIPS and Science Act to a subsidiary of Korea Zinc — Crucible Metals, LLC — to support an advanced smelter and critical minerals processing facility in Tennessee with an expected $6.6 billion of capital expenditures. The state-of-the-art smelter and critical minerals processing facility will produce 13 critical and strategic minerals that are vital to semiconductors, AI, quantum computing, aerospace \u0026 defense, automotives, and industrials."
+          "source_id": "caltestbed-apply",
+          "url": "https://www.caltestbed.com/apply/",
+          "claim": "Public source page for CalTestBed Apply."
         }
       ]
     },
     {
-      "recommendation_id": "rec-111",
-      "opportunity_id": 111,
-      "program_name": "SEEDING CRITICAL ADVANCES FOR LEADING ENERGY TECHNOLOGIES WITH UNTAPPED POTENTIAL (SCALEUP) READY",
-      "agency": "Advanced Research Projects Agency Energy ",
-      "amount": "unknown from current evidence",
-      "deadline": "09/29/2029",
-      "deadline_certainty": "confirmed",
-      "eligibility_fit": {
-        "level": "low",
-        "explanation": "Few explicit assignment signals matched in current ledger evidence."
-      },
-      "effort_estimate": {
-        "level": "low",
-        "explanation": "No high-effort application signals found in current evidence."
-      },
-      "activity_status": {
-        "level": "active",
-        "explanation": "Deadline is current: 2029-09-29."
-      },
-      "url": "https://www.grants.gov/search-results-detail/356623",
-      "evidence": [
-        {
-          "source_id": "grants-gov-api",
-          "url": "https://www.grants.gov/search-results-detail/356623",
-          "claim": "SEEDING CRITICAL ADVANCES FOR LEADING ENERGY TECHNOLOGIES WITH UNTAPPED POTENTIAL (SCALEUP) READY Advanced Research Projects Agency Energy  posted"
-        }
-      ]
-    },
-    {
-      "recommendation_id": "rec-117",
-      "opportunity_id": 117,
-      "program_name": "INSPIRING GENERATIONS OF NEW INNOVATORS TO IMPACT TECHNOLOGIES IN ENERGY 2026 (IGNIITE 2026)",
-      "agency": "Advanced Research Projects Agency Energy ",
-      "amount": "unknown from current evidence",
-      "deadline": "05/29/2026",
-      "deadline_certainty": "confirmed",
-      "eligibility_fit": {
-        "level": "low",
-        "explanation": "Few explicit assignment signals matched in current ledger evidence."
-      },
-      "effort_estimate": {
-        "level": "low",
-        "explanation": "No high-effort application signals found in current evidence."
-      },
-      "activity_status": {
-        "level": "active",
-        "explanation": "Deadline is current: 2026-05-29."
-      },
-      "url": "https://www.grants.gov/search-results-detail/362036",
-      "evidence": [
-        {
-          "source_id": "grants-gov-api",
-          "url": "https://www.grants.gov/search-results-detail/362036",
-          "claim": "INSPIRING GENERATIONS OF NEW INNOVATORS TO IMPACT TECHNOLOGIES IN ENERGY 2026 (IGNIITE 2026) Advanced Research Projects Agency Energy  posted"
-        }
-      ]
-    },
-    {
-      "recommendation_id": "rec-113",
-      "opportunity_id": 113,
-      "program_name": "High-performance Optimized Recycled Nuclear Isotopes for Gen IV reactors (HORNIG)",
-      "agency": "Advanced Research Projects Agency Energy ",
-      "amount": "unknown from current evidence",
-      "deadline": "05/28/2026",
-      "deadline_certainty": "confirmed",
-      "eligibility_fit": {
-        "level": "low",
-        "explanation": "Few explicit assignment signals matched in current ledger evidence."
-      },
-      "effort_estimate": {
-        "level": "low",
-        "explanation": "No high-effort application signals found in current evidence."
-      },
-      "activity_status": {
-        "level": "active",
-        "explanation": "Deadline is current: 2026-05-28."
-      },
-      "url": "https://www.grants.gov/search-results-detail/362035",
-      "evidence": [
-        {
-          "source_id": "grants-gov-api",
-          "url": "https://www.grants.gov/search-results-detail/362035",
-          "claim": "High-performance Optimized Recycled Nuclear Isotopes for Gen IV reactors (HORNIG) Advanced Research Projects Agency Energy  posted"
-        }
-      ]
-    },
-    {
-      "recommendation_id": "rec-104",
-      "opportunity_id": 104,
-      "program_name": "Joint Center of Excellence for Advanced Materials Research",
-      "agency": "FAA-COE-JAMS",
+      "recommendation_id": "rec-6",
+      "opportunity_id": 6,
+      "program_name": "NASA SBIR 2026 Improved Material Discovery and Development",
+      "agency": "NASA SBIR 2026 Improved Material Discovery and Development",
       "amount": "unknown from current evidence",
       "deadline": null,
       "deadline_certainty": "unknown",
       "eligibility_fit": {
+        "level": "high",
+        "explanation": "Matched strong assignment signals: SBIR/STTR, advanced materials, manufacturing r&d"
+      },
+      "effort_estimate": {
+        "level": "low",
+        "explanation": "No high-effort application signals found in current evidence."
+      },
+      "activity_status": {
+        "level": "active",
+        "explanation": "No closed, archived, expired, or past-due signal was found."
+      },
+      "url": "https://www.sbir.gov/topics/1012270",
+      "application_outline": [
+        "Company and technology overview",
+        "Problem, deployment context, and public benefit",
+        "Technical approach and work plan",
+        "Commercialization or deployment plan",
+        "Budget, milestones, and partner commitments"
+      ],
+      "evidence": [
+        {
+          "source_id": "sbir-gov-nasa-improved-material-discovery-topic",
+          "url": "https://www.sbir.gov/topics/1012270",
+          "claim": "Public source page for NASA SBIR 2026 Improved Material Discovery and Development."
+        }
+      ]
+    },
+    {
+      "recommendation_id": "rec-5",
+      "opportunity_id": 5,
+      "program_name": "NASA SBIR 2026 Waterproofing Coatings or Surface Treatments for Reusable TPS",
+      "agency": "NASA SBIR 2026 Waterproofing Coatings or Surface Treatments for Reusable TPS",
+      "amount": "unknown from current evidence",
+      "deadline": null,
+      "deadline_certainty": "unknown",
+      "eligibility_fit": {
+        "level": "high",
+        "explanation": "Matched strong assignment signals: SBIR/STTR, advanced materials"
+      },
+      "effort_estimate": {
+        "level": "low",
+        "explanation": "No high-effort application signals found in current evidence."
+      },
+      "activity_status": {
+        "level": "active",
+        "explanation": "No closed, archived, expired, or past-due signal was found."
+      },
+      "url": "https://www.sbir.gov/topics/1012231",
+      "application_outline": [
+        "Company and technology overview",
+        "Problem, deployment context, and public benefit",
+        "Technical approach and work plan",
+        "Commercialization or deployment plan",
+        "Budget, milestones, and partner commitments"
+      ],
+      "evidence": [
+        {
+          "source_id": "sbir-gov-nasa-waterproofing-coatings-topic",
+          "url": "https://www.sbir.gov/topics/1012231",
+          "claim": "Public source page for NASA SBIR 2026 Waterproofing Coatings or Surface Treatments for Reusable TPS."
+        }
+      ]
+    },
+    {
+      "recommendation_id": "rec-7",
+      "opportunity_id": 7,
+      "program_name": "NASA SBIR 2026 Hydrazine-Compatible Elastomeric Materials",
+      "agency": "NASA SBIR 2026 Hydrazine-Compatible Elastomeric Materials",
+      "amount": "unknown from current evidence",
+      "deadline": null,
+      "deadline_certainty": "unknown",
+      "eligibility_fit": {
+        "level": "high",
+        "explanation": "Matched strong assignment signals: SBIR/STTR, advanced materials"
+      },
+      "effort_estimate": {
+        "level": "low",
+        "explanation": "No high-effort application signals found in current evidence."
+      },
+      "activity_status": {
+        "level": "active",
+        "explanation": "No closed, archived, expired, or past-due signal was found."
+      },
+      "url": "https://www.sbir.gov/topics/1012276",
+      "application_outline": [
+        "Company and technology overview",
+        "Problem, deployment context, and public benefit",
+        "Technical approach and work plan",
+        "Commercialization or deployment plan",
+        "Budget, milestones, and partner commitments"
+      ],
+      "evidence": [
+        {
+          "source_id": "sbir-gov-nasa-hydrazine-elastomer-topic",
+          "url": "https://www.sbir.gov/topics/1012276",
+          "claim": "Public source page for NASA SBIR 2026 Hydrazine-Compatible Elastomeric Materials."
+        }
+      ]
+    },
+    {
+      "recommendation_id": "rec-4",
+      "opportunity_id": 4,
+      "program_name": "NSF America's Seed Fund: Chemical Technologies",
+      "agency": "NSF America's Seed Fund: Chemical Technologies",
+      "amount": "unknown from current evidence",
+      "deadline": null,
+      "deadline_certainty": "unknown",
+      "eligibility_fit": {
+        "level": "high",
+        "explanation": "Matched strong assignment signals: SBIR/STTR, advanced materials"
+      },
+      "effort_estimate": {
+        "level": "low",
+        "explanation": "No high-effort application signals found in current evidence."
+      },
+      "activity_status": {
+        "level": "active",
+        "explanation": "No closed, archived, expired, or past-due signal was found."
+      },
+      "url": "https://seedfund.nsf.gov/topics/chemical-technologies/",
+      "application_outline": [
+        "Company and technology overview",
+        "Problem, deployment context, and public benefit",
+        "Technical approach and work plan",
+        "Commercialization or deployment plan",
+        "Budget, milestones, and partner commitments"
+      ],
+      "evidence": [
+        {
+          "source_id": "nsf-seed-chemical-technologies-topic",
+          "url": "https://seedfund.nsf.gov/topics/chemical-technologies/",
+          "claim": "NSF funds startups. Use a research and development grant to create chemical technologies."
+        }
+      ]
+    },
+    {
+      "recommendation_id": "rec-18",
+      "opportunity_id": 18,
+      "program_name": "EPA SBIR funding opportunities",
+      "agency": "EPA SBIR funding opportunities",
+      "amount": "unknown from current evidence",
+      "deadline": null,
+      "deadline_certainty": "unknown",
+      "eligibility_fit": {
+        "level": "high",
+        "explanation": "Matched strong assignment signals: SBIR/STTR, advanced materials"
+      },
+      "effort_estimate": {
         "level": "medium",
-        "explanation": "Some assignment signals matched; agent should verify eligibility details against the official source."
-      },
-      "effort_estimate": {
-        "level": "low",
-        "explanation": "No high-effort application signals found in current evidence."
-      },
-      "activity_status": {
-        "level": "active",
-        "explanation": "Source status indicates posted or forecasted and no past deadline was found."
-      },
-      "url": "https://www.grants.gov/search-results-detail/39841",
-      "evidence": [
-        {
-          "source_id": "grants-gov-api",
-          "url": "https://www.grants.gov/search-results-detail/39841",
-          "claim": "Joint Center of Excellence for Advanced Materials Research FAA-COE-JAMS posted"
-        }
-      ]
-    },
-    {
-      "recommendation_id": "rec-10",
-      "opportunity_id": 10,
-      "program_name": "Nanoplatelets Could Make TVs More Energy Efficient",
-      "agency": "NIST manufacturing RSS",
-      "amount": "unknown from current evidence",
-      "deadline": null,
-      "deadline_certainty": "unknown",
-      "eligibility_fit": {
-        "level": "low",
-        "explanation": "Few explicit assignment signals matched in current ledger evidence."
-      },
-      "effort_estimate": {
-        "level": "low",
-        "explanation": "No high-effort application signals found in current evidence."
+        "explanation": "Likely requires a structured application or technical proposal."
       },
       "activity_status": {
         "level": "active",
         "explanation": "No closed, archived, expired, or past-due signal was found."
       },
-      "url": "https://www.nist.gov/news-events/news/2018/03/nanoplatelets-could-make-tvs-more-energy-efficient",
+      "url": "https://www.epa.gov/sbir/sbir-funding-opportunities",
+      "application_outline": [
+        "Company and technology overview",
+        "Problem, deployment context, and public benefit",
+        "Technical approach and work plan",
+        "Commercialization or deployment plan",
+        "Budget, milestones, and partner commitments"
+      ],
       "evidence": [
         {
-          "source_id": "nist-manufacturing-rss",
-          "url": "https://www.nist.gov/news-events/manufacturing/rss.xml",
-          "claim": "Researchers at NIST and Sharp Laboratories of America, Inc. have discovered new optical properties in sheet-like materials that could eventually make flat-screen televisions, laptops and other light-emitting appliances more energy-efficient. Known as"
+          "source_id": "epa-sbir-funding-opportunities",
+          "url": "https://www.epa.gov/sbir/sbir-funding-opportunities",
+          "claim": "SBIR Program established by the Small Business Innovation Development Act of 1982. EPA issues annual solicitations for Phase I and Phase II research proposals from science and technology-based firms."
         }
       ]
     }

@@ -57,10 +57,11 @@ then agent judgment out — is the point of the example.
 - **No API keys.** This system must run end-to-end with zero third-party API
   credentials beyond whatever the host harness already provides for the BYO
   Prose VM agent itself. The `grant-finder` CLI uses only free public APIs
-  (Grants.gov, Federal Register) and public agency RSS feeds. No SAM.gov key,
-  no Exa key, no OpenAI/Anthropic keys inside any service, no browser
-  automation. If a future service wants to add an API-keyed source, it must
-  be opt-in and the system must still run without it.
+  (Grants.gov, Federal Register), public agency RSS feeds, and configured
+  public source pages. No SAM.gov key, no Exa key, no OpenAI/Anthropic keys
+  inside any service, no browser automation. If a future service wants to add
+  an API-keyed source, it must be opt-in and the system must still run without
+  it.
 - **No LLM inside the CLI.** Every service that invokes `grant-finder`
   validates `retrieval.no_llm == true` (or `no_llm == true` on the explain
   packet) before publishing the result. The CLI is the deterministic engine;
@@ -115,9 +116,9 @@ The default `codex-sdk` harness for `prose run` sandboxes the spawned agent
 to a read-only `$HOME` and blocks outbound network. The CLI cannot run
 under those defaults — it needs to create its SQLite ledger under
 `~/.local/share/grant-finder/` and reach public APIs (Grants.gov, Federal
-Register, agency RSS).
+Register), agency RSS feeds, and configured public source pages.
 
-**Recommended (granular permissions** — requires
+**Recommended (granular permissions)** — requires
 [openprose/prose#78](https://github.com/openprose/prose/pull/78) (or any
 prose release that includes it) for the `PROSE_CODEX_ADD_DIR` /
 `PROSE_CODEX_NETWORK` env-passthrough):
@@ -131,7 +132,7 @@ prose run examples/openprose/src/grant-radar.prose.md \
   --startup_brief "$(cat examples/openprose/fixtures/polyspectra.brief.txt)"
 ```
 
-**Fallback (no sandbox** — works on any prose version, including 0.13.1):
+**Fallback (no sandbox)** — works on any prose version, including 0.13.1:
 
 ```bash
 PROSE_CODEX_SANDBOX_MODE=danger-full-access \
@@ -173,7 +174,7 @@ network.outbound:
   - api.grants.gov                  # Grants.gov search + fetchOpportunity
   - www.federalregister.gov         # Federal Register document hydration
   - grants.gov                      # XML bulk extract page
-  # plus the per-feed RSS URLs declared in cli/grant-finder/internal/grantfinder/data/feeds.json
+  # plus the RSS and public source-page URLs declared in cli/grant-finder/internal/grantfinder/data/feeds.json
 
 exec:
   - grant-finder                    # the CLI binary itself
