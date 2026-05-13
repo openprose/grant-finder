@@ -114,8 +114,9 @@ under those defaults — it needs to create its SQLite ledger under
 Register, agency RSS).
 
 **Recommended (granular permissions** — requires
-[openprose/prose#TBD](https://github.com/openprose/prose) with the
-`PROSE_CODEX_ADD_DIR` / `PROSE_CODEX_NETWORK` env-passthrough patch):
+[openprose/prose#78](https://github.com/openprose/prose/pull/78) (or any
+prose release that includes it) for the `PROSE_CODEX_ADD_DIR` /
+`PROSE_CODEX_NETWORK` env-passthrough):
 
 ```bash
 PROSE_CODEX_SANDBOX_MODE=workspace-write \

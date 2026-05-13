@@ -15,6 +15,18 @@ backed by source-cited evidence.
 > Looking for a hosted, fully-managed version? See
 > [Hosted service](#hosted-service) below.
 
+## Current maturity
+
+The agent-facing CLI surface is usable today: `research`, `explain`, `status`,
+`doctor`, `agent-context`, and `version` are the supported top-level commands,
+with source plumbing kept under `debug`. The harness verifies the fixture-driven
+research flow end to end.
+
+The project is still hardening as an operated product. Source coverage,
+freshness policy, and long-running ingestion schedules are intentionally called
+out in [Limitations](#limitations); the hosted service handles those operational
+concerns for users who do not want to run the ledger themselves.
+
 ## Try it in 60 seconds
 
 ```bash
@@ -118,8 +130,9 @@ RSS feeds.
 ## Design choices worth knowing
 
 - **The CLI doesn't call an LLM.** Ranking, fit scoring, dedupe, and
-  source-lane coverage are all deterministic. If an AI agent calls
-  `grant-finder` twice with the same assignment, it gets the same answer.
+  source-lane coverage are deterministic for a fixed assignment, options, and
+  ledger state. Fields such as `generated_at` and results after
+  `--refresh auto` can change as time passes and public sources update.
 - **No paid API keys.** Grants.gov, Federal Register, and public agency feeds
   cover the core federal sources. The CLI will work offline against a
   populated ledger.
@@ -180,13 +193,14 @@ from a shell or a script.
   programs. International funding is not in scope yet.
 - **Federal sources are the strongest lane.** State, foundation, and
   commercial grant databases are partial or absent.
+- **Freshness is local unless hosted.** `--refresh auto` updates stale or empty
+  local ledgers, but this repo does not run a background scheduler for you.
+  Use your own scheduled job if you need continuously fresh self-hosted data.
 - **SAM.gov is off by default.** It requires an API key, which the public
   binary intentionally does not configure.
 - **No web scraping.** The CLI only reads structured sources (APIs and RSS).
   Programs that only publish via a JavaScript-rendered page or a paid
   database won't be picked up.
-- **Freshness depends on you.** Without `--refresh auto` (the default), the
-  ledger doesn't update. Cold ledgers have nothing to rank.
 - **Eligibility decisions are yours.** The CLI rates eligibility *fit*
   conservatively but does not adjudicate. Always read the official source
   before applying.
@@ -229,10 +243,12 @@ operational concerns are theirs. See <https://openprose.ai>.
 
 Issues are welcome. We're a small team and contribute time is scarce, so
 substantive PRs are most useful when they come with: a clear motivating use
-case, a green `make dogfood-agent` run, and respect for the
+case, green `make validate` and `make dogfood-agent` runs, and respect for the
 [invariants documented in `AGENTS.md`](./AGENTS.md#invariants-dont-break-these)
 (notably: no LLM inside the CLI, no paid API keys, no breaking the public
-command surface). New source manifests are especially welcome.
+command surface). Run `make fuzz-smoke FUZZTIME=10s` when changing parsers,
+JSON projection, or debug SQL validation. New source manifests are especially
+welcome.
 
 ## License
 
