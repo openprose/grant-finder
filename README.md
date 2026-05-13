@@ -1,91 +1,221 @@
-# Grant Finder
+# grant-finder
 
-Agent-facing grant deep-research substrate. Open source. Self-hostable.
+Find non-dilutive funding for your U.S. startup from the command line.
+SBIR/STTR solicitations, federal agency grants, state economic development
+programs — ranked by fit, with every recommendation cited back to its source.
 
-Grant Finder helps an upstream agent answer a funding-opportunity request for a
-specific startup. It reuses deterministic collectors, a local SQLite Opportunity
-Ledger with FTS5, optional `usearch` semantic retrieval, source provenance, and
-change detection so the upstream LLM does not rebuild grant research from
-scratch on every request.
+**No API keys.** Runs on free public data (Grants.gov, the Federal Register,
+public agency RSS feeds). Self-hostable.
 
-The upstream LLM uses the CLI. **The CLI itself must not call an LLM.** It
-operates entirely on public free APIs (Grants.gov, Federal Register) and public
-agency feeds.
+**For founders, the engineers working with them, and the AI agents driving
+both.** Describe your startup in a paragraph; get back a ranked list of
+funding opportunities with deadlines, fit rationale, and application outlines,
+backed by source-cited evidence.
 
-## Standing Goal
+> Looking for a hosted, fully-managed version? See
+> [Hosted service](#hosted-service) below.
 
-> Keep a startup's funding pipeline curated, provenance-backed, and ready for
-> agent-driven follow-up — without reinventing source discovery every time.
-
-## Agent CLI Surface
-
-The CLI is not a human source-operations console. The public surface is:
-
-- `research` — accept a Research Assignment, return a Research Packet
-- `explain` — show evidence and provenance for one recommendation
-- `status` — report ledger freshness and source coverage
-
-Source plumbing (sync, feeds, federal-register, grants, sql, export) lives
-under `debug` and is not the headline interface. See
-`docs/adr/0001-agent-facing-grant-deep-research.md`.
-
-## Quick Start
-
-Build the CLI:
+## Try it in 60 seconds
 
 ```bash
-cd cli/grant-finder
-go build -o /tmp/grant-finder ./cmd/grant-finder
+# 1. Get the repo
+git clone https://github.com/openprose/grant-finder.git
+cd grant-finder
+
+# 2. Build the CLI
+cd cli/grant-finder && go build -o "$HOME/.local/bin/grant-finder" ./cmd/grant-finder
+cd ../..
+
+# 3. Run it against the sample assignment
+grant-finder research --assignment fixtures/acme-deeptech-assignment.sample.json
 ```
 
-Seed the deterministic fixture used by the harness:
+On first run the CLI refreshes its local ledger from public sources
+(~30 seconds), then prints a ranked table:
+
+```
+FIT     PROGRAM                                              AGENCY                       DEADLINE     URL
+high    SBIR autonomous vehicle fleet charging infrastr…    U.S. National Science Found… 2026-08-01   https://…
+medium  America's Seed Fund Phase I (FY2026)                 U.S. National Science Found… 2026-07-15   https://…
+medium  DOE EERE Vehicle Technologies SBIR                   U.S. Department of Energy    2026-09-30   https://…
+…
+```
+
+Pass `--json` for the machine-readable Research Packet that an agent would
+consume, including per-recommendation evidence, provenance, deadline
+certainty, effort estimate, and source-lane coverage (including explicit
+negative-evidence rows like *"no current ARPA-E programs match"*).
+
+## What you can ask it
 
 ```bash
-/tmp/grant-finder debug seed-fixture \
-  --fixture ../../fixtures/acme-deeptech-opportunities.sample.json \
-  --db /tmp/grant-finder-demo.sqlite \
-  --json
+# Rank opportunities for a specific startup context
+grant-finder research --assignment my-startup.json --json
+
+# Show evidence and provenance for one recommendation
+grant-finder explain rec-12 --json
+
+# Check ledger freshness and source-lane coverage
+grant-finder status --assignment my-startup.json --json
+
+# Inspect health
+grant-finder doctor --json
 ```
 
-Ask for a research packet:
+A `my-startup.json` looks like this — see the schema at
+[`schemas/research-assignment.schema.json`](./schemas/research-assignment.schema.json):
+
+```json
+{
+  "assignment_id": "acme-deeptech-2026-05-13",
+  "research_question": "Find non-dilutive funding for autonomous EV fleet infrastructure.",
+  "company_profile": {
+    "name": "Acme Deep-Tech",
+    "description": "A deep-tech startup building autonomous fleet-servicing infrastructure...",
+    "stage": "startup",
+    "location": "United States",
+    "technologies": ["autonomous vehicles", "ev infrastructure", "robotics"]
+  },
+  "focus_areas": ["ev infrastructure", "autonomous vehicles", "robotics"],
+  "target_geographies": ["United States", "California"],
+  "known_grants": []
+}
+```
+
+If you want an AI agent to fill this in from a paragraph-length brief, see
+[the OpenProse example](./examples/openprose/) — it shows a complete
+brief-to-report flow.
+
+## How it works
+
+```
+your assignment (JSON)
+        │
+        ▼
+ ┌────────────────────────────────────────────────────────────┐
+ │  grant-finder research                                     │
+ │   ├─ refresh stale source lanes (Grants.gov, Fed. Reg.,    │
+ │   │   public agency RSS) — only if your local ledger       │
+ │   │   is empty or stale                                    │
+ │   ├─ retrieve candidates (usearch semantic when available, │
+ │   │   FTS5 fallback)                                       │
+ │   ├─ dedupe against your known grants                      │
+ │   ├─ score fit, effort, deadline certainty, activity       │
+ │   ├─ filter out closed / archived / past-due (by default)  │
+ │   └─ rank                                                  │
+ └────────────────────────────────────────────────────────────┘
+        │
+        ▼
+ ranked recommendations + per-result evidence + source-lane coverage
+```
+
+The CLI keeps a local SQLite ledger at
+`~/.local/share/grant-finder/grant-finder.sqlite` (or `$XDG_DATA_HOME` if set).
+Repeat queries reuse it; nothing leaves your machine except the public-API
+fetches the CLI makes against Grants.gov, the Federal Register, and configured
+RSS feeds.
+
+## Design choices worth knowing
+
+- **The CLI doesn't call an LLM.** Ranking, fit scoring, dedupe, and
+  source-lane coverage are all deterministic. If an AI agent calls
+  `grant-finder` twice with the same assignment, it gets the same answer.
+- **No paid API keys.** Grants.gov, Federal Register, and public agency feeds
+  cover the core federal sources. The CLI will work offline against a
+  populated ledger.
+- **Provenance over completeness.** Every recommendation cites its source.
+  When a must-check lane (like ARPA-E) has no current match, the CLI says so
+  explicitly rather than silently omitting the lane.
+- **Self-hostable. Always.** This repo is the whole product. Hosting is the
+  upsell, not feature parity.
+
+## Install
 
 ```bash
-/tmp/grant-finder research \
-  --assignment ../../fixtures/acme-deeptech-assignment.sample.json \
-  --db /tmp/grant-finder-demo.sqlite \
-  --refresh off \
-  --semantic usearch \
-  --json
+# Most common: go install (binary lands in $GOPATH/bin)
+go install github.com/openprose/grant-finder/cli/grant-finder/cmd/grant-finder@latest
+
+# From source
+git clone https://github.com/openprose/grant-finder.git
+cd grant-finder/cli/grant-finder
+go build -o "$HOME/.local/bin/grant-finder" ./cmd/grant-finder
 ```
 
-The `research`, `explain`, and `status` commands are deterministic and report
-`no_llm: true`. Semantic retrieval prefers local `usearch`; when the local
-corpus is not indexed or `usearch` is unavailable, the CLI falls back to
-SQLite FTS5. Default `research` output filters out closed, archived, expired,
-and past-due opportunities. Pass `--include-inactive` for historical comps.
+Requires Go 1.25+ (see `cli/grant-finder/go.mod`). Optional:
+install [`usearch`](https://github.com/unum-cloud/usearch) on `PATH` for
+faster semantic retrieval; without it the CLI falls back to SQLite FTS5
+automatically.
 
-## Harness
+## What's in the box
 
-```bash
-make validate              # fast repo check + go test ./...
-make validate-product-cli  # stricter product-surface contract gate
-make dogfood-agent         # exercise CLI as an upstream agent would
-```
+| Path | What |
+|---|---|
+| `cli/grant-finder/` | The Go CLI source |
+| `schemas/` | JSON Schema for assignment input and Research Packet output |
+| `fixtures/` | Sample assignment + opportunities (generic deep-tech startup) |
+| `examples/openprose/` | A runnable OpenProse system that turns a natural-language brief into a ranked report by driving the CLI |
+| [`AGENTS.md`](./AGENTS.md) | Architecture and conventions for contributors and AI agents working on this repo |
 
-## Hosted Service
+## Limitations
 
-Running Grant Finder yourself is the whole point of this repo — fork it, run it,
-maintain it. If you would rather have someone else operate it (source freshness,
-monitoring, ingestion, reliability, support), the OpenProse team offers a
-hosted Grant Radar service. See `https://openprose.ai` for details.
+- **U.S.-focused.** The source manifest covers federal and select U.S. state
+  programs. International funding is not in scope yet.
+- **Federal sources are the strongest lane.** State, foundation, and
+  commercial grant databases are partial or absent.
+- **SAM.gov is off by default.** It requires an API key, which the public
+  binary intentionally does not configure.
+- **No web scraping.** The CLI only reads structured sources (APIs and RSS).
+  Programs that only publish via a JavaScript-rendered page or a paid
+  database won't be picked up.
+- **Freshness depends on you.** Without `--refresh auto` (the default), the
+  ledger doesn't update. Cold ledgers have nothing to rank.
+- **Eligibility decisions are yours.** The CLI rates eligibility *fit*
+  conservatively but does not adjudicate. Always read the official source
+  before applying.
 
-## Credits
+## FAQ
 
-This CLI was scaffolded with
-[CLI Printing Press](https://github.com/mvanhorn/cli-printing-press) and is now
-maintained directly in this repo. The Printing Press meta-artifacts that
-explain the product thesis live under `printing-press/`.
+**Q: Do I need an OpenAI / Anthropic / SAM.gov / Exa API key?**
+A: No. None of the above. The CLI uses only free public APIs (Grants.gov,
+Federal Register) and public RSS feeds.
+
+**Q: Can I use this without an AI agent?**
+A: Yes. The CLI takes a JSON file as input — you can write one by hand using
+the schema in `schemas/`. The AI-agent integration just makes the
+brief-to-assignment translation easier; the CLI itself is fully usable
+standalone.
+
+**Q: How fresh is the data?**
+A: As fresh as the last `--refresh auto` run. A hosted version (see below)
+keeps the ledger continuously fresh; if you're running it yourself, schedule
+your own refresh.
+
+**Q: Why isn't \<favorite source\> included?**
+A: The default manifest is at
+`cli/grant-finder/internal/grantfinder/data/{sources.json,feeds.json}`. PRs
+that add public, key-free sources are welcome.
+
+**Q: Will this work for non-U.S. startups?**
+A: Not well, today. The source manifest is U.S.-focused. International
+expansion is a known limitation, not a permanent decision.
+
+## Hosted service
+
+Running grant-finder yourself is the whole point of this repo — fork it,
+build it, run it. If you'd rather have someone else handle source freshness,
+ingestion scheduling, monitoring, and reliability, the OpenProse team offers
+a hosted version of this same CLI as a service. The code is the same; the
+operational concerns are theirs. See <https://openprose.ai>.
+
+## Contributing
+
+Issues are welcome. We're a small team and contribute time is scarce, so
+substantive PRs are most useful when they come with: a clear motivating use
+case, a green `make dogfood-agent` run, and respect for the
+[invariants documented in `AGENTS.md`](./AGENTS.md#invariants-dont-break-these)
+(notably: no LLM inside the CLI, no paid API keys, no breaking the public
+command surface). New source manifests are especially welcome.
 
 ## License
 
-MIT. See `LICENSE`.
+MIT. See [`LICENSE`](./LICENSE).
