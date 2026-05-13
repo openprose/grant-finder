@@ -1,10 +1,12 @@
 package grantfinder
 
 import (
+	"bytes"
 	"context"
 	"encoding/xml"
 	"fmt"
 	"html"
+	"regexp"
 	"strings"
 	"time"
 )
@@ -62,6 +64,12 @@ type atomLink struct {
 	Rel  string `xml:"rel,attr"`
 }
 
+var (
+	sourcePageTitleRE                  = regexp.MustCompile(`(?is)<title[^>]*>(.*?)</title>`)
+	sourcePageMetaDescriptionRE        = regexp.MustCompile(`(?is)<meta[^>]+(?:name|property)\s*=\s*["'](?:description|og:description)["'][^>]+content\s*=\s*["']([^"']*)["']`)
+	sourcePageMetaDescriptionContentRE = regexp.MustCompile(`(?is)<meta[^>]+content\s*=\s*["']([^"']*)["'][^>]+(?:name|property)\s*=\s*["'](?:description|og:description)["']`)
+)
+
 func SmokeFeeds(ctx context.Context, limit int, timeout time.Duration) ([]FeedSmokeResult, error) {
 	feeds, err := Feeds()
 	if err != nil {
@@ -80,7 +88,7 @@ func SmokeFeeds(ctx context.Context, limit int, timeout time.Duration) ([]FeedSm
 
 func smokeOneFeed(ctx context.Context, feed Feed, timeout time.Duration) (FeedSmokeResult, []FeedItem) {
 	res := FeedSmokeResult{ID: feed.ID, Name: feed.Name, URL: feed.URL}
-	data, code, contentType, err := getBytes(ctx, feed.URL, timeout)
+	data, code, contentType, err := getBytesForFeed(ctx, feed, timeout)
 	res.StatusCode = code
 	res.Status = code
 	res.ContentType = contentType
@@ -103,9 +111,19 @@ func smokeOneFeed(ctx context.Context, feed Feed, timeout time.Duration) (FeedSm
 	return res, items
 }
 
+func getBytesForFeed(ctx context.Context, feed Feed, timeout time.Duration) ([]byte, int, string, error) {
+	if supportsSourcePageFallback(feed) {
+		return getBytesLimit(ctx, feed.URL, timeout, 6<<20)
+	}
+	return getBytes(ctx, feed.URL, timeout)
+}
+
 func ParseFeedItems(feed Feed, data []byte) ([]FeedItem, error) {
 	var doc rssDoc
-	if err := xml.Unmarshal(data, &doc); err != nil {
+	if err := unmarshalFeedXML(data, &doc); err != nil {
+		if supportsSourcePageFallback(feed) {
+			return ParseSourcePageItem(feed, data), nil
+		}
 		return nil, err
 	}
 	var out []FeedItem
@@ -164,7 +182,140 @@ func ParseFeedItems(feed Feed, data []byte) ([]FeedItem, error) {
 			Signals:   SortedSignals(feed.Signals),
 		})
 	}
+	if len(out) == 0 && supportsSourcePageFallback(feed) {
+		return ParseSourcePageItem(feed, data), nil
+	}
 	return out, nil
+}
+
+func unmarshalFeedXML(data []byte, doc *rssDoc) error {
+	if err := xml.Unmarshal(data, doc); err != nil {
+		repaired, changed := escapeBareAmpersands(data)
+		if !changed {
+			return err
+		}
+		if repairedErr := xml.Unmarshal(repaired, doc); repairedErr == nil {
+			return nil
+		}
+		return err
+	}
+	return nil
+}
+
+func escapeBareAmpersands(data []byte) ([]byte, bool) {
+	out := make([]byte, 0, len(data))
+	changed := false
+	for i := 0; i < len(data); i++ {
+		if data[i] == '&' && !startsKnownEntity(data[i:]) {
+			out = append(out, '&', 'a', 'm', 'p', ';')
+			changed = true
+			continue
+		}
+		out = append(out, data[i])
+	}
+	return out, changed
+}
+
+func startsKnownEntity(data []byte) bool {
+	for _, entity := range [][]byte{
+		[]byte("&amp;"),
+		[]byte("&lt;"),
+		[]byte("&gt;"),
+		[]byte("&quot;"),
+		[]byte("&apos;"),
+	} {
+		if bytes.HasPrefix(data, entity) {
+			return true
+		}
+	}
+	if len(data) < 4 || data[0] != '&' || data[1] != '#' {
+		return false
+	}
+	for i := 2; i < len(data) && i < 16; i++ {
+		switch {
+		case data[i] == ';':
+			return i > 2
+		case data[i] == 'x' || data[i] == 'X':
+			if i != 2 {
+				return false
+			}
+		case (data[i] >= '0' && data[i] <= '9') ||
+			(data[i] >= 'a' && data[i] <= 'f') ||
+			(data[i] >= 'A' && data[i] <= 'F'):
+			continue
+		default:
+			return false
+		}
+	}
+	return false
+}
+
+func supportsSourcePageFallback(feed Feed) bool {
+	switch strings.ToLower(strings.TrimSpace(feed.Type)) {
+	case "source_page", "topic_page", "html_page":
+		return true
+	default:
+		return false
+	}
+}
+
+func ParseSourcePageItem(feed Feed, data []byte) []FeedItem {
+	title := strings.TrimSpace(feed.Name)
+	if title == "" {
+		title = sourcePageTitle(data)
+	}
+	if title == "" && strings.TrimSpace(feed.URL) == "" {
+		return nil
+	}
+	summary := sourcePageSummary(data)
+	if summary == "" || looksLikeSourcePageBoilerplate(summary) {
+		summary = "Public source page for " + title + "."
+	}
+	return []FeedItem{{
+		SourceID:  feed.ID,
+		SourceURL: feed.URL,
+		RawID:     feed.URL,
+		Title:     title,
+		URL:       feed.URL,
+		Summary:   summary,
+		Signals:   SortedSignals(feed.Signals),
+	}}
+}
+
+func sourcePageTitle(data []byte) string {
+	match := sourcePageTitleRE.FindSubmatch(data)
+	if len(match) < 2 {
+		return ""
+	}
+	return cleanText(html.UnescapeString(stripTags(string(match[1]))))
+}
+
+func sourcePageSummary(data []byte) string {
+	for _, re := range []*regexp.Regexp{sourcePageMetaDescriptionRE, sourcePageMetaDescriptionContentRE} {
+		match := re.FindSubmatch(data)
+		if len(match) >= 2 {
+			return truncateText(cleanText(html.UnescapeString(string(match[1]))), 800)
+		}
+	}
+	return ""
+}
+
+func looksLikeSourcePageBoilerplate(value string) bool {
+	lower := strings.ToLower(value)
+	return strings.Contains(lower, "skip to main content") ||
+		strings.Contains(lower, "an official website of the united states government") ||
+		strings.Contains(lower, "official websites use .gov")
+}
+
+func truncateText(value string, maxRunes int) string {
+	if maxRunes <= 0 {
+		return ""
+	}
+	runes := []rune(value)
+	if len(runes) <= maxRunes {
+		return value
+	}
+	return strings.TrimSpace(string(runes[:maxRunes]))
 }
 
 func OpportunityFromFeedItem(feed Feed, item FeedItem) Opportunity {

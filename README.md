@@ -5,7 +5,7 @@ SBIR/STTR solicitations, federal agency grants, state economic development
 programs — surfaced as source-cited candidates for an upstream agent to rank.
 
 **No API keys.** Runs on free public data (Grants.gov, the Federal Register,
-public agency RSS feeds). Self-hostable.
+public agency RSS feeds, and authoritative public source pages). Self-hostable.
 
 **For founders, the engineers working with them, and the AI agents driving
 both.** Describe your startup in a paragraph; get back a source-cited candidate
@@ -106,8 +106,8 @@ your assignment (JSON)
  ┌────────────────────────────────────────────────────────────┐
  │  grant-finder research                                     │
  │   ├─ refresh stale source lanes (Grants.gov, Fed. Reg.,    │
- │   │   public agency RSS) — only if your local ledger       │
- │   │   is empty or stale                                    │
+ │   │   RSS feeds, public source pages) — only if your local │
+ │   │   ledger is empty or stale                             │
  │   ├─ retrieve candidates (usearch semantic when available, │
  │   │   FTS5 fallback)                                       │
  │   ├─ dedupe against your known grants                      │
@@ -123,8 +123,8 @@ your assignment (JSON)
 The CLI keeps a local SQLite ledger at
 `~/.local/share/grant-finder/grant-finder.sqlite` (or `$XDG_DATA_HOME` if set).
 Repeat queries reuse it; nothing leaves your machine except the public-API
-fetches the CLI makes against Grants.gov, the Federal Register, and configured
-RSS feeds.
+fetches the CLI makes against Grants.gov, the Federal Register, configured RSS
+feeds, and configured public source pages.
 
 ## Design choices worth knowing
 
@@ -135,9 +135,9 @@ RSS feeds.
 - **Agents make the judgment call.** The CLI is a ledger and provenance engine,
   not the final grant strategist. The bundled OpenProse example ranks,
   rejects, and formats the candidate packet with the full startup context.
-- **No paid API keys.** Grants.gov, Federal Register, and public agency feeds
-  cover the core federal sources. The CLI will work offline against a
-  populated ledger.
+- **No paid API keys.** Grants.gov, Federal Register, public agency feeds, and
+  authoritative public source pages cover the core federal sources. The CLI
+  will work offline against a populated ledger.
 - **Provenance over completeness.** Every candidate cites its source.
   When a must-check lane (like ARPA-E) has no current match, the CLI says so
   explicitly rather than silently omitting the lane.
@@ -200,9 +200,10 @@ from a shell or a script.
   Use your own scheduled job if you need continuously fresh self-hosted data.
 - **SAM.gov is off by default.** It requires an API key, which the public
   binary intentionally does not configure.
-- **No web scraping.** The CLI only reads structured sources (APIs and RSS).
-  Programs that only publish via a JavaScript-rendered page or a paid
-  database won't be picked up.
+- **No browser automation or paid scraping.** The CLI reads public APIs, RSS
+  feeds, and configured source pages with a small deterministic HTML adapter.
+  Programs that only publish through JavaScript-rendered pages, gated portals,
+  or paid databases won't be picked up.
 - **Eligibility decisions are yours.** The CLI rates eligibility *fit*
   conservatively but does not adjudicate. Always read the official source
   before applying.
@@ -211,7 +212,7 @@ from a shell or a script.
 
 **Q: Do I need an OpenAI / Anthropic / SAM.gov / Exa API key?**
 A: No. None of the above. The CLI uses only free public APIs (Grants.gov,
-Federal Register) and public RSS feeds.
+Federal Register), public RSS feeds, and configured public source pages.
 
 **Q: Can I use this without an AI agent?**
 A: Yes. The CLI takes a JSON file as input — you can write one by hand using
@@ -249,8 +250,9 @@ case, green `make validate` and `make dogfood-agent` runs, and respect for the
 [invariants documented in `AGENTS.md`](./AGENTS.md#invariants-dont-break-these)
 (notably: no LLM inside the CLI, no paid API keys, no breaking the public
 command surface). Run `make fuzz-smoke FUZZTIME=10s` when changing parsers,
-JSON projection, or debug SQL validation. New source manifests are especially
-welcome.
+JSON projection, or debug SQL validation. Run `make validate-recall` when
+changing retrieval, source manifests, source-page adapters, or assignment query
+construction. New public, key-free source manifests are especially welcome.
 
 ## License
 

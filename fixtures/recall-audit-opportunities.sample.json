@@ -1,0 +1,277 @@
+{
+  "opportunities": [
+    {
+      "source_id": "nsf-seed-fund-topic",
+      "raw_id": "RECALL-POLY-NSF-AM-001",
+      "source_url": "https://seedfund.nsf.gov/topics/advanced-manufacturing/",
+      "opportunity": {
+        "record_type": "grant",
+        "title": "NSF America's Seed Fund: Advanced Manufacturing",
+        "sponsor": "U.S. National Science Foundation",
+        "url": "https://seedfund.nsf.gov/topics/advanced-manufacturing/",
+        "apply_url": "https://seedfund.nsf.gov/apply/",
+        "deadline_text": "recurring seed-fund windows",
+        "published": "2026-05-13",
+        "opportunity_number": "RECALL-POLY-NSF-AM-001",
+        "canonicality": "authoritative",
+        "publication_basis": "fixture",
+        "summary": "NSF America's Seed Fund topic lane for small businesses developing advanced manufacturing processes, materials, minerals, additive manufacturing, 3D printing, and commercialization-ready deep technology.",
+        "eligibility": "U.S. small businesses may apply for Phase I and Phase II seed funding.",
+        "raw_signals": [
+          "nsf seed fund",
+          "sbir",
+          "small business",
+          "advanced manufacturing",
+          "additive manufacturing",
+          "3d printing",
+          "advanced materials",
+          "materials"
+        ]
+      }
+    },
+    {
+      "source_id": "sbir-gov-topics",
+      "raw_id": "RECALL-POLY-NASA-HYDRAZINE-001",
+      "source_url": "https://www.sbir.gov/topics/1012276",
+      "opportunity": {
+        "record_type": "grant",
+        "title": "NASA SBIR 2026 Hydrazine-Compatible Elastomeric Materials",
+        "sponsor": "National Aeronautics and Space Administration",
+        "url": "https://www.sbir.gov/topics/1012276",
+        "deadline_text": "2026-05-21",
+        "published": "2026-04-21",
+        "opportunity_number": "RECALL-POLY-NASA-HYDRAZINE-001",
+        "canonicality": "authoritative",
+        "publication_basis": "fixture",
+        "summary": "NASA SBIR topic for chemically resistant elastomeric and polymer materials compatible with hydrazine and spaceflight systems. Relevant to rugged resin and aerospace materials R&D.",
+        "eligibility": "Small businesses may apply through NASA SBIR/STTR topic solicitations.",
+        "raw_signals": [
+          "sbir",
+          "small business",
+          "polymer materials",
+          "aerospace materials",
+          "chemical resistance",
+          "advanced materials"
+        ]
+      }
+    },
+    {
+      "source_id": "nsf-seed-fund-topic",
+      "raw_id": "RECALL-CYPRIS-NSF-PHOTONICS-001",
+      "source_url": "https://seedfund.nsf.gov/topics/photonics/",
+      "opportunity": {
+        "record_type": "grant",
+        "title": "NSF America's Seed Fund: Photonics",
+        "sponsor": "U.S. National Science Foundation",
+        "url": "https://seedfund.nsf.gov/topics/photonics/",
+        "apply_url": "https://seedfund.nsf.gov/apply/",
+        "deadline_text": "recurring seed-fund windows",
+        "published": "2026-05-13",
+        "opportunity_number": "RECALL-CYPRIS-NSF-PHOTONICS-001",
+        "canonicality": "authoritative",
+        "publication_basis": "fixture",
+        "summary": "NSF America's Seed Fund topic lane for photonic materials, photonic metamaterials, optical components, lighting, displays, and other photonics technologies developed by startups.",
+        "eligibility": "U.S. small businesses may apply for Phase I and Phase II seed funding.",
+        "raw_signals": [
+          "nsf seed fund",
+          "sbir",
+          "small business",
+          "photonics",
+          "photonic materials",
+          "photonic coatings",
+          "advanced materials",
+          "structural color"
+        ]
+      }
+    },
+    {
+      "source_id": "nsf-seed-fund-topic",
+      "raw_id": "RECALL-CYPRIS-NSF-CHEM-001",
+      "source_url": "https://seedfund.nsf.gov/topics/chemical-technologies/",
+      "opportunity": {
+        "record_type": "grant",
+        "title": "NSF America's Seed Fund: Chemical Technologies",
+        "sponsor": "U.S. National Science Foundation",
+        "url": "https://seedfund.nsf.gov/topics/chemical-technologies/",
+        "apply_url": "https://seedfund.nsf.gov/apply/",
+        "deadline_text": "recurring seed-fund windows",
+        "published": "2026-05-13",
+        "opportunity_number": "RECALL-CYPRIS-NSF-CHEM-001",
+        "canonicality": "authoritative",
+        "publication_basis": "fixture",
+        "summary": "NSF America's Seed Fund topic lane for chemical technologies, green chemicals, chemical alternatives, advanced chemicals, sustainable chemistry, and advanced materials.",
+        "eligibility": "U.S. small businesses may apply for Phase I and Phase II seed funding.",
+        "raw_signals": [
+          "nsf seed fund",
+          "sbir",
+          "small business",
+          "chemical technologies",
+          "sustainable chemistry",
+          "green chemistry",
+          "advanced materials",
+          "coatings"
+        ]
+      }
+    },
+    {
+      "source_id": "sbir-gov-topics",
+      "raw_id": "RECALL-CYPRIS-NASA-COATINGS-001",
+      "source_url": "https://www.sbir.gov/topics/1012231",
+      "opportunity": {
+        "record_type": "grant",
+        "title": "NASA SBIR 2026 Waterproofing Coatings or Surface Treatments for Reusable TPS",
+        "sponsor": "National Aeronautics and Space Administration",
+        "url": "https://www.sbir.gov/topics/1012231",
+        "deadline_text": "2026-05-21",
+        "published": "2026-04-21",
+        "opportunity_number": "RECALL-CYPRIS-NASA-COATINGS-001",
+        "canonicality": "authoritative",
+        "publication_basis": "fixture",
+        "summary": "NASA SBIR topic for modern coating and surface-treatment chemistries that improve durability and reduce toxic materials for reusable thermal-protection systems.",
+        "eligibility": "Small businesses may apply through NASA SBIR/STTR topic solicitations.",
+        "raw_signals": [
+          "sbir",
+          "small business",
+          "coatings",
+          "surface treatments",
+          "sustainable chemistry",
+          "advanced materials",
+          "durability"
+        ]
+      }
+    },
+    {
+      "source_id": "nih-guide",
+      "raw_id": "RECALL-ENACT-PAR-25-184",
+      "source_url": "https://grants.nih.gov/grants/guide/pa-files/PAR-25-184.html",
+      "opportunity": {
+        "record_type": "grant",
+        "title": "Early Stage Testing of Pharmacologic or Neuromodulatory Interventions for Mental Disorders (R61/R33)",
+        "sponsor": "National Institutes of Health",
+        "url": "https://grants.nih.gov/grants/guide/pa-files/PAR-25-184.html",
+        "apply_url": "https://grants.nih.gov/grants/guide/pa-files/PAR-25-184.html",
+        "deadline_text": "multiple receipt dates",
+        "published": "2026-05-13",
+        "opportunity_number": "PAR-25-184",
+        "canonicality": "authoritative",
+        "publication_basis": "fixture",
+        "summary": "NIH R61/R33 funding for early-stage testing of pharmacologic or neuromodulatory interventions for mental disorders, target engagement, clinical trials, fMRI, EEG, and psychiatric mechanisms.",
+        "eligibility": "Academic research institutions and clinical investigators may apply for mental-health intervention studies.",
+        "raw_signals": [
+          "nih",
+          "nimh",
+          "academic research lab",
+          "psychiatry",
+          "clinical neuroscience",
+          "clinical trials",
+          "mechanism of action",
+          "fMRI",
+          "EEG",
+          "treatment-resistant depression"
+        ]
+      }
+    },
+    {
+      "source_id": "nih-guide",
+      "raw_id": "RECALL-ENACT-PAR-25-180",
+      "source_url": "https://grants.nih.gov/grants/guide/pa-files/PAR-25-180.html",
+      "opportunity": {
+        "record_type": "grant",
+        "title": "First in Human and Early Stage Clinical Trials of Novel Investigational Drugs or Neuromodulatory Device-based Interventions for Psychiatric Disorders (U01 Clinical Trial Required)",
+        "sponsor": "National Institutes of Health",
+        "url": "https://grants.nih.gov/grants/guide/pa-files/PAR-25-180.html",
+        "apply_url": "https://grants.nih.gov/grants/guide/pa-files/PAR-25-180.html",
+        "deadline_text": "multiple receipt dates",
+        "published": "2026-05-13",
+        "opportunity_number": "PAR-25-180",
+        "canonicality": "authoritative",
+        "publication_basis": "fixture",
+        "summary": "NIH U01 funding for first-in-human and early-stage clinical trials of novel investigational drugs or neuromodulatory device-based interventions for psychiatric disorders, CNS target engagement, clinical neuroscience, and psychiatric disorders.",
+        "eligibility": "Academic research institutions and clinical investigators may apply for early-stage psychiatric drug trials.",
+        "raw_signals": [
+          "nih",
+          "psychiatry",
+          "clinical neuroscience",
+          "clinical trials",
+          "mechanism of action",
+          "treatment-resistant depression",
+          "PTSD",
+          "OCD"
+        ]
+      }
+    },
+    {
+      "source_id": "nih-highlighted-topics",
+      "raw_id": "RECALL-ENACT-NIH-PSILOCYBIN-001",
+      "source_url": "https://grants.nih.gov/funding/find-a-fit-for-your-research/highlighted-topics/55",
+      "opportunity": {
+        "record_type": "grant",
+        "title": "NIH highlighted topic: mechanism-driven psilocybin research",
+        "sponsor": "National Institutes of Health",
+        "url": "https://grants.nih.gov/funding/find-a-fit-for-your-research/highlighted-topics/55",
+        "deadline_text": "highlighted topic expires 2027-04-10",
+        "published": "2026-04-10",
+        "opportunity_number": "RECALL-ENACT-NIH-PSILOCYBIN-001",
+        "canonicality": "curated_lead",
+        "publication_basis": "fixture",
+        "summary": "NIH highlighted topic expressing interest in mechanism-driven psilocybin research, biomarkers, safety, dose timing, translational research, psychedelic pharmacology, and psychiatric conditions.",
+        "eligibility": "Academic investigators should map the highlighted topic to a matching NIH funding mechanism.",
+        "raw_signals": [
+          "nih",
+          "psilocybin",
+          "psychedelic medicine",
+          "psychedelic pharmacology",
+          "psychiatry",
+          "clinical neuroscience",
+          "mechanism of action",
+          "biomarkers"
+        ]
+      }
+    },
+    {
+      "source_id": "grants-gov-api",
+      "raw_id": "RECALL-GENERIC-SBIR-001",
+      "source_url": "https://www.grants.gov/",
+      "opportunity": {
+        "record_type": "grant",
+        "title": "Generic Small Business Innovation Research Phase I",
+        "sponsor": "Administration for Community Living",
+        "url": "https://example.org/generic-sbir-phase-i",
+        "deadline_text": "forecasted",
+        "published": "2026-05-01",
+        "opportunity_number": "RECALL-GENERIC-SBIR-001",
+        "canonicality": "authoritative",
+        "publication_basis": "fixture",
+        "summary": "Generic forecasted small business innovation research program with no specific domain evidence.",
+        "eligibility": "Small businesses may apply.",
+        "raw_signals": [
+          "sbir",
+          "small business"
+        ]
+      }
+    },
+    {
+      "source_id": "army-baa",
+      "raw_id": "RECALL-UNRELATED-ARMY-BAA-001",
+      "source_url": "https://www.grants.gov/",
+      "opportunity": {
+        "record_type": "grant",
+        "title": "Army behavioral and social sciences broad agency announcement",
+        "sponsor": "Dept of the Army -- Materiel Command",
+        "url": "https://example.org/army-behavioral-social-sciences-baa",
+        "deadline_text": "2026-12-31",
+        "published": "2026-05-01",
+        "opportunity_number": "RECALL-UNRELATED-ARMY-BAA-001",
+        "canonicality": "authoritative",
+        "publication_basis": "fixture",
+        "summary": "Basic and applied research in behavioral and social sciences.",
+        "eligibility": "Universities and research organizations may apply.",
+        "raw_signals": [
+          "broad agency announcement",
+          "behavioral sciences",
+          "social sciences"
+        ]
+      }
+    }
+  ]
+}

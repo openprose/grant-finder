@@ -31,6 +31,83 @@ func TestOpportunityFromFeedItemAvoidsHyphenPhraseAsOpportunityNumber(t *testing
 	}
 }
 
+func TestParseSourcePageFeedItem(t *testing.T) {
+	feed := Feed{
+		ID:           "nsf-seed-advanced-manufacturing-topic",
+		Name:         "NSF America's Seed Fund: Advanced Manufacturing",
+		URL:          "https://seedfund.nsf.gov/topics/advanced-manufacturing/",
+		Type:         "source_page",
+		Canonicality: "authoritative",
+		Signals:      []string{"advanced manufacturing", "grant", "sbir", "grant"},
+	}
+	items, err := ParseFeedItems(feed, []byte(`<!doctype html>
+		<html>
+			<head>
+				<title>Advanced Manufacturing</title>
+				<meta name="description" content="Funding for small businesses commercializing advanced manufacturing technologies, additive manufacturing, and 3D printing materials.">
+			</head>
+			<body><script>ignored()</script><main><p>Additive manufacturing and 3D printing materials.</p></main></body>
+		</html>`))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(items) != 1 {
+		t.Fatalf("expected one source-page item, got %d", len(items))
+	}
+	item := items[0]
+	if item.Title != feed.Name {
+		t.Fatalf("title = %q, want %q", item.Title, feed.Name)
+	}
+	if item.RawID != feed.URL || item.URL != feed.URL || item.SourceURL != feed.URL {
+		t.Fatalf("source-page URLs not normalized into item: %#v", item)
+	}
+	if !strings.Contains(item.Summary, "advanced manufacturing") || !strings.Contains(item.Summary, "3D printing materials") {
+		t.Fatalf("summary lost page evidence: %q", item.Summary)
+	}
+	if got := strings.Join(item.Signals, ","); got != "advanced manufacturing,grant,sbir" {
+		t.Fatalf("signals = %q", got)
+	}
+	op := OpportunityFromFeedItem(feed, item)
+	if op.RecordType != "grant" {
+		t.Fatalf("record type = %q, want grant", op.RecordType)
+	}
+}
+
+func TestParseFeedItemsRepairsBareAmpersandLinks(t *testing.T) {
+	feed := Feed{
+		ID:           "grants-gov-new-opps-by-agency",
+		Name:         "Grants.gov new opportunities by agency",
+		URL:          "https://www.grants.gov/rss/GG_NewOppByAgency.xml",
+		Type:         "rss",
+		Canonicality: "authoritative",
+		Signals:      []string{"federal_grant"},
+	}
+	items, err := ParseFeedItems(feed, []byte(`<rss><channel><item>
+		<title>Advanced manufacturing grant</title>
+		<link>https://www.grants.gov/search?agency=NSF&subagency=ENG</link>
+		<guid>raw-1</guid>
+		<description>Funds manufacturing research.</description>
+	</item></channel></rss>`))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(items) != 1 {
+		t.Fatalf("expected one item, got %d", len(items))
+	}
+	if items[0].URL != "https://www.grants.gov/search?agency=NSF&subagency=ENG" {
+		t.Fatalf("URL = %q", items[0].URL)
+	}
+}
+
+func TestSourcePageFeedsUseLargerFetchLimit(t *testing.T) {
+	if supportsSourcePageFallback(Feed{Type: "rss"}) {
+		t.Fatal("rss feeds should not use source-page fallback")
+	}
+	if !supportsSourcePageFallback(Feed{Type: "source_page"}) {
+		t.Fatal("source_page feeds should use source-page fallback")
+	}
+}
+
 func TestStoreSearchRoundTrip(t *testing.T) {
 	ctx := context.Background()
 	store, err := OpenStore(ctx, filepath.Join(t.TempDir(), "test.sqlite"))

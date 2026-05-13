@@ -8,8 +8,9 @@ description: Use the `grant-finder` CLI to return source-cited candidate non-dil
 A deterministic Go CLI that turns a Research Assignment JSON into an
 evidence-backed candidate list of non-dilutive funding opportunities. The CLI
 does not call an LLM; it operates on a local SQLite ledger refreshed from
-Grants.gov, the Federal Register, and public agency RSS feeds. Final ranking
-and recommendation judgment belong to the calling agent.
+Grants.gov, the Federal Register, public agency RSS feeds, and configured
+public source pages. Final ranking and recommendation judgment belong to the
+calling agent.
 
 ## When to use
 

@@ -35,9 +35,10 @@ never inside the CLI.
    CLI must remain deterministic and replayable. If you find yourself reaching
    for an LLM library inside `internal/`, stop and reconsider the design.
 2. **No API keys.** The CLI uses only free public APIs (Grants.gov, Federal
-   Register) and public agency RSS feeds. SAM.gov is intentionally gated off
-   pending a key path. Do not introduce a service that requires Exa, OpenAI,
-   Anthropic, Stripe, browser automation, or any paid third party.
+   Register), public agency RSS feeds, and configured public source pages.
+   SAM.gov is intentionally gated off pending a key path. Do not introduce a
+   service that requires Exa, OpenAI, Anthropic, Stripe, browser automation, or
+   any paid third party.
 3. **Agent-facing command surface stays minimal.** Agent-facing product
    commands are `research`, `explain`, and `status`. Public utility commands
    are `doctor`, `agent-context`, and `version`. Source plumbing lives under
@@ -56,6 +57,7 @@ never inside the CLI.
 make validate              # go test ./... + sample-output contract checks
 make validate-product-cli  # build CLI + python3 scripts/validate_product_surface.py (checks command surface)
 make validate-examples     # validate checked-in OpenProse sample outputs
+make validate-recall       # seed known-plausible candidates and verify retrieval surfaces them
 make dogfood-agent         # end-to-end: seed fixture → research → explain → status
 make fuzz-smoke            # optional Go fuzz smoke for parsers/projection/read-only SQL guard
 make secret-scan           # gitleaks scan of history plus working tree
@@ -66,6 +68,12 @@ command surface or domain logic. `dogfood-agent` validates schema-shaped
 Research Packet output plus the Aeseon-style behavioral contract: candidate
 opportunities, provenance-bearing evidence, ARPA-E negative evidence, and
 `no_llm: true`.
+
+Run `make validate-recall` when changing retrieval, assignment query
+construction, source manifests, source-page adapters, or seeded fixtures. It
+distinguishes a source coverage gap from a retrieval regression by seeding
+known-plausible candidates for the polySpectra, Cypris, and ENACT examples and
+asserting that `research` surfaces them.
 
 Run `make fuzz-smoke FUZZTIME=10s` when changing assignment parsing, feed/XML
 parsing, Federal Register hydration, JSON projection, or debug SQL validation.
@@ -101,6 +109,15 @@ To add a new source lane:
 3. Run `make dogfood-agent` to confirm no regressions in the behavioral fixture.
 4. Add coverage notes if the lane is must-check (see `BuildCoverage()` in
    `internal/grantfinder/research.go`).
+
+Use `type: "source_page"` for authoritative public HTML pages that should
+produce one provenance-backed candidate, such as NSF Seed Fund topic pages,
+SBIR.gov topic detail pages, NIH Guide PAR pages, and similar key-free pages.
+The source-page adapter is intentionally shallow: it extracts the page title,
+meta description when available, a clean source-page existence claim when
+metadata is missing, and manifest signals. Do not use it for JavaScript-rendered
+portals, paid databases, or sources that require API keys; keep those as
+manifested gaps or debug-only lanes.
 
 ## Mycelium notes
 

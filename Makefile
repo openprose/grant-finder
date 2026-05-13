@@ -1,6 +1,6 @@
 FUZZTIME ?= 10s
 
-.PHONY: validate validate-product-cli validate-examples dogfood-agent fuzz-smoke secret-scan
+.PHONY: validate validate-product-cli validate-examples validate-recall dogfood-agent fuzz-smoke secret-scan
 
 validate:
 	cd cli/grant-finder && go test ./...
@@ -13,7 +13,10 @@ validate-product-cli:
 validate-examples:
 	python3 scripts/validate_example_outputs.py
 
-dogfood-agent: validate-product-cli validate-examples
+validate-recall: validate-product-cli
+	python3 scripts/validate_recall_audit.py --binary /tmp/grant-finder
+
+dogfood-agent: validate-product-cli validate-examples validate-recall
 	python3 scripts/validate_agent_dogfood.py --binary /tmp/grant-finder
 
 fuzz-smoke:
