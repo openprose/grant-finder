@@ -23,5 +23,13 @@ is not the right vehicle for us.
 
 We prefer grants we can realistically win as an academic lab and that pay for
 investigators, trainees, and clinical-trial infrastructure. Do not recommend
-grants already held by Yale/YPPS investigators on the team (the upstream
-agent will pass that list separately).
+grants on the known-grants list (the upstream agent supplies that list; this
+example fixture leaves it empty).
+
+---
+
+Sources for the public-info facts in this brief:
+enactresearch.com (about + team pages); enact-lab.com;
+medicine.yale.edu profile pages for the Yale Program for Psychedelic Science
+and Dr. Benjamin Kelmendi; public Yale Bioimaging trial pages.
+
