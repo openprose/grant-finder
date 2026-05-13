@@ -31,3 +31,6 @@ cli/**/dogfood-results.json
 # OpenProse runtime state (per-run bindings, manifests, etc.)
 .prose/runs/
 .prose/agents/
+
+# Codex SDK sentinel files (0-byte markers dropped by codex-sdk in workspace-write sandbox)
+.codex
