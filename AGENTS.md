@@ -53,11 +53,14 @@ judgment lives on the caller side, never inside the CLI.
 make validate              # go test ./...
 make validate-product-cli  # build CLI + python3 scripts/validate_product_surface.py (checks command surface)
 make dogfood-agent         # end-to-end: seed fixture → research → explain → status
+make fuzz-smoke            # optional Go fuzz smoke for parsers/projection/read-only SQL guard
 ```
 
 All three must pass before merging anything that touches the public command
 surface or domain logic. `dogfood-agent` verifies the Aeseon-style behavioral
 contract (ranked opportunities, ARPA-E negative evidence row, `no_llm: true`).
+Run `make fuzz-smoke FUZZTIME=10s` when changing assignment parsing, feed/XML
+parsing, Federal Register hydration, JSON projection, or debug SQL validation.
 
 ## Debug surface (maintainer-only)
 

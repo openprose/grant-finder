@@ -1,4 +1,6 @@
-.PHONY: validate validate-product-cli dogfood-agent
+FUZZTIME ?= 10s
+
+.PHONY: validate validate-product-cli dogfood-agent fuzz-smoke
 
 validate:
 	cd cli/grant-finder && go test ./...
@@ -9,3 +11,11 @@ validate-product-cli:
 
 dogfood-agent: validate-product-cli
 	python3 scripts/validate_agent_dogfood.py --binary /tmp/grant-finder
+
+fuzz-smoke:
+	cd cli/grant-finder && go test -run=^$$ -fuzz=FuzzParseAssignment -fuzztime=$(FUZZTIME) ./internal/grantfinder
+	cd cli/grant-finder && go test -run=^$$ -fuzz=FuzzParseFeedItems -fuzztime=$(FUZZTIME) ./internal/grantfinder
+	cd cli/grant-finder && go test -run=^$$ -fuzz=FuzzParseGrantsXMLZip -fuzztime=$(FUZZTIME) ./internal/grantfinder
+	cd cli/grant-finder && go test -run=^$$ -fuzz=FuzzOpportunityFromFederalRegister -fuzztime=$(FUZZTIME) ./internal/grantfinder
+	cd cli/grant-finder && go test -run=^$$ -fuzz=FuzzSelectJSONFields -fuzztime=$(FUZZTIME) ./internal/cli
+	cd cli/grant-finder && go test -run=^$$ -fuzz=FuzzEnsureReadOnlySQL -fuzztime=$(FUZZTIME) ./internal/cli

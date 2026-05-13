@@ -8,6 +8,8 @@ import (
 	"io"
 	"strconv"
 	"strings"
+	"unicode"
+	"unicode/utf8"
 
 	"github.com/spf13/cobra"
 
@@ -110,11 +112,72 @@ func openStore(ctx context.Context, dbPath string) (*grantfinder.Store, error) {
 }
 
 func ensureReadOnlySQL(query string) error {
-	q := strings.TrimSpace(strings.ToLower(query))
-	if strings.HasPrefix(q, "select") || strings.HasPrefix(q, "with") || strings.HasPrefix(q, "pragma") {
-		return nil
+	q := strings.TrimSpace(query)
+	token, ok := firstSQLToken(q)
+	if !ok {
+		return fmt.Errorf("only read-only SQL is allowed (SELECT, WITH, PRAGMA)")
 	}
-	return fmt.Errorf("only read-only SQL is allowed (SELECT, WITH, PRAGMA)")
+	switch strings.ToLower(token) {
+	case "select", "with", "pragma":
+	default:
+		return fmt.Errorf("only read-only SQL is allowed (SELECT, WITH, PRAGMA)")
+	}
+	if hasStackedSQLStatement(q) {
+		return fmt.Errorf("only one read-only SQL statement is allowed")
+	}
+	return nil
+}
+
+func firstSQLToken(query string) (string, bool) {
+	query = strings.TrimLeftFunc(query, unicode.IsSpace)
+	if query == "" {
+		return "", false
+	}
+	end := 0
+	for end < len(query) {
+		r, size := utf8.DecodeRuneInString(query[end:])
+		if r == utf8.RuneError && size == 1 {
+			break
+		}
+		if !unicode.IsLetter(r) {
+			break
+		}
+		end += size
+	}
+	if end == 0 {
+		return "", false
+	}
+	return query[:end], true
+}
+
+func hasStackedSQLStatement(query string) bool {
+	inSingle := false
+	inDouble := false
+	for i := 0; i < len(query); i++ {
+		switch query[i] {
+		case '\'':
+			if inSingle && i+1 < len(query) && query[i+1] == '\'' {
+				i++
+				continue
+			}
+			if !inDouble {
+				inSingle = !inSingle
+			}
+		case '"':
+			if inDouble && i+1 < len(query) && query[i+1] == '"' {
+				i++
+				continue
+			}
+			if !inSingle {
+				inDouble = !inDouble
+			}
+		case ';':
+			if !inSingle && !inDouble && strings.TrimSpace(query[i+1:]) != "" {
+				return true
+			}
+		}
+	}
+	return false
 }
 
 func queryRows(ctx context.Context, db *sql.DB, query string, args ...any) ([]map[string]any, error) {
