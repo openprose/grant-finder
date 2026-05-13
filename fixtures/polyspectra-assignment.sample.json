@@ -1,0 +1,36 @@
+{
+  "assignment_id": "polyspectra-2026-05-13",
+  "research_question": "Find non-dilutive R&D funding for an industrial 3D printing materials small business specializing in rugged photopolymer resins.",
+  "company_profile": {
+    "name": "polySpectra",
+    "description": "A U.S. small business making COR (cyclic olefin resin) rugged photopolymer resins for industrial DLP/LCD 3D printing. We sell to engineers in industrial, manufacturing, and laboratory facilities for end-use parts that need durability, heat resistance, and chemical resistance.",
+    "stage": "small business",
+    "location": "United States",
+    "technologies": [
+      "additive manufacturing",
+      "photopolymer chemistry",
+      "advanced materials",
+      "3d printing",
+      "resin chemistry"
+    ],
+    "constraints": [
+      "prefer non-dilutive funding",
+      "prefer programs without matching-fund requirements when feasible",
+      "conservative on eligibility — only surface programs we can credibly win",
+      "exclude grants already in the known_grants list"
+    ]
+  },
+  "focus_areas": [
+    "additive manufacturing",
+    "advanced materials",
+    "advanced manufacturing",
+    "manufacturing R&D",
+    "dual-use technology",
+    "aerospace materials",
+    "energy materials"
+  ],
+  "target_geographies": [
+    "United States"
+  ],
+  "known_grants": []
+}

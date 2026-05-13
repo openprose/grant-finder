@@ -1,0 +1,39 @@
+{
+  "assignment_id": "cypris-materials-2026-05-13",
+  "research_question": "Find non-dilutive R&D funding for a Berkeley-based advanced-materials small business developing structural color coatings.",
+  "company_profile": {
+    "name": "Cypris Materials",
+    "description": "A U.S. small business developing structural color coatings — paints and inks that generate color through self-assembled polymer nanostructures rather than pigments, dyes, metals, or PCBs. Target markets include industrial printing, automotive, cosmetics, and general coatings. Berkeley, California.",
+    "stage": "small business",
+    "location": "Berkeley, California",
+    "technologies": [
+      "advanced materials",
+      "structural color",
+      "photonic coatings",
+      "sustainable chemistry",
+      "bio-inspired polymers",
+      "self-assembled polymers"
+    ],
+    "constraints": [
+      "prefer non-dilutive funding",
+      "prefer programs without matching-fund requirements when feasible",
+      "conservative on eligibility — only surface programs we can credibly win",
+      "exclude grants already in the known_grants list"
+    ]
+  },
+  "focus_areas": [
+    "advanced materials",
+    "sustainable chemistry",
+    "green chemistry",
+    "photonic coatings",
+    "industrial printing",
+    "industrial manufacturing R&D",
+    "dual-use technology",
+    "automotive coatings"
+  ],
+  "target_geographies": [
+    "United States",
+    "California"
+  ],
+  "known_grants": []
+}

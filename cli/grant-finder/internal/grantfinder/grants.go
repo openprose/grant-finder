@@ -67,13 +67,27 @@ type grantsXMLDetail struct {
 	CloseDate                 string `xml:"CloseDate"`
 }
 
+// GrantsSearch queries the Grants.gov search2 API. By default it requests
+// only currently-actionable opportunities (forecasted and posted) so the
+// CLI's research surface stays focused on grants an agent could actually
+// apply for. The maintainer-only debug surface (`debug grants search
+// --status ...`) can pass an explicit status string to override this default
+// when historical research is needed.
 func GrantsSearch(ctx context.Context, keyword string, rows int, oppNum string) ([]GrantsRecord, error) {
+	return GrantsSearchWithStatus(ctx, keyword, rows, oppNum, "forecasted|posted")
+}
+
+// GrantsSearchWithStatus is the explicit-status form. Pass an empty string to
+// accept the Grants.gov default (all statuses).
+func GrantsSearchWithStatus(ctx context.Context, keyword string, rows int, oppNum, oppStatuses string) ([]GrantsRecord, error) {
 	if rows <= 0 {
 		rows = 10
 	}
 	payload := map[string]any{
-		"rows":        rows,
-		"oppStatuses": "forecasted|posted|closed|archived",
+		"rows": rows,
+	}
+	if oppStatuses != "" {
+		payload["oppStatuses"] = oppStatuses
 	}
 	if oppNum != "" {
 		payload["oppNum"] = oppNum

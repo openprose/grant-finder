@@ -1,0 +1,39 @@
+{
+  "assignment_id": "enact-lab-2026-05-13",
+  "research_question": "Find non-dilutive federal and foundation research funding for an academic clinical-neuroscience lab studying psychedelic compounds for treatment-resistant psychiatric conditions.",
+  "company_profile": {
+    "name": "ENACT Lab",
+    "description": "An academic research laboratory at Yale School of Medicine, Department of Psychiatry — the founding lab of the Yale Program for Psychedelic Science. Conducts clinical and translational neuroscience research on psilocybin, MDMA, ketamine, and related psychedelic compounds as candidate treatments for OCD, PTSD, and depression. New Haven, Connecticut. Academic group; not an SBIR/STTR vehicle.",
+    "stage": "academic research lab",
+    "location": "New Haven, Connecticut",
+    "technologies": [
+      "psychedelic pharmacology",
+      "psychiatry",
+      "clinical neuroscience",
+      "fMRI",
+      "MRS",
+      "EEG",
+      "neurocognitive assessment"
+    ],
+    "constraints": [
+      "academic R-mechanism / clinical-trials funding — not SBIR/STTR",
+      "must fund investigators, trainees, and clinical-trial infrastructure",
+      "exclude grants already held by Yale/YPPS investigators in the known_grants list"
+    ]
+  },
+  "focus_areas": [
+    "psychiatry",
+    "psychedelic medicine",
+    "clinical neuroscience",
+    "treatment-resistant depression",
+    "PTSD",
+    "OCD",
+    "clinical trials",
+    "mechanism of action"
+  ],
+  "target_geographies": [
+    "United States",
+    "Connecticut"
+  ],
+  "known_grants": []
+}

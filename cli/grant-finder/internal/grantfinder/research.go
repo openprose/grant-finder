@@ -559,7 +559,21 @@ func refreshIfEmpty(ctx context.Context, opts ResearchOptions, assignment Assign
 	return err
 }
 
+// KeywordForAssignment picks a Grants.gov search keyword from a Research
+// Assignment. The keyword is what we feed to the Grants.gov API during
+// refresh — it materially shapes what shows up in the ledger.
+//
+// Stage is the strongest signal. An academic lab is not an SBIR target even
+// when the brief mentions "not SBIR/STTR" — a substring match on "sbir" in
+// such a phrase would be a false positive. We branch on stage first.
 func KeywordForAssignment(a Assignment) string {
+	stage := strings.ToLower(a.CompanyProfile.Stage)
+	if strings.Contains(stage, "academic") || strings.Contains(stage, "university") || strings.Contains(stage, "lab") {
+		if len(a.FocusAreas) > 0 {
+			return a.FocusAreas[0]
+		}
+		return "research"
+	}
 	text := strings.ToLower(BuildAssignmentQuery(a))
 	switch {
 	case strings.Contains(text, "sbir"), strings.Contains(text, "sttr"), strings.Contains(text, "startup"), strings.Contains(text, "small business"):
@@ -597,11 +611,28 @@ func effortPenalty(level string) int {
 
 func evidenceScore(rec OpportunityRecord) int {
 	score := len(rec.SourceRefs) * 5
+	// Real grant listings carry an opportunity number or Federal Register
+	// document number. These records exist on a canonical funding surface
+	// (Grants.gov, the Federal Register). Weight them so they dominate
+	// fit-level differences against text-matched ecosystem/media noise.
 	if rec.OpportunityNumber != "" || rec.DocumentNumber != "" {
-		score += 15
+		score += 100
 	}
-	if rec.Canonicality == "authoritative" {
+	switch rec.Canonicality {
+	case "authoritative":
+		score += 60
+	case "authoritative_or_corroborating", "state_authoritative", "authoritative_replacement":
+		score += 40
+	case "corroborating", "enrichment", "curated_lead", "cross_agency_index", "state_program":
+		score += 20
+	case "deadline_signal":
 		score += 10
+	case "early_warning", "human_qa_alert":
+		score -= 20
+	case "context", "ecosystem_media", "community_lead", "search_generated_lead", "commercial_lead":
+		// Not opportunity records — these are leads, context, or news. Penalize
+		// so they only surface when nothing more authoritative matches.
+		score -= 100
 	}
 	return score
 }
