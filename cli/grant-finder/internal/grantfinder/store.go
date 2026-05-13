@@ -247,6 +247,43 @@ func (s *Store) OpportunityByID(ctx context.Context, id int64) (OpportunityRecor
 	return scanOpportunityRecord(ctx, s, row)
 }
 
+// CoverageMatch reports whether the ledger contains any opportunity whose
+// title, sponsor, or URL contains any of the supplied needles (case-insensitive).
+// Empty needles list returns (false, nil) — no needles means no match.
+//
+// This is the truthful-coverage check: it answers "did this lane contribute
+// records to the ledger?" rather than "did a record from this lane survive
+// to the top-N ranking?"
+func (s *Store) CoverageMatch(ctx context.Context, needles []string) (bool, error) {
+	if len(needles) == 0 {
+		return false, nil
+	}
+	var conditions []string
+	var args []any
+	for _, needle := range needles {
+		needle = strings.TrimSpace(needle)
+		if needle == "" {
+			continue
+		}
+		pattern := "%" + strings.ToLower(needle) + "%"
+		conditions = append(conditions, "(LOWER(title) LIKE ? OR LOWER(sponsor) LIKE ? OR LOWER(url) LIKE ?)")
+		args = append(args, pattern, pattern, pattern)
+	}
+	if len(conditions) == 0 {
+		return false, nil
+	}
+	query := "SELECT 1 FROM opportunities WHERE " + strings.Join(conditions, " OR ") + " LIMIT 1"
+	var hit int
+	err := s.DB.QueryRowContext(ctx, query, args...).Scan(&hit)
+	if err == sql.ErrNoRows {
+		return false, nil
+	}
+	if err != nil {
+		return false, err
+	}
+	return true, nil
+}
+
 func (s *Store) OpportunityByKey(ctx context.Context, key string) (OpportunityRecord, error) {
 	row := s.DB.QueryRowContext(ctx, `SELECT id, dedupe_key, record_type, title, sponsor, url, apply_url, deadline_text, published, opportunity_number, document_number, canonicality, publication_basis, first_seen, last_seen, payload_json FROM opportunities WHERE dedupe_key=? OR opportunity_number=? OR document_number=?`, key, key, key)
 	return scanOpportunityRecord(ctx, s, row)

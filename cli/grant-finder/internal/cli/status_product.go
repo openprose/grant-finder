@@ -36,7 +36,7 @@ func newStatusCmd() *cobra.Command {
 					return err
 				}
 				out["assignment_id"] = assignment.AssignmentID
-				out["coverage"] = grantfinder.BuildCoverage(assignment, nil)
+				out["coverage"] = grantfinder.BuildCoverage(cmd.Context(), assignment, store)
 			}
 			if asJSON || compact || selectFields != "" {
 				return printJSONWithOptions(cmd.OutOrStdout(), out, outputOptions{Select: selectFields, Compact: compact})

@@ -184,10 +184,6 @@ func Research(ctx context.Context, opts ResearchOptions, assignment Assignment) 
 	if len(recs) > opts.Limit {
 		recs = recs[:opts.Limit]
 	}
-	coverageRecs := recs
-	if len(records) == 0 {
-		coverageRecs = nil
-	}
 	packet := ResearchPacket{
 		AssignmentID: assignment.AssignmentID,
 		GeneratedAt:  time.Now().UTC().Format(time.RFC3339),
@@ -198,7 +194,7 @@ func Research(ctx context.Context, opts ResearchOptions, assignment Assignment) 
 		},
 		Summary:  BuildSummary(recs, opts.IncludeInactive),
 		Grants:   recs,
-		Coverage: BuildCoverage(assignment, coverageRecs),
+		Coverage: BuildCoverage(ctx, assignment, store),
 	}
 	return packet, nil
 }
@@ -465,13 +461,29 @@ func BuildSummary(recs []GrantRecommendation, includeInactive bool) ResearchSumm
 	}
 }
 
-func BuildCoverage(a Assignment, recs []GrantRecommendation) []CoverageRow {
+// BuildCoverage reports per-source-lane coverage for a Research Assignment.
+//
+// The truthful question is "did the ledger get any records from this lane
+// during the most recent refresh?" — not "did we surface a record from this
+// lane in the top-N recommendations?" A lane can be well-covered but lose
+// the ranking race; that is not the same thing as "checked_no_match."
+//
+// When store is nil (e.g., a hypothetical preflight before any refresh) every
+// lane reports "not_checked".
+func BuildCoverage(ctx context.Context, a Assignment, store *Store) []CoverageRow {
+	arpae := statusFromLedger(ctx, store, "arpa-e", "advanced research projects agency energy")
+	arpaeNote := "energy funding lane"
+	if arpae == "checked_no_match" {
+		// Negative-evidence call-out per docs/adr/0001 and printing-press
+		// absorb manifest — must-check lane, surface absence explicitly.
+		arpaeNote = "No current ARPA-E programs match"
+	}
 	rows := []CoverageRow{
-		{SourceLane: "Grants.gov", Status: statusFromMatches(recs, "grants.gov"), Note: "canonical federal opportunity lane"},
-		{SourceLane: "SBIR/STTR", Status: statusFromMatches(recs, "sbir", "sttr"), Note: "small business funding lane"},
-		{SourceLane: "ARPA-E", Status: statusFromMatches(recs, "arpa-e", "advanced research projects agency energy"), Note: "No current ARPA-E programs match"},
-		{SourceLane: "DOE EERE", Status: statusFromMatches(recs, "eere", "energy efficiency"), Note: "energy funding lane"},
-		{SourceLane: "NSF", Status: statusFromMatches(recs, "national science foundation", "nsf"), Note: "research and commercialization lane"},
+		{SourceLane: "Grants.gov", Status: statusFromLedger(ctx, store, "grants.gov"), Note: "canonical federal opportunity lane"},
+		{SourceLane: "SBIR/STTR", Status: statusFromLedger(ctx, store, "sbir", "sttr", "small business innovation"), Note: "small business funding lane"},
+		{SourceLane: "ARPA-E", Status: arpae, Note: arpaeNote},
+		{SourceLane: "DOE EERE", Status: statusFromLedger(ctx, store, "eere", "energy efficiency and renewable energy"), Note: "energy funding lane"},
+		{SourceLane: "NSF", Status: statusFromLedger(ctx, store, "national science foundation", "nsf"), Note: "research and commercialization lane"},
 	}
 	for _, geo := range a.TargetGeographies {
 		geo = strings.TrimSpace(geo)
@@ -480,26 +492,22 @@ func BuildCoverage(a Assignment, recs []GrantRecommendation) []CoverageRow {
 		}
 		rows = append(rows, CoverageRow{
 			SourceLane: "state economic development: " + geo,
-			Status:     statusFromMatches(recs, strings.ToLower(geo)),
+			Status:     statusFromLedger(ctx, store, strings.ToLower(geo)),
 			Note:       "state-specific source lane required by assignment geography",
 		})
 	}
 	return rows
 }
 
-func statusFromMatches(recs []GrantRecommendation, needles ...string) string {
-	if recs == nil {
+func statusFromLedger(ctx context.Context, store *Store, needles ...string) string {
+	if store == nil {
 		return "not_checked"
 	}
-	for _, rec := range recs {
-		haystack := strings.ToLower(strings.Join([]string{rec.ProgramName, rec.Agency, rec.URL}, " "))
-		for _, needle := range needles {
-			if strings.Contains(haystack, strings.ToLower(needle)) {
-				return "matched"
-			}
-		}
+	matched, err := store.CoverageMatch(ctx, needles)
+	if err != nil || !matched {
+		return "checked_no_match"
 	}
-	return "checked_no_match"
+	return "matched"
 }
 
 func IsKnownGrant(a Assignment, rec OpportunityRecord) bool {
