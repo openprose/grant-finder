@@ -1,0 +1,125 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openprose.local/grant-finder/research-packet.schema.json",
+  "title": "Grant Finder Research Packet",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "assignment_id",
+    "generated_at",
+    "retrieval",
+    "summary",
+    "grants",
+    "coverage"
+  ],
+  "properties": {
+    "assignment_id": {"type": "string"},
+    "generated_at": {"type": "string"},
+    "retrieval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["backend", "query", "no_llm"],
+      "properties": {
+        "backend": {"type": "string"},
+        "query": {"type": "string"},
+        "no_llm": {"type": "boolean"}
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "total_potential_funding",
+        "high_fit_count",
+        "nearest_deadline"
+      ],
+      "properties": {
+        "total_potential_funding": {"type": "string"},
+        "high_fit_count": {"type": "integer"},
+        "nearest_deadline": {"type": ["string", "null"]},
+        "notes": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "grants": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "recommendation_id",
+          "program_name",
+          "agency",
+          "amount",
+          "deadline",
+          "deadline_certainty",
+          "eligibility_fit",
+          "effort_estimate",
+          "activity_status",
+          "url",
+          "evidence"
+        ],
+        "properties": {
+          "recommendation_id": {"type": "string"},
+          "program_name": {"type": "string"},
+          "agency": {"type": "string"},
+          "amount": {"type": "string"},
+          "deadline": {"type": ["string", "null"]},
+          "deadline_certainty": {"enum": ["confirmed", "projected", "awaiting_nofo", "unknown"]},
+          "eligibility_fit": {
+            "type": "object",
+            "required": ["level", "explanation"],
+            "properties": {
+              "level": {"enum": ["high", "medium", "low"]},
+              "explanation": {"type": "string"}
+            }
+          },
+          "effort_estimate": {
+            "type": "object",
+            "required": ["level", "explanation"],
+            "properties": {
+              "level": {"enum": ["low", "medium", "high"]},
+              "explanation": {"type": "string"}
+            }
+          },
+          "activity_status": {
+            "type": "object",
+            "required": ["level", "explanation"],
+            "properties": {
+              "level": {"enum": ["active", "inactive"]},
+              "explanation": {"type": "string"}
+            }
+          },
+          "url": {"type": "string"},
+          "application_outline": {
+            "type": "array",
+            "items": {"type": "string"}
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["source_id", "url", "claim"],
+              "properties": {
+                "source_id": {"type": "string"},
+                "url": {"type": "string"},
+                "claim": {"type": "string"}
+              }
+            }
+          }
+        }
+      }
+    },
+    "coverage": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["source_lane", "status"],
+        "properties": {
+          "source_lane": {"type": "string"},
+          "status": {"enum": ["matched", "checked_no_match", "stale", "not_checked"]},
+          "note": {"type": "string"}
+        }
+      }
+    }
+  }
+}

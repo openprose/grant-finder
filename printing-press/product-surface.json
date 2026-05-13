@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "product_name": "Grant Finder",
+  "product_behavior": "Grant Radar",
+  "primary_persona": "upstream OpenProse agent",
+  "primary_command": "research",
+  "public_commands": [
+    {
+      "name": "research",
+      "role": "agent-facing",
+      "input": "Resolved Agent Request / Research Assignment JSON",
+      "output": "Research Packet JSON",
+      "description": "Return ranked funding opportunities with fit, evidence, provenance, negative evidence, freshness, and next actions."
+    },
+    {
+      "name": "explain",
+      "role": "agent-facing",
+      "input": "recommendation ID or opportunity ID",
+      "output": "Evidence and provenance JSON",
+      "description": "Explain why an opportunity was recommended and show the source trail behind it."
+    },
+    {
+      "name": "status",
+      "role": "agent-facing",
+      "input": "optional Research Assignment JSON",
+      "output": "Freshness and source coverage JSON",
+      "description": "Report whether the ledger is fresh enough and which required source lanes were checked."
+    }
+  ],
+  "background_capabilities": [
+    {
+      "name": "source refresh",
+      "automation": "automatic",
+      "description": "Refresh source lanes when stale before research."
+    },
+    {
+      "name": "feed smoke",
+      "automation": "debug-only",
+      "description": "Validate feeds and page sources for maintainers."
+    },
+    {
+      "name": "source smoke",
+      "automation": "debug-only",
+      "description": "Validate source reachability for maintainers."
+    },
+    {
+      "name": "grants xml ingestion",
+      "automation": "automatic",
+      "description": "Reconcile bounded Grants.gov bulk extract scans into the ledger."
+    },
+    {
+      "name": "federal register hydration",
+      "automation": "automatic",
+      "description": "Resolve weak Federal Register signals into canonical formal notices."
+    },
+    {
+      "name": "fts5 search",
+      "automation": "internal",
+      "description": "Retrieve candidate ledger records for research and explanation."
+    },
+    {
+      "name": "usearch semantic retrieval",
+      "automation": "internal",
+      "description": "Use local usearch over the opportunity/evidence corpus as the preferred semantic candidate finder; fall back to FTS5 when unavailable."
+    },
+    {
+      "name": "read-only sql",
+      "automation": "debug-only",
+      "description": "Inspect the local ledger during development."
+    },
+    {
+      "name": "opml export",
+      "automation": "debug-only",
+      "description": "Export feed manifests for source review."
+    }
+  ],
+  "prohibited_public_commands": [
+    "sync",
+    "search",
+    "changes",
+    "sources",
+    "feeds",
+    "grants",
+    "federal-register",
+    "sql",
+    "export"
+  ],
+  "runtime_constraints": [
+    "the upstream LLM agent uses the CLI",
+    "the CLI itself must not call an LLM",
+    "semantic retrieval prefers local usearch and falls back to SQLite FTS5",
+    "agent JSON output supports --select and --compact"
+  ],
+  "acceptance_artifacts": [
+    "CONTEXT.md",
+    "docs/adr/0001-agent-facing-grant-deep-research.md",
+    "printing-press/research/grant-finder-brief.md",
+    "printing-press/research/grant-finder-absorb-manifest.md",
+    "schemas/research-assignment.schema.json",
+    "schemas/research-packet.schema.json"
+  ],
+  "sample_assignments": [
+    "fixtures/acme-deeptech-assignment.sample.json"
+  ],
+  "prototype_cli": {
+    "path": "cli/grant-finder",
+    "status": "agent-surface-prototype",
+    "reason": "The current CLI has research/explain/status and source plumbing under debug, but automatic collectors and Printing Press ship acceptance are not complete."
+  }
+}

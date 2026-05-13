@@ -1,0 +1,46 @@
+# Verification manifest for the Grant Finder agent workflow:
+# (1) seed deterministic opportunity evidence,
+# (2) ask for a research packet,
+# (3) explain a recommendation,
+# (4) check source-lane status.
+#
+# This is fixture-backed and read-only with respect to upstream services.
+workflows:
+  - name: grant-finder-agent-research-packet
+    primary: true
+    steps:
+      - name: seed-fixture-ledger
+        command: debug seed-fixture --fixture ../../fixtures/acme-deeptech-opportunities.sample.json --db /tmp/grant-finder-workflow-verify.sqlite
+        mode: local
+        expect_fields:
+          - counts
+          - run_id
+
+      - name: research-packet
+        command: research --assignment ../../fixtures/acme-deeptech-assignment.sample.json --db /tmp/grant-finder-workflow-verify.sqlite --refresh off --semantic usearch
+        mode: local
+        extract:
+          top_opportunity_id: $.grants[0].opportunity_id
+        expect_fields:
+          - assignment_id
+          - retrieval
+          - summary
+          - grants
+          - coverage
+
+      - name: explain-top-recommendation
+        command: explain ${top_opportunity_id} --db /tmp/grant-finder-workflow-verify.sqlite
+        mode: local
+        expect_fields:
+          - opportunity
+          - evidence
+          - sources
+          - no_llm
+
+      - name: status-for-assignment
+        command: status --assignment ../../fixtures/acme-deeptech-assignment.sample.json --db /tmp/grant-finder-workflow-verify.sqlite
+        mode: local
+        expect_fields:
+          - no_llm
+          - stats
+          - coverage

@@ -1,0 +1,29 @@
+__pycache__/
+*.py[cod]
+
+# Generated source/cache artifacts
+cache/
+feed-cache/
+pipeline-cache/
+
+# Local SQLite run state
+*.sqlite
+*.sqlite-*
+
+# Machine-generated run outputs; regenerate from the scripts.
+candidate-links.csv
+candidate-links.json
+derisking-matrix.csv
+derisking-matrix.json
+feed-records.json
+feed-smoke-results.json
+grants-gov-poc-records.json
+reachability-results.json
+smoke-results.csv
+smoke-results.json
+
+.DS_Store
+
+# Local Go build and verification artifacts
+cli/**/grant-finder/grant-finder
+cli/**/dogfood-results.json

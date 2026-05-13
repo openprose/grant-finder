@@ -1,0 +1,56 @@
+{
+  "opportunities": [
+    {
+      "source_id": "nsf-sbir",
+      "raw_id": "NSF-SBIR-AUTO-FLEET-001",
+      "source_url": "https://seedfund.nsf.gov/",
+      "opportunity": {
+        "record_type": "grant",
+        "title": "SBIR autonomous vehicle fleet charging infrastructure grant",
+        "sponsor": "U.S. National Science Foundation",
+        "url": "https://example.org/nsf-sbir-autonomous-fleet-charging",
+        "apply_url": "https://example.org/apply/nsf-sbir-autonomous-fleet-charging",
+        "deadline_text": "2026-08-01",
+        "published": "2026-05-01",
+        "opportunity_number": "NSF-SBIR-AUTO-FLEET-001",
+        "canonicality": "authoritative",
+        "publication_basis": "fixture",
+        "summary": "Non-dilutive SBIR funding for small businesses building robotics, autonomous vehicle fleet-servicing systems, and EV charging infrastructure.",
+        "eligibility": "U.S. small businesses developing advanced manufacturing, robotics, clean-energy, and smart-city infrastructure technologies may apply.",
+        "raw_signals": [
+          "sbir",
+          "autonomous vehicles",
+          "robotics",
+          "ev infrastructure",
+          "advanced manufacturing",
+          "clean energy",
+          "smart cities"
+        ]
+      }
+    },
+    {
+      "source_id": "state-california-go-biz",
+      "raw_id": "CA-GOBIZ-ZEV-INFRA-001",
+      "source_url": "https://business.ca.gov/",
+      "opportunity": {
+        "record_type": "incentive",
+        "title": "California zero-emission fleet infrastructure incentive",
+        "sponsor": "California GO-Biz",
+        "url": "https://example.org/california-zero-emission-fleet-infrastructure",
+        "deadline_text": "awaiting FY2026 NOFO",
+        "published": "2026-04-20",
+        "opportunity_number": "CA-GOBIZ-ZEV-INFRA-001",
+        "canonicality": "authoritative",
+        "publication_basis": "fixture",
+        "summary": "Projected state incentive for EV charging depots, fleet infrastructure, and clean transportation deployment.",
+        "eligibility": "Companies deploying clean transportation infrastructure in California may qualify when a new NOFO opens.",
+        "raw_signals": [
+          "California",
+          "ev infrastructure",
+          "clean energy",
+          "fleet infrastructure"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "assignment_id": "acme-deeptech-2026-05-13",
+  "research_question": "Find non-dilutive funding for a deep-tech startup building autonomous fleet-servicing and EV charging infrastructure.",
+  "company_profile": {
+    "name": "Acme Deep-Tech",
+    "description": "A deep-tech startup building autonomous fleet-servicing systems, EV charging infrastructure, and robotics for clean-energy and smart-city deployments.",
+    "stage": "startup",
+    "location": "United States",
+    "technologies": [
+      "autonomous vehicles",
+      "robotics",
+      "ev infrastructure",
+      "advanced manufacturing",
+      "clean energy",
+      "smart cities"
+    ],
+    "constraints": [
+      "prefer non-dilutive funding",
+      "avoid opportunities already identified by the upstream agent"
+    ]
+  },
+  "focus_areas": [
+    "ev infrastructure",
+    "autonomous vehicles",
+    "robotics",
+    "clean energy",
+    "smart cities",
+    "advanced manufacturing"
+  ],
+  "target_geographies": [
+    "United States",
+    "California",
+    "Texas",
+    "Arizona",
+    "Nevada",
+    "Florida"
+  ],
+  "known_grants": []
+}

@@ -1,0 +1,1507 @@
+[
+  {
+    "id": "grants-gov-new-opps-by-agency",
+    "name": "Grants.gov new opportunities by agency",
+    "url": "https://www.grants.gov/rss/GG_NewOppByAgency.xml",
+    "type": "rss",
+    "access": "public",
+    "canonicality": "authoritative",
+    "signals": [
+      "new_nofo",
+      "agency",
+      "federal_grant"
+    ],
+    "poll": "2-6h",
+    "next_smoke": "Fetch RSS and normalize first item by funding opportunity number or opportunity ID."
+  },
+  {
+    "id": "grants-gov-modified-opps-by-agency",
+    "name": "Grants.gov modified opportunities by agency",
+    "url": "https://www.grants.gov/rss/GG_OppModByAgency.xml",
+    "type": "rss",
+    "access": "public",
+    "canonicality": "authoritative",
+    "signals": [
+      "modified_nofo",
+      "deadline_change",
+      "federal_grant"
+    ],
+    "poll": "2-6h",
+    "next_smoke": "Fetch RSS and reconcile one modified item against Grants.gov detail/API."
+  },
+  {
+    "id": "grants-gov-xml-extract",
+    "name": "Grants.gov XML Extract",
+    "url": "https://grants.gov/xml-extract",
+    "type": "bulk_xml",
+    "access": "public",
+    "canonicality": "authoritative",
+    "signals": [
+      "full_opportunity_corpus",
+      "deadline",
+      "eligibility",
+      "agency"
+    ],
+    "poll": "nightly",
+    "next_smoke": "Download extract metadata or one extract file and map fields to shallow opportunity schema."
+  },
+  {
+    "id": "federal-register-api-searches",
+    "name": "Federal Register API/search RSS",
+    "url": "https://www.federalregister.gov/reader-aids/developer-resources/rest-api",
+    "type": "api_or_rss",
+    "access": "public",
+    "canonicality": "authoritative_or_corroborating",
+    "signals": [
+      "nofo_notice",
+      "correction",
+      "policy",
+      "prize",
+      "comment_deadline"
+    ],
+    "poll": "daily",
+    "next_smoke": "Query terms: NOFO, notice of funding opportunity, prize competition, challenge, SBIR, STTR, BAA, CSO."
+  },
+  {
+    "id": "usa-gov-active-challenges",
+    "name": "USA.gov active challenges",
+    "url": "https://www.usa.gov/find-active-challenge",
+    "type": "public_page",
+    "access": "public",
+    "canonicality": "authoritative_replacement",
+    "signals": [
+      "challenge",
+      "prize",
+      "deadline",
+      "agency"
+    ],
+    "poll": "daily",
+    "next_smoke": "Scrape page and follow challenge links to sponsor-owned pages."
+  },
+  {
+    "id": "sam-contract-opportunities-api",
+    "name": "SAM.gov Contract Opportunities API",
+    "url": "https://open.gsa.gov/api/get-opportunities-public-api/",
+    "type": "api",
+    "access": "api_key",
+    "canonicality": "authoritative",
+    "signals": [
+      "solicitation",
+      "baa",
+      "cso",
+      "set_aside",
+      "contract_notice"
+    ],
+    "poll": "daily_or_more",
+    "next_smoke": "Retry with real SAM API key for targeted BAA/CSO/SBIR keywords."
+  },
+  {
+    "id": "sam-saved-search-alerts",
+    "name": "SAM.gov saved searches",
+    "url": "https://sam.gov/content/opportunities",
+    "type": "email_alert",
+    "access": "account_required",
+    "canonicality": "human_qa_alert",
+    "signals": [
+      "new_contract_notice",
+      "changed_contract_notice"
+    ],
+    "poll": "mailbox",
+    "next_smoke": "Create human QA saved searches for BAA, CSO, SBIR, STTR, prototype, OTA."
+  },
+  {
+    "id": "sba-email-updates",
+    "name": "SBA email updates",
+    "url": "https://www.sba.gov/updates",
+    "type": "email_list",
+    "access": "public_signup",
+    "canonicality": "early_warning",
+    "signals": [
+      "program_update",
+      "event",
+      "grant_announcement"
+    ],
+    "poll": "mailbox",
+    "next_smoke": "Subscribe a monitored mailbox and filter for grant/funding/program-update terms."
+  },
+  {
+    "id": "sba-newsroom",
+    "name": "SBA Newsroom",
+    "url": "https://www.sba.gov/about-sba/sba-newsroom",
+    "type": "news_archive",
+    "access": "public",
+    "canonicality": "early_warning",
+    "signals": [
+      "grant_announcement",
+      "program_update",
+      "disaster_funding"
+    ],
+    "poll": "daily",
+    "next_smoke": "Scrape latest news cards and classify funding/program items."
+  },
+  {
+    "id": "eda-funding-opportunities",
+    "name": "EDA funding opportunities",
+    "url": "https://www.eda.gov/funding/funding-opportunities",
+    "type": "news_archive",
+    "access": "public",
+    "canonicality": "corroborating",
+    "signals": [
+      "nofo",
+      "deadline",
+      "grants_gov_link",
+      "innovation_ecosystem"
+    ],
+    "poll": "daily",
+    "next_smoke": "Scrape current EDA funding items and reconcile against Grants.gov."
+  },
+  {
+    "id": "eda-govdelivery",
+    "name": "EDA GovDelivery",
+    "url": "https://public.govdelivery.com/accounts/USEDA/subscriber/new",
+    "type": "email_list",
+    "access": "public_signup",
+    "canonicality": "early_warning",
+    "signals": [
+      "funding_opportunity",
+      "tech_hubs",
+      "manufacturing",
+      "small_business"
+    ],
+    "poll": "mailbox",
+    "next_smoke": "Subscribe to Innovation, Manufacturing, Small Business, and Tech Hubs topics."
+  },
+  {
+    "id": "mbda-minute-archive",
+    "name": "MBDA news and MBDA Minute archive",
+    "url": "https://www.mbda.gov/news/mbda-minute-archive",
+    "type": "newsletter_archive",
+    "access": "public",
+    "canonicality": "early_warning",
+    "signals": [
+      "program_update",
+      "grant",
+      "event"
+    ],
+    "poll": "weekly",
+    "next_smoke": "Scrape archive items and classify opportunity-like links."
+  },
+  {
+    "id": "nist-mep-nofos",
+    "name": "NIST MEP NOFOs",
+    "url": "https://www.nist.gov/mep/about-nist-mep/notice-funding-opportunities",
+    "type": "news_archive",
+    "access": "public",
+    "canonicality": "corroborating",
+    "signals": [
+      "manufacturing_nofo",
+      "award",
+      "regional_forum"
+    ],
+    "poll": "weekly",
+    "next_smoke": "Scrape open NOFO titles/deadlines or empty-state text."
+  },
+  {
+    "id": "nist-manufacturing-rss",
+    "name": "NIST manufacturing RSS",
+    "url": "https://www.nist.gov/news-events/manufacturing/rss.xml",
+    "type": "rss",
+    "access": "public",
+    "canonicality": "early_warning",
+    "signals": [
+      "manufacturing_news",
+      "funding",
+      "policy",
+      "program_update"
+    ],
+    "poll": "daily",
+    "next_smoke": "Fetch RSS and filter for NOFO/funding/grant terms."
+  },
+  {
+    "id": "nist-manufacturing-blog-rss",
+    "name": "NIST Manufacturing Innovation Blog RSS",
+    "url": "https://www.nist.gov/blogs/manufacturing-innovation-blog/rss.xml",
+    "type": "rss",
+    "access": "public",
+    "canonicality": "context",
+    "signals": [
+      "mep_update",
+      "manufacturing_program_context"
+    ],
+    "poll": "weekly",
+    "next_smoke": "Fetch RSS and classify funding/program-context items."
+  },
+  {
+    "id": "manufacturing-gov-funding-opportunities",
+    "name": "Manufacturing.gov funding opportunities",
+    "url": "https://www.manufacturing.gov/funding-opportunities",
+    "type": "public_page",
+    "access": "public",
+    "canonicality": "curated_lead",
+    "signals": [
+      "cross_agency_manufacturing_grant",
+      "loan",
+      "tax_credit"
+    ],
+    "poll": "weekly",
+    "next_smoke": "Scrape curated items and follow outbound official links."
+  },
+  {
+    "id": "sbir-gov-topics",
+    "name": "SBIR.gov Funding Opportunities",
+    "url": "https://www.sbir.gov/topics",
+    "type": "public_index",
+    "access": "public",
+    "canonicality": "cross_agency_index",
+    "signals": [
+      "sbir_topic",
+      "sttr_topic",
+      "deadline",
+      "agency"
+    ],
+    "poll": "daily",
+    "next_smoke": "Poll topics and reconcile copied topic data against agency source."
+  },
+  {
+    "id": "sbir-gov-newsletter",
+    "name": "SBIR.gov Newsletter",
+    "url": "https://www.sbir.gov/topics",
+    "type": "email_list",
+    "access": "public_signup",
+    "canonicality": "early_warning",
+    "signals": [
+      "sbir_news",
+      "event",
+      "cross_agency_update"
+    ],
+    "poll": "mailbox",
+    "next_smoke": "Subscribe monitored mailbox from nav signup and classify emails."
+  },
+  {
+    "id": "sbir-gov-api",
+    "name": "SBIR.gov API docs",
+    "url": "https://www.sbir.gov/api",
+    "type": "api",
+    "access": "public",
+    "canonicality": "enrichment",
+    "signals": [
+      "award",
+      "company",
+      "topic"
+    ],
+    "poll": "daily_or_weekly",
+    "next_smoke": "Use for portfolio/award enrichment; do not trust as sole deadline source."
+  },
+  {
+    "id": "nsf-funding-rss",
+    "name": "NSF funding opportunities RSS",
+    "url": "https://www.nsf.gov/rss/rss_www_funding_pgm_annc_inf.xml",
+    "type": "rss",
+    "access": "public",
+    "canonicality": "authoritative_or_corroborating",
+    "signals": [
+      "funding_opportunity",
+      "sbir",
+      "sttr"
+    ],
+    "poll": "daily",
+    "next_smoke": "Fetch RSS and filter for SBIR/STTR/Seed Fund."
+  },
+  {
+    "id": "nsf-upcoming-due-dates-rss",
+    "name": "NSF upcoming due dates RSS",
+    "url": "https://www.nsf.gov/rss/rss_www_funding_upcoming.xml",
+    "type": "rss",
+    "access": "public",
+    "canonicality": "deadline_signal",
+    "signals": [
+      "deadline",
+      "funding_opportunity"
+    ],
+    "poll": "daily",
+    "next_smoke": "Fetch RSS and map due-date items to funding opportunity URLs."
+  },
+  {
+    "id": "nsf-seedfund-solicitations",
+    "name": "NSF Seed Fund solicitations",
+    "url": "https://seedfund.nsf.gov/solicitations/",
+    "type": "public_page",
+    "access": "public",
+    "canonicality": "corroborating",
+    "signals": [
+      "active_solicitation",
+      "archived_solicitation",
+      "project_pitch"
+    ],
+    "poll": "daily",
+    "next_smoke": "Page diff and assert current submission-status block."
+  },
+  {
+    "id": "nih-seed-govdelivery",
+    "name": "NIH SEED GovDelivery",
+    "url": "https://public.govdelivery.com/accounts/USNIHOER/signup/23029",
+    "type": "email_list",
+    "access": "public_signup",
+    "canonicality": "early_warning",
+    "signals": [
+      "nih_sbir",
+      "nih_sttr",
+      "entrepreneurship",
+      "event"
+    ],
+    "poll": "mailbox",
+    "next_smoke": "Subscribe monitored mailbox and classify NIH small-business emails."
+  },
+  {
+    "id": "nih-guide-funding-rss",
+    "name": "NIH Guide funding opportunities RSS",
+    "url": "https://grants.nih.gov/grants/guide/newsfeed/fundingopps.xml",
+    "type": "rss",
+    "access": "public",
+    "canonicality": "authoritative_or_corroborating",
+    "signals": [
+      "nofo",
+      "notice",
+      "policy",
+      "nih_sbir",
+      "nih_sttr"
+    ],
+    "poll": "daily",
+    "next_smoke": "Fetch RSS and filter for SBIR/STTR/small business terms."
+  },
+  {
+    "id": "nih-guide-weekly-listserv",
+    "name": "NIH Guide weekly listserv",
+    "url": "https://grants.nih.gov/funding/nih-guide-for-grants-and-contracts/subscribe",
+    "type": "email_list",
+    "access": "public_signup",
+    "canonicality": "early_warning",
+    "signals": [
+      "weekly_nih_notices",
+      "nofo",
+      "policy"
+    ],
+    "poll": "mailbox",
+    "next_smoke": "Subscribe monitored mailbox and parse weekly digest."
+  },
+  {
+    "id": "doe-office-science-rss",
+    "name": "DOE Office of Science RSS directory",
+    "url": "https://science.osti.gov/RSS",
+    "type": "rss_directory",
+    "access": "public",
+    "canonicality": "early_warning",
+    "signals": [
+      "foa",
+      "sbir_highlight",
+      "science_news"
+    ],
+    "poll": "daily_or_weekly",
+    "next_smoke": "Identify FOA/SBIR RSS feeds from directory and fetch first item."
+  },
+  {
+    "id": "dod-dsip-listserv",
+    "name": "DoD DSIP listserv",
+    "url": "https://www.defensesbirsttr.mil/SBIR-STTR/DSIP/",
+    "type": "email_list",
+    "access": "public_signup",
+    "canonicality": "early_warning",
+    "signals": [
+      "baa",
+      "new_topic",
+      "event",
+      "dod_sbir"
+    ],
+    "poll": "mailbox",
+    "next_smoke": "Subscribe monitored mailbox; use SBIR.gov/SAM.gov as canonical fallback."
+  },
+  {
+    "id": "dod-topics-portal",
+    "name": "DoD/DSIP topics portal",
+    "url": "https://www.dodsbirsttr.mil/topics-app/",
+    "type": "public_portal",
+    "access": "public",
+    "canonicality": "authoritative_or_corroborating",
+    "signals": [
+      "active_topic",
+      "archived_topic",
+      "q_and_a",
+      "component"
+    ],
+    "poll": "daily",
+    "next_smoke": "Poll/search by component and tech area; compare to DSIP/SBIR.gov."
+  },
+  {
+    "id": "darpa-sbir-topics",
+    "name": "DARPA SBIR/STTR topics",
+    "url": "https://www.darpa.mil/work-with-us/communities/small-business/sbir-sttr-topics",
+    "type": "public_page",
+    "access": "public",
+    "canonicality": "corroborating",
+    "signals": [
+      "darpa_topic",
+      "monthly_topic",
+      "baa"
+    ],
+    "poll": "daily",
+    "next_smoke": "Page diff topics and reconcile against DSIP/DARPA filters."
+  },
+  {
+    "id": "darpa-opportunities-rss",
+    "name": "DARPA opportunities RSS",
+    "url": "https://www.darpa.mil/rss/opportunities.xml",
+    "type": "rss",
+    "access": "public",
+    "canonicality": "early_warning",
+    "signals": [
+      "darpa_opportunity",
+      "baa",
+      "solicitation"
+    ],
+    "poll": "daily",
+    "next_smoke": "Fetch RSS and classify SBIR/STTR/BAA opportunities."
+  },
+  {
+    "id": "afwerx-get-funded",
+    "name": "AFWERX Get Funded",
+    "url": "https://afwerx.com/get-funded/",
+    "type": "public_page",
+    "access": "public",
+    "canonicality": "corroborating",
+    "signals": [
+      "afwerx_date",
+      "spacewerx_date",
+      "stratfi",
+      "tacfi"
+    ],
+    "poll": "daily",
+    "next_smoke": "Page diff and reconcile external DOD submission links."
+  },
+  {
+    "id": "nasa-sbir-news-archive",
+    "name": "NASA SBIR/STTR newsletter archive",
+    "url": "https://www.nasa.gov/sbir_sttr/program-news/",
+    "type": "newsletter_archive",
+    "access": "public",
+    "canonicality": "early_warning",
+    "signals": [
+      "newsletter",
+      "award",
+      "program_news"
+    ],
+    "poll": "weekly",
+    "next_smoke": "Scrape archive and subscribe where signup is available."
+  },
+  {
+    "id": "epa-sbir-listserv",
+    "name": "EPA SBIR listserv",
+    "url": "https://www.epa.gov/sbir/sbir-listserv",
+    "type": "email_list",
+    "access": "public_signup",
+    "canonicality": "early_warning",
+    "signals": [
+      "epa_sbir_funding",
+      "news"
+    ],
+    "poll": "mailbox",
+    "next_smoke": "Subscribe monitored mailbox and parse opportunity announcements."
+  },
+  {
+    "id": "epa-sbir-funding-page",
+    "name": "EPA SBIR funding opportunities",
+    "url": "https://www.epa.gov/sbir/sbir-funding-opportunities",
+    "type": "public_page",
+    "access": "public",
+    "canonicality": "corroborating",
+    "signals": [
+      "open_solicitation",
+      "closed_solicitation",
+      "dates"
+    ],
+    "poll": "daily",
+    "next_smoke": "Page diff open/closed wording and deadline text."
+  },
+  {
+    "id": "noaa-sbir-funding",
+    "name": "NOAA SBIR funding opportunities",
+    "url": "https://techpartnerships.noaa.gov/sbir/fundingopportunities/",
+    "type": "public_page",
+    "access": "public",
+    "canonicality": "corroborating",
+    "signals": [
+      "annual_nofo",
+      "award",
+      "project"
+    ],
+    "poll": "daily",
+    "next_smoke": "Page diff and reconcile against Grants.gov saved search."
+  },
+  {
+    "id": "arpa-h-vitals",
+    "name": "ARPA-H Vitals",
+    "url": "https://engage.arpa-h.gov/vitals",
+    "type": "email_list",
+    "access": "public_signup",
+    "canonicality": "early_warning",
+    "signals": [
+      "funding",
+      "program",
+      "event"
+    ],
+    "poll": "mailbox",
+    "next_smoke": "Subscribe monitored mailbox and classify funding/program/event messages."
+  },
+  {
+    "id": "activate-application-interest",
+    "name": "Activate application interest",
+    "url": "https://activate.org/application-interest",
+    "type": "application_page_email_list",
+    "access": "public_form",
+    "canonicality": "early_warning",
+    "signals": [
+      "cohort_open",
+      "cohort_close",
+      "eligibility"
+    ],
+    "poll": "daily_or_mailbox",
+    "next_smoke": "Monitor application-interest page and subscribe to form if appropriate."
+  },
+  {
+    "id": "cyclotron-road-news",
+    "name": "Cyclotron Road program/news",
+    "url": "https://cyclotronroad.lbl.gov/news/feed/",
+    "type": "rss",
+    "access": "public",
+    "canonicality": "early_warning",
+    "signals": [
+      "leep_application",
+      "fellowship_announcement"
+    ],
+    "poll": "weekly",
+    "next_smoke": "Parse feed items for fellowship/application announcements; use news page as fallback."
+  },
+  {
+    "id": "innovation-crossroads-newsletter",
+    "name": "Innovation Crossroads apply/newsletter",
+    "url": "https://innovationcrossroads.ornl.gov/apply",
+    "type": "application_page_email_list",
+    "access": "public_signup",
+    "canonicality": "early_warning",
+    "signals": [
+      "deadline",
+      "webinar",
+      "cohort_cycle"
+    ],
+    "poll": "daily_or_mailbox",
+    "next_smoke": "Monitor apply page and newsletter signup for annual cycle status."
+  },
+  {
+    "id": "west-gate-apply",
+    "name": "West Gate apply",
+    "url": "https://www.nlr.gov/west-gate/apply.html",
+    "type": "application_page",
+    "access": "public",
+    "canonicality": "corroborating",
+    "signals": [
+      "cohort_timing",
+      "eligibility"
+    ],
+    "poll": "weekly",
+    "next_smoke": "Monitor spring-cycle apply page and normalize eligibility constraints."
+  },
+  {
+    "id": "venturewell-e-team-guidelines",
+    "name": "VentureWell E-Team guidelines",
+    "url": "https://venturewell.org/student-grants/e-team-guidelines/",
+    "type": "application_page_email_list",
+    "access": "public",
+    "canonicality": "corroborating",
+    "signals": [
+      "deadline",
+      "info_session",
+      "student_grant"
+    ],
+    "poll": "daily_or_mailbox",
+    "next_smoke": "Monitor guidelines and updates signup for deadline changes."
+  },
+  {
+    "id": "z-fellows-beehiiv",
+    "name": "Z Fellows Beehiiv archive",
+    "url": "https://joinzfellows.beehiiv.com/",
+    "type": "newsletter_archive",
+    "access": "public",
+    "canonicality": "early_warning",
+    "signals": [
+      "cohort",
+      "founder_content",
+      "application_status"
+    ],
+    "poll": "weekly",
+    "next_smoke": "Check for RSS-style Beehiiv feed or scrape public archive."
+  },
+  {
+    "id": "osv-newsletter",
+    "name": "OSV newsletter",
+    "url": "https://newsletter.osv.llc/feed",
+    "type": "rss",
+    "access": "public",
+    "canonicality": "early_warning",
+    "signals": [
+      "fellowship_cycle",
+      "grant",
+      "application"
+    ],
+    "poll": "weekly_or_mailbox",
+    "next_smoke": "Parse newsletter feed items and cross-check OSV fellowship page."
+  },
+  {
+    "id": "opengrants-rss",
+    "name": "OpenGrants RSS feed",
+    "url": "https://ops.opengrants.io/functions/v1/rss-feed",
+    "type": "rss",
+    "access": "public",
+    "canonicality": "commercial_lead",
+    "signals": [
+      "grant",
+      "contract",
+      "deadline"
+    ],
+    "poll": "daily",
+    "next_smoke": "Parse first item title/pubDate and review API terms before deeper extraction."
+  },
+  {
+    "id": "instrumentl-newsletter",
+    "name": "Instrumentl newsletter",
+    "url": "https://www.instrumentl.com/newsletter",
+    "type": "newsletter",
+    "access": "public_signup",
+    "canonicality": "commercial_lead",
+    "signals": [
+      "grant_resource",
+      "deadline_reminder",
+      "platform_update"
+    ],
+    "poll": "mailbox",
+    "next_smoke": "Subscribe only for public resources; do not scrape paid database."
+  },
+  {
+    "id": "federal-register-sbir-rss",
+    "name": "Federal Register SBIR notices RSS",
+    "url": "https://www.federalregister.gov/api/v1/documents.rss?conditions[term]=SBIR&conditions[type]=NOTICE&per_page=20&order=newest",
+    "type": "rss",
+    "access": "public",
+    "canonicality": "authoritative_or_corroborating",
+    "signals": [
+      "sbir",
+      "notice",
+      "federal_register"
+    ],
+    "poll": "daily",
+    "next_smoke": "Parse RSS items, then hydrate with documents.json for citation/pdf_url."
+  },
+  {
+    "id": "federal-register-nofo-rss",
+    "name": "Federal Register NOFO notices RSS",
+    "url": "https://www.federalregister.gov/api/v1/documents.rss?conditions[term]=%22notice%20of%20funding%20opportunity%22&conditions[type]=NOTICE&per_page=20&order=newest",
+    "type": "rss",
+    "access": "public",
+    "canonicality": "authoritative_or_corroborating",
+    "signals": [
+      "nofo",
+      "notice",
+      "federal_register"
+    ],
+    "poll": "daily",
+    "next_smoke": "Parse RSS items, then hydrate with documents.json fields."
+  },
+  {
+    "id": "federal-register-prize-rss",
+    "name": "Federal Register prize notices RSS",
+    "url": "https://www.federalregister.gov/api/v1/documents.rss?conditions[term]=prize&conditions[type]=NOTICE&per_page=20&order=newest",
+    "type": "rss",
+    "access": "public",
+    "canonicality": "authoritative_or_corroborating",
+    "signals": [
+      "prize",
+      "challenge",
+      "notice",
+      "federal_register"
+    ],
+    "poll": "daily",
+    "next_smoke": "Parse RSS items and classify prize/challenge notices."
+  },
+  {
+    "id": "federal-register-public-inspection-sbir-rss",
+    "name": "Federal Register public inspection SBIR RSS",
+    "url": "https://www.federalregister.gov/api/v1/public-inspection-documents.rss?conditions[term]=SBIR&conditions[type]=NOTICE&per_page=20&order=newest",
+    "type": "rss",
+    "access": "public",
+    "canonicality": "early_warning",
+    "signals": [
+      "sbir",
+      "public_inspection",
+      "notice"
+    ],
+    "poll": "daily",
+    "next_smoke": "Parse public-inspection items as early warning only; reconcile after publication."
+  },
+  {
+    "id": "third-derivative-blog-rss",
+    "name": "Third Derivative blog RSS",
+    "url": "https://www.third-derivative.org/blog/rss.xml",
+    "type": "rss",
+    "access": "public",
+    "canonicality": "early_warning",
+    "signals": ["climate_accelerator", "cohort", "application", "startup"],
+    "poll": "weekly",
+    "next_smoke": "Parse RSS items and score for application/cohort/startup terms."
+  },
+  {
+    "id": "for-climatetech-newsletter-rss",
+    "name": "For ClimateTech newsletter RSS",
+    "url": "https://forclimatetech.org/category/newsletter/feed/",
+    "type": "rss",
+    "access": "public",
+    "canonicality": "early_warning",
+    "signals": ["climate_accelerator", "deadline", "grant", "ecosystem_call"],
+    "poll": "weekly",
+    "next_smoke": "Parse RSS items for climate accelerator deadlines and grant calls."
+  },
+  {
+    "id": "venturewell-e-team-grants-rss",
+    "name": "VentureWell E-Team grants RSS",
+    "url": "https://venturewell.org/category/e-team-grants/feed/",
+    "type": "rss",
+    "access": "public",
+    "canonicality": "early_warning",
+    "signals": ["student_grant", "deadline", "info_session", "venturewell"],
+    "poll": "weekly",
+    "next_smoke": "Parse RSS and reconcile with E-Team guidelines page."
+  },
+  {
+    "id": "greentown-labs-stories-rss",
+    "name": "Greentown Labs stories RSS",
+    "url": "https://greentownlabs.com/category/stories/feed/",
+    "type": "rss",
+    "access": "public",
+    "canonicality": "early_warning",
+    "signals": ["climatetech", "accelerator", "applications_open"],
+    "poll": "weekly",
+    "next_smoke": "Parse RSS and alert on applications/open cohort terms."
+  },
+  {
+    "id": "elemental-impact-feed",
+    "name": "Elemental Impact feed",
+    "url": "https://elementalimpact.com/feed/",
+    "type": "rss",
+    "access": "public",
+    "canonicality": "early_warning",
+    "signals": ["climate_funding", "foak", "deployment", "catalytic_capital"],
+    "poll": "weekly",
+    "next_smoke": "Parse feed and pair with funding-opportunities page monitor."
+  },
+  {
+    "id": "elemental-impact-funding-page",
+    "name": "Elemental Impact funding opportunities",
+    "url": "https://elementalimpact.com/funding-opportunities",
+    "type": "public_page",
+    "access": "public",
+    "canonicality": "curated_lead",
+    "signals": ["climate_funding", "foak", "deployment"],
+    "poll": "weekly",
+    "next_smoke": "Scrape public funding page and follow official opportunity links."
+  },
+  {
+    "id": "foresight-rss",
+    "name": "Foresight Institute RSS",
+    "url": "https://foresight.org/feed/",
+    "type": "rss",
+    "access": "public",
+    "canonicality": "early_warning",
+    "signals": ["grant", "prize", "fellowship", "frontier_tech"],
+    "poll": "weekly",
+    "next_smoke": "Parse RSS and filter for grants/prizes/fellowship terms."
+  },
+  {
+    "id": "hello-tomorrow-medium-rss",
+    "name": "Hello Tomorrow Medium RSS",
+    "url": "https://medium.com/feed/hello-tomorrow",
+    "type": "rss",
+    "access": "public",
+    "canonicality": "early_warning",
+    "signals": ["deeptech_challenge", "equity_free_prize", "investor_day"],
+    "poll": "weekly",
+    "next_smoke": "Parse RSS and monitor Global Challenge page separately."
+  },
+  {
+    "id": "hello-tomorrow-global-challenge",
+    "name": "Hello Tomorrow Global Challenge",
+    "url": "https://hello-tomorrow.org/global-challenge/",
+    "type": "public_page",
+    "access": "public",
+    "canonicality": "curated_lead",
+    "signals": ["deeptech_challenge", "prize", "application"],
+    "poll": "weekly",
+    "next_smoke": "Scrape challenge status and application/deadline text."
+  },
+  {
+    "id": "indiebio-rss",
+    "name": "IndieBio RSS",
+    "url": "https://indiebio.co/feed/",
+    "type": "rss",
+    "access": "public",
+    "canonicality": "early_warning",
+    "signals": ["biotech_accelerator", "application", "showcase"],
+    "poll": "weekly",
+    "next_smoke": "Parse RSS and monitor apply page for current application state."
+  },
+  {
+    "id": "sosv-rss",
+    "name": "SOSV RSS",
+    "url": "https://sosv.com/feed/",
+    "type": "rss",
+    "access": "public",
+    "canonicality": "early_warning",
+    "signals": ["hax", "indiebio", "hardtech", "accelerator"],
+    "poll": "weekly",
+    "next_smoke": "Parse RSS with program/entity filters and dedupe against IndieBio."
+  },
+  {
+    "id": "xprize-news",
+    "name": "XPRIZE news",
+    "url": "https://www.xprize.org/news",
+    "type": "public_page",
+    "access": "public",
+    "canonicality": "curated_lead",
+    "signals": ["prize", "challenge", "open_competition"],
+    "poll": "weekly",
+    "next_smoke": "Scrape paginated news and classify prize/open-call posts."
+  },
+  {
+    "id": "fedtech-now-recruiting",
+    "name": "FedTech now recruiting",
+    "url": "https://www.fedtech.io/now-recruiting",
+    "type": "public_page",
+    "access": "public",
+    "canonicality": "curated_lead",
+    "signals": ["startup_studio", "lab_commercialization", "deadline"],
+    "poll": "weekly",
+    "next_smoke": "Scrape recruiting cards and deadlines."
+  },
+  {
+    "id": "masschallenge-rss",
+    "name": "MassChallenge RSS",
+    "url": "https://masschallenge.org/feed/",
+    "type": "rss",
+    "access": "public",
+    "canonicality": "early_warning",
+    "signals": ["no_equity_accelerator", "challenge", "program"],
+    "poll": "weekly",
+    "next_smoke": "Parse RSS and monitor programs page for application portals."
+  },
+  {
+    "id": "nucleate-medium-rss",
+    "name": "Nucleate Medium RSS",
+    "url": "https://medium.com/feed/nucleate",
+    "type": "rss",
+    "access": "public",
+    "canonicality": "early_warning",
+    "signals": ["biotech_founder", "activator", "fellowship", "chapter_deadline"],
+    "poll": "weekly",
+    "next_smoke": "Parse RSS and monitor Signal/archive for program deadlines."
+  },
+  {
+    "id": "yc-blog-rss",
+    "name": "Y Combinator blog RSS",
+    "url": "https://www.ycombinator.com/blog/rss",
+    "type": "rss",
+    "access": "public",
+    "canonicality": "ecosystem_media",
+    "signals": ["founder_program", "startup_school", "application"],
+    "poll": "daily",
+    "next_smoke": "Parse RSS and classify application/founder-program announcements."
+  },
+  {
+    "id": "hnrss-launches",
+    "name": "HNRSS Launch HN",
+    "url": "https://hnrss.org/launches",
+    "type": "rss",
+    "access": "public",
+    "canonicality": "community_lead",
+    "signals": ["launch", "startup", "founder"],
+    "poll": "daily",
+    "next_smoke": "Parse RSS as noisy ecosystem signal only."
+  },
+  {
+    "id": "hnrss-founder-fellowship-query",
+    "name": "HNRSS founder fellowship query",
+    "url": "https://hnrss.org/newest?q=%22founder%20fellowship%22%20OR%20%22startup%20grant%22%20OR%20%22non-dilutive%20funding%22",
+    "type": "rss_search",
+    "access": "public",
+    "canonicality": "search_generated_lead",
+    "signals": ["founder_fellowship", "startup_grant", "non_dilutive"],
+    "poll": "daily",
+    "next_smoke": "Parse RSS and require strong opportunity keywords before retaining."
+  },
+  {
+    "id": "hnrss-applications-open-query",
+    "name": "HNRSS applications open query",
+    "url": "https://hnrss.org/newest?q=%22applications%20open%22%20OR%20%22startup%20accelerator%22%20OR%20%22pitch%20competition%22",
+    "type": "rss_search",
+    "access": "public",
+    "canonicality": "search_generated_lead",
+    "signals": ["applications_open", "accelerator", "pitch_competition"],
+    "poll": "daily",
+    "next_smoke": "Parse RSS and require application/deadline language."
+  },
+  {
+    "id": "spc-blog-rss",
+    "name": "South Park Commons blog RSS",
+    "url": "https://blog.southparkcommons.com/feed",
+    "type": "rss",
+    "access": "public",
+    "canonicality": "early_warning",
+    "signals": ["founder_fellowship", "residency", "investment"],
+    "poll": "daily",
+    "next_smoke": "Parse RSS and monitor Founder Fellowship announcements."
+  },
+  {
+    "id": "sixteen-vc-founder-fellowship-substack",
+    "name": "16VC Founder Fellowship Substack",
+    "url": "https://16vc.substack.com/feed",
+    "type": "rss",
+    "access": "public",
+    "canonicality": "early_warning",
+    "signals": ["founder_fellowship", "substack"],
+    "poll": "daily",
+    "next_smoke": "Parse Substack RSS and classify fellowship/application posts."
+  },
+  {
+    "id": "transform-the-hustle-substack",
+    "name": "Transform the Hustle grants/fellowships Substack",
+    "url": "https://transformthehustle.substack.com/feed",
+    "type": "rss",
+    "access": "public",
+    "canonicality": "curated_lead",
+    "signals": ["grant", "fellowship", "funding"],
+    "poll": "daily",
+    "next_smoke": "Parse Substack RSS as curated lead source."
+  },
+  {
+    "id": "a16z-news-rss",
+    "name": "a16z News RSS",
+    "url": "https://www.a16z.news/feed",
+    "type": "rss",
+    "access": "public",
+    "canonicality": "ecosystem_media",
+    "signals": ["founder_news", "policy", "program"],
+    "poll": "daily",
+    "next_smoke": "Parse RSS and retain only opportunity/program posts."
+  },
+  {
+    "id": "a16z-substack",
+    "name": "a16z Substack RSS",
+    "url": "https://a16z.substack.com/feed",
+    "type": "rss",
+    "access": "public",
+    "canonicality": "ecosystem_media",
+    "signals": ["founder_news", "startup"],
+    "poll": "daily",
+    "next_smoke": "Parse RSS and retain only opportunity/program posts."
+  },
+  {
+    "id": "a16z-policy-substack",
+    "name": "a16z Policy Substack RSS",
+    "url": "https://a16zpolicy.substack.com/feed",
+    "type": "rss",
+    "access": "public",
+    "canonicality": "ecosystem_media",
+    "signals": ["policy", "startup", "program"],
+    "poll": "daily",
+    "next_smoke": "Parse RSS and retain only funding/program policy signals."
+  },
+  {
+    "id": "venturewell-blog-rss",
+    "name": "VentureWell blog RSS",
+    "url": "https://venturewell.org/blog/feed/",
+    "type": "rss",
+    "access": "public",
+    "canonicality": "early_warning",
+    "signals": ["student_founder", "e_team", "grant"],
+    "poll": "daily",
+    "next_smoke": "Parse RSS and reconcile E-Team posts to official application page."
+  },
+  {
+    "id": "venturewell-e-team-category-rss",
+    "name": "VentureWell E-Team category RSS",
+    "url": "https://venturewell.org/category/e-team-grants/feed/",
+    "type": "rss",
+    "access": "public",
+    "canonicality": "early_warning",
+    "signals": ["e_team", "grant", "student_founder"],
+    "poll": "daily",
+    "next_smoke": "Parse category RSS and retain current application/deadline posts."
+  },
+  {
+    "id": "startupnation-rss",
+    "name": "StartupNation RSS",
+    "url": "https://startupnation.com/feed/",
+    "type": "rss",
+    "access": "public",
+    "canonicality": "ecosystem_media",
+    "signals": ["small_business", "startup_grant", "founder"],
+    "poll": "daily",
+    "next_smoke": "Parse RSS and keyword-filter grant/funding/program posts."
+  },
+  {
+    "id": "google-news-founder-fellowship",
+    "name": "Google News founder fellowship query",
+    "url": "https://news.google.com/rss/search?q=%22founder%20fellowship%22%20OR%20%22startup%20fellowship%22%20OR%20%22founder%20residency%22%20when%3A30d&hl=en-US&gl=US&ceid=US%3Aen",
+    "type": "rss_search",
+    "access": "public",
+    "canonicality": "search_generated_lead",
+    "signals": ["founder_fellowship", "startup_fellowship", "residency"],
+    "poll": "daily",
+    "next_smoke": "Parse Google News RSS and resolve items to original sponsor pages."
+  },
+  {
+    "id": "google-news-startup-grants",
+    "name": "Google News startup grants query",
+    "url": "https://news.google.com/rss/search?q=%22startup%20grant%22%20OR%20%22small%20business%20grant%22%20OR%20%22non-dilutive%20funding%22%20when%3A30d&hl=en-US&gl=US&ceid=US%3Aen",
+    "type": "rss_search",
+    "access": "public",
+    "canonicality": "search_generated_lead",
+    "signals": ["startup_grant", "small_business_grant", "non_dilutive"],
+    "poll": "daily",
+    "next_smoke": "Parse Google News RSS and resolve items to original sponsor pages."
+  },
+  {
+    "id": "google-news-accelerator-applications",
+    "name": "Google News accelerator applications query",
+    "url": "https://news.google.com/rss/search?q=%22applications%20open%22%20%22startup%20accelerator%22%20when%3A30d&hl=en-US&gl=US&ceid=US%3Aen",
+    "type": "rss_search",
+    "access": "public",
+    "canonicality": "search_generated_lead",
+    "signals": ["applications_open", "startup_accelerator"],
+    "poll": "daily",
+    "next_smoke": "Parse Google News RSS and resolve items to original sponsor pages."
+  },
+  {
+    "id": "google-news-pitch-competitions",
+    "name": "Google News pitch competitions query",
+    "url": "https://news.google.com/rss/search?q=%22startup%20challenge%22%20OR%20%22pitch%20competition%22%20OR%20%22cash%20prize%22%20%22startup%22%20when%3A30d&hl=en-US&gl=US&ceid=US%3Aen",
+    "type": "rss_search",
+    "access": "public",
+    "canonicality": "search_generated_lead",
+    "signals": ["startup_challenge", "pitch_competition", "cash_prize"],
+    "poll": "daily",
+    "next_smoke": "Parse Google News RSS and resolve items to original sponsor pages."
+  },
+  {
+    "id": "google-news-deeptech-founder",
+    "name": "Google News deep-tech founder query",
+    "url": "https://news.google.com/rss/search?q=%22deep%20tech%22%20%22founder%22%20%22fellowship%22%20OR%20%22hardtech%20accelerator%22%20when%3A30d&hl=en-US&gl=US&ceid=US%3Aen",
+    "type": "rss_search",
+    "access": "public",
+    "canonicality": "search_generated_lead",
+    "signals": ["deeptech", "hardtech", "fellowship", "accelerator"],
+    "poll": "daily",
+    "next_smoke": "Parse Google News RSS and resolve items to original sponsor pages."
+  },
+  {
+    "id": "google-news-climate-founder-programs",
+    "name": "Google News climate founder programs query",
+    "url": "https://news.google.com/rss/search?q=%22climate%20tech%22%20%22fellowship%22%20OR%20%22energy%20startup%20accelerator%22%20OR%20%22Breakthrough%20Energy%20Fellows%22%20when%3A30d&hl=en-US&gl=US&ceid=US%3Aen",
+    "type": "rss_search",
+    "access": "public",
+    "canonicality": "search_generated_lead",
+    "signals": ["climate_tech", "energy_startup", "fellowship", "accelerator"],
+    "poll": "daily",
+    "next_smoke": "Parse Google News RSS and resolve items to original sponsor pages."
+  },
+  {
+    "id": "google-news-biotech-founder-programs",
+    "name": "Google News biotech founder programs query",
+    "url": "https://news.google.com/rss/search?q=%22biotech%20startup%22%20%22accelerator%22%20OR%20%22healthtech%20startup%22%20%22grant%22%20OR%20%22life%20science%20startup%20fellowship%22%20when%3A30d&hl=en-US&gl=US&ceid=US%3Aen",
+    "type": "rss_search",
+    "access": "public",
+    "canonicality": "search_generated_lead",
+    "signals": ["biotech", "healthtech", "grant", "fellowship"],
+    "poll": "daily",
+    "next_smoke": "Parse Google News RSS and resolve items to original sponsor pages."
+  },
+  {
+    "id": "techcrunch-startups-rss",
+    "name": "TechCrunch Startups RSS",
+    "url": "https://techcrunch.com/category/startups/feed/",
+    "type": "rss",
+    "access": "public",
+    "canonicality": "ecosystem_media",
+    "signals": ["startup_media", "accelerator", "funding"],
+    "poll": "daily",
+    "next_smoke": "Parse RSS and keyword-filter opportunity announcements."
+  },
+  {
+    "id": "geekwire-startups-rss",
+    "name": "GeekWire Startups RSS",
+    "url": "https://www.geekwire.com/startups/feed/",
+    "type": "rss",
+    "access": "public",
+    "canonicality": "ecosystem_media",
+    "signals": ["regional_media", "startup", "challenge"],
+    "poll": "daily",
+    "next_smoke": "Parse RSS and keyword-filter opportunity announcements."
+  },
+  {
+    "id": "technical-ly-rss",
+    "name": "Technical.ly RSS",
+    "url": "https://technical.ly/feed/",
+    "type": "rss",
+    "access": "public",
+    "canonicality": "ecosystem_media",
+    "signals": ["regional_media", "startup", "grant"],
+    "poll": "daily",
+    "next_smoke": "Parse RSS and keyword-filter opportunity announcements."
+  },
+  {
+    "id": "sifted-rss",
+    "name": "Sifted RSS",
+    "url": "https://sifted.eu/feed/",
+    "type": "rss",
+    "access": "public",
+    "canonicality": "ecosystem_media",
+    "signals": ["startup_media", "accelerator", "founder"],
+    "poll": "daily",
+    "next_smoke": "Parse RSS as lower-priority non-US ecosystem signal."
+  },
+  {
+    "id": "first-round-review-rss",
+    "name": "First Round Review RSS",
+    "url": "https://review.firstround.com/feed.xml",
+    "type": "rss",
+    "access": "public",
+    "canonicality": "ecosystem_media",
+    "signals": ["founder_platform", "startup"],
+    "poll": "weekly",
+    "next_smoke": "Parse RSS and retain only program/opportunity posts."
+  },
+  {
+    "id": "openvc-blog-rss",
+    "name": "OpenVC blog RSS",
+    "url": "https://www.openvc.app/blog/feed",
+    "type": "rss",
+    "access": "public",
+    "canonicality": "ecosystem_media",
+    "signals": ["fundraising", "accelerator_list", "founder_resource"],
+    "poll": "weekly",
+    "next_smoke": "Parse RSS and retain accelerator/funding-list posts."
+  },
+  {
+    "id": "lifescivc-rss",
+    "name": "LifeSciVC RSS",
+    "url": "https://lifescivc.com/feed/",
+    "type": "rss",
+    "access": "public",
+    "canonicality": "ecosystem_media",
+    "signals": ["biotech", "life_science", "founder"],
+    "poll": "weekly",
+    "next_smoke": "Parse RSS and retain biotech founder/funding program posts."
+  },
+  {
+    "id": "reddit-startups-rss",
+    "name": "Reddit r/startups RSS",
+    "url": "https://www.reddit.com/r/startups/.rss",
+    "type": "rss",
+    "access": "public",
+    "canonicality": "community_lead",
+    "signals": ["startup", "founder", "community"],
+    "poll": "daily",
+    "next_smoke": "Parse noisy community RSS and apply strict opportunity classifier."
+  },
+  {
+    "id": "reddit-sbir-rss",
+    "name": "Reddit r/SBIR RSS",
+    "url": "https://www.reddit.com/r/SBIR/.rss",
+    "type": "rss",
+    "access": "public",
+    "canonicality": "community_lead",
+    "signals": ["sbir", "sttr", "community"],
+    "poll": "daily",
+    "next_smoke": "Parse noisy community RSS and apply strict opportunity classifier."
+  },
+  {
+    "id": "reddit-grants-rss",
+    "name": "Reddit r/grants RSS",
+    "url": "https://www.reddit.com/r/grants/.rss",
+    "type": "rss",
+    "access": "public",
+    "canonicality": "community_lead",
+    "signals": ["grant", "community"],
+    "poll": "daily",
+    "next_smoke": "Parse noisy community RSS and apply strict opportunity classifier."
+  },
+  {
+    "id": "doe-eere-funding-opportunities",
+    "name": "DOE EERE funding opportunities",
+    "url": "https://www.energy.gov/eere/eere-funding-opportunities",
+    "type": "public_page",
+    "access": "public",
+    "canonicality": "corroborating",
+    "signals": ["doe", "eere", "foa", "clean_energy", "transportation_energy"],
+    "poll": "daily",
+    "next_smoke": "Scrape EERE FOA/funding opportunity cards and reconcile to Grants.gov/eXCHANGE."
+  },
+  {
+    "id": "joint-office-ev-funding-opportunities",
+    "name": "Joint Office EV funding opportunities",
+    "url": "https://driveelectric.gov/funding-opportunities/",
+    "type": "public_page",
+    "access": "public",
+    "canonicality": "curated_lead",
+    "signals": ["ev_infrastructure", "nevi", "cfi", "transportation_energy"],
+    "poll": "weekly",
+    "next_smoke": "Scrape EV charging/funding cards and follow through to FHWA/DOE/DOT sponsor pages."
+  },
+  {
+    "id": "joint-office-funding-programs",
+    "name": "Joint Office funding programs",
+    "url": "https://driveelectric.gov/funding-programs",
+    "type": "public_page",
+    "access": "public",
+    "canonicality": "curated_lead",
+    "signals": ["ev_infrastructure", "nevi", "cfi", "state_plans"],
+    "poll": "weekly",
+    "next_smoke": "Scrape program list and extract state/federal EV infrastructure funding routes."
+  },
+  {
+    "id": "fhwa-nevi-program",
+    "name": "FHWA NEVI Formula Program",
+    "url": "https://highways.dot.gov/iija/fact-sheets/national-electric-vehicle-infrastructure-formula-program",
+    "type": "public_page",
+    "access": "public",
+    "canonicality": "authoritative_or_corroborating",
+    "signals": ["nevi", "formula_funding", "ev_charging", "state_pass_through"],
+    "poll": "monthly",
+    "next_smoke": "Monitor official NEVI page for guidance, reports, and state pass-through links."
+  },
+  {
+    "id": "california-grants-portal",
+    "name": "California Grants Portal",
+    "url": "https://www.grants.ca.gov/",
+    "type": "public_index",
+    "access": "public",
+    "canonicality": "state_authoritative",
+    "signals": ["state_grants", "california", "deadline", "eligibility"],
+    "poll": "daily",
+    "next_smoke": "Search/filter California state grant records for technology, climate, manufacturing, and small business terms."
+  },
+  {
+    "id": "california-energy-commission-funding",
+    "name": "California Energy Commission funding opportunities",
+    "url": "https://www.energy.ca.gov/funding-opportunities",
+    "type": "public_index",
+    "access": "public",
+    "canonicality": "state_authoritative",
+    "signals": ["california", "energy", "transportation", "rd_funding", "solicitation"],
+    "poll": "daily",
+    "next_smoke": "Scrape CEC solicitations and extract deadline/status/apply links."
+  },
+  {
+    "id": "calseed-how-to-apply",
+    "name": "CalSEED how to apply",
+    "url": "https://calseed.fund/how-to-apply/",
+    "type": "public_page",
+    "access": "public",
+    "canonicality": "state_program",
+    "signals": ["california", "clean_energy", "seed_grant", "entrepreneur"],
+    "poll": "weekly",
+    "next_smoke": "Monitor CalSEED application cycle, concept award amount, eligibility, and deadline state."
+  },
+  {
+    "id": "california-go-biz-incentives",
+    "name": "California GO-Biz incentives",
+    "url": "https://business.ca.gov/advantages/incentives/",
+    "type": "public_page",
+    "access": "public",
+    "canonicality": "state_authoritative",
+    "signals": ["california", "tax_credit", "incentive", "business"],
+    "poll": "weekly",
+    "next_smoke": "Scrape incentive links including CalCompetes and manufacturing/clean-energy programs."
+  },
+  {
+    "id": "california-competes-tax-credit",
+    "name": "California Competes Tax Credit",
+    "url": "https://business.ca.gov/california-competes-tax-credit/",
+    "type": "public_page",
+    "access": "public",
+    "canonicality": "state_program",
+    "signals": ["california", "tax_credit", "job_creation", "business_incentive"],
+    "poll": "weekly",
+    "next_smoke": "Monitor application periods, eligibility, and award-cycle dates."
+  },
+  {
+    "id": "caeatfa-programs",
+    "name": "CAEATFA programs",
+    "url": "https://www.treasurer.ca.gov/caeatfa/",
+    "type": "public_page",
+    "access": "public",
+    "canonicality": "state_authoritative",
+    "signals": ["california", "advanced_transportation", "alternative_energy", "tax_exclusion"],
+    "poll": "weekly",
+    "next_smoke": "Scrape CAEATFA program links for application windows and eligibility."
+  },
+  {
+    "id": "arizona-commerce-incentives",
+    "name": "Arizona Commerce Authority incentives",
+    "url": "https://www.azcommerce.com/incentives/",
+    "type": "public_page",
+    "access": "public",
+    "canonicality": "state_authoritative",
+    "signals": ["arizona", "incentive", "tax_credit", "business"],
+    "poll": "weekly",
+    "next_smoke": "Scrape Arizona incentive cards and flag application windows."
+  },
+  {
+    "id": "texas-governor-business-incentives",
+    "name": "Texas Governor business incentives",
+    "url": "https://gov.texas.gov/business/page/incentives",
+    "type": "public_page",
+    "access": "public",
+    "canonicality": "state_authoritative",
+    "signals": ["texas", "incentive", "economic_development", "business"],
+    "poll": "weekly",
+    "next_smoke": "Scrape Texas incentive programs and identify grant/tax-credit application paths."
+  },
+  {
+    "id": "nevada-goed-incentives",
+    "name": "Nevada GOED incentives",
+    "url": "https://goed.nv.gov/incentives/",
+    "type": "public_page",
+    "access": "public",
+    "canonicality": "state_authoritative",
+    "signals": ["nevada", "incentive", "economic_development", "business"],
+    "poll": "weekly",
+    "next_smoke": "Scrape Nevada incentive program pages and eligibility links."
+  },
+  {
+    "id": "floridacommerce-business-incentives",
+    "name": "FloridaCommerce business incentives",
+    "url": "https://www.floridajobs.org/business-growth-and-partnerships/for-businesses-and-entrepreneurs/business-resources/business-incentives",
+    "type": "public_page",
+    "access": "public",
+    "canonicality": "state_authoritative",
+    "signals": ["florida", "incentive", "business", "economic_development"],
+    "poll": "weekly",
+    "next_smoke": "Smoke current FloridaCommerce incentives path; Enterprise Florida is deprecated."
+  },
+  {
+    "id": "google-news-local-smart-city-rfps",
+    "name": "Google News local smart city RFP query",
+    "url": "https://news.google.com/rss/search?q=%22smart%20city%22%20RFP%20OR%20%22mobility%22%20%22request%20for%20proposals%22%20OR%20%22autonomous%20vehicle%22%20%22pilot%20program%22%20when%3A30d&hl=en-US&gl=US&ceid=US%3Aen",
+    "type": "rss_search",
+    "access": "public",
+    "canonicality": "search_generated_lead",
+    "signals": ["smart_city", "rfp", "mobility", "pilot"],
+    "poll": "daily",
+    "next_smoke": "Parse Google News RSS and resolve municipal RFP items to official procurement pages."
+  },
+  {
+    "id": "eere-exchange-foa-search",
+    "name": "EERE eXCHANGE FOA search",
+    "url": "https://eere-exchange.energy.gov/Default.aspx?Search=DE-FOA",
+    "type": "public_index",
+    "access": "public",
+    "canonicality": "authoritative_or_corroborating",
+    "signals": ["doe", "eere", "foa", "exchange"],
+    "poll": "daily",
+    "next_smoke": "Scrape EERE eXCHANGE FOA search results and reconcile to Grants.gov/DOE pages."
+  },
+  {
+    "id": "nist-sbir",
+    "name": "NIST SBIR",
+    "url": "https://www.nist.gov/sbir",
+    "type": "public_page",
+    "access": "public",
+    "canonicality": "authoritative_or_corroborating",
+    "signals": ["nist", "sbir", "sttr", "small_business"],
+    "poll": "weekly",
+    "next_smoke": "Monitor NIST SBIR page for phase/year NOFO links and research area pages."
+  },
+  {
+    "id": "nist-tpo-fy26-nofo-research-areas",
+    "name": "NIST TPO FY26 NOFO research areas",
+    "url": "https://www.nist.gov/tpo/fy26-nofo-research-area-selection-page",
+    "type": "public_page",
+    "access": "public",
+    "canonicality": "authoritative_or_corroborating",
+    "signals": ["nist", "sbir", "research_area", "nofo"],
+    "poll": "weekly",
+    "next_smoke": "Scrape research area links and map them to NIST SBIR opportunity records."
+  },
+  {
+    "id": "arpa-e-exchange-active-foas",
+    "name": "ARPA-E eXCHANGE active FOAs",
+    "url": "https://arpa-e-foa.energy.gov/",
+    "type": "public_index",
+    "access": "public",
+    "canonicality": "authoritative",
+    "signals": ["arpa_e", "foa", "energy", "hardtech"],
+    "poll": "daily",
+    "next_smoke": "Scrape active FOA list and require explicit no-match evidence for target topics."
+  },
+  {
+    "id": "afdc-nevi-law",
+    "name": "AFDC NEVI law reference",
+    "url": "https://afdc.energy.gov/laws/12744",
+    "type": "public_page",
+    "access": "public",
+    "canonicality": "corroborating",
+    "signals": ["nevi", "ev_charging", "state_pass_through", "law"],
+    "poll": "monthly",
+    "next_smoke": "Monitor as NEVI reference and route to state pass-through/procurement sources."
+  },
+  {
+    "id": "caeatfa-ste-program",
+    "name": "CAEATFA Sales and Use Tax Exclusion",
+    "url": "https://www.treasurer.ca.gov/caeatfa/ste/index.asp",
+    "type": "public_page",
+    "access": "public",
+    "canonicality": "state_program",
+    "signals": ["california", "sales_tax_exclusion", "advanced_manufacturing", "alternative_energy"],
+    "poll": "weekly",
+    "next_smoke": "Scrape STE application status, eligibility, and application documents."
+  },
+  {
+    "id": "florida-business-incentives",
+    "name": "Florida business incentives",
+    "url": "https://www.floridabusiness.org/locate-here/incentives.stml",
+    "type": "public_page",
+    "access": "public",
+    "canonicality": "state_authoritative",
+    "signals": ["florida", "incentive", "economic_development", "business"],
+    "poll": "weekly",
+    "next_smoke": "Smoke Florida business incentives page and prefer this over deprecated Enterprise Florida references if reachable."
+  },
+  {
+    "id": "selectflorida",
+    "name": "SelectFlorida",
+    "url": "https://selectflorida.org/",
+    "type": "public_page",
+    "access": "public",
+    "canonicality": "state_authoritative",
+    "signals": ["florida", "economic_development", "business"],
+    "poll": "weekly",
+    "next_smoke": "Monitor for incentive and relocation/expansion program links."
+  },
+  {
+    "id": "floridacommerce-incentives-portal",
+    "name": "FloridaCommerce Economic Development Incentives Portal",
+    "url": "https://floridajobs.org/office-directory/division-of-economic-development/economic-development-incentives-portal",
+    "type": "public_page",
+    "access": "public",
+    "canonicality": "state_authoritative",
+    "signals": ["florida", "incentive", "economic_development"],
+    "poll": "weekly",
+    "next_smoke": "Smoke current FloridaCommerce incentives portal and extract program/application links."
+  }
+]

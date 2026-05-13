@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openprose.local/grant-finder/research-assignment.schema.json",
+  "title": "Grant Finder Research Assignment",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "assignment_id",
+    "company_profile",
+    "focus_areas",
+    "target_geographies",
+    "known_grants"
+  ],
+  "properties": {
+    "assignment_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "research_question": {
+      "type": "string",
+      "description": "The upstream agent's funding question for this run."
+    },
+    "company_profile": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["description"],
+      "properties": {
+        "name": {"type": "string"},
+        "description": {"type": "string", "minLength": 1},
+        "stage": {"type": "string"},
+        "location": {"type": "string"},
+        "technologies": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "constraints": {
+          "type": "array",
+          "items": {"type": "string"}
+        }
+      }
+    },
+    "focus_areas": {
+      "type": "array",
+      "items": {"type": "string"},
+      "default": [
+        "ev infrastructure",
+        "autonomous vehicles",
+        "robotics",
+        "clean energy",
+        "smart cities",
+        "advanced manufacturing"
+      ]
+    },
+    "target_geographies": {
+      "type": "array",
+      "items": {"type": "string"},
+      "default": ["United States"]
+    },
+    "known_grants": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "program_name": {"type": "string"},
+          "opportunity_id": {"type": "string"},
+          "url": {"type": "string"}
+        }
+      }
+    },
+    "freshness": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "max_age_hours": {"type": "integer", "minimum": 0}
+      }
+    }
+  }
+}
