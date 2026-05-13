@@ -24,10 +24,10 @@ CLI does the work; this service just bridges JSON across the process boundary.
   - `retrieval`: backend used (`usearch`, `fts5`, or fallback) and the
     constructed query
   - `summary`: high-fit count, nearest deadline, total potential funding
-  - `grants`: ranked recommendations with `recommendation_id`,
+  - `grants`: retrieval-ordered candidate opportunities with `recommendation_id`,
     `opportunity_id`, `program_name`, `agency`, `amount`, `deadline`,
     `deadline_certainty`, `eligibility_fit`, `effort_estimate`,
-    `activity_status`, `url`, `application_outline`, `evidence`, `score`
+    `activity_status`, `url`, `application_outline`, and `evidence`
   - `coverage`: per-source-lane status rows including negative evidence for
     must-check lanes (e.g., ARPA-E)
 

@@ -3,24 +3,23 @@ name: explain-top-picks
 kind: service
 ---
 
-# Explain Top Picks
+# Explain Selected Opportunities
 
 ### Description
 
-For each high-fit recommendation in the Research Packet, invoke
+For each opportunity selected by `rank-opportunities`, invoke
 `grant-finder explain <id> --json` to retrieve the per-recommendation evidence
-and provenance trail. The CLI already includes summary evidence on each grant;
-`explain` returns the full source trail (raw observations, source snapshots,
-dedupe rationale) that the agent should use when drafting an application.
+and provenance trail. The CLI already includes summary evidence on each
+candidate; `explain` returns the full source trail that the report should cite.
 
 ### Requires
 
-- `research_packet`: Research Packet from `run-research`
+- `ranked_recommendations`: agent-reviewed selection from `rank-opportunities`
 
 ### Ensures
 
-- `top_pick_explanations`: array of explanation records for high-fit grants in
-  the packet, each containing:
+- `top_pick_explanations`: array of explanation records for the selected
+  recommendations, each containing:
   - `recommendation_id`: matches `grants[i].recommendation_id` in the packet
   - `opportunity`: normalized opportunity record
   - `evidence`: list of `{ source_id, url, claim }` items
@@ -34,20 +33,19 @@ dedupe rationale) that the agent should use when drafting an application.
 
 ### Shape
 
-- `self`: select up to 5 high-fit recommendations, invoke `explain` for each,
-  collect results, publish the array
+- `self`: invoke `explain` for each recommendation in
+  `ranked_recommendations.recommendations`, collect results, publish the array
 - `prohibited`: inventing evidence the CLI did not return; merging or
   paraphrasing evidence across recommendations; explaining recommendations
-  the packet did not return
+  the agent review did not select
 
 ### Strategies
 
-- Filter `research_packet.grants` to entries where
-  `eligibility_fit.level == "high"`. Cap at 5 to keep the explanation work
-  bounded — the report stays scannable and process time stays predictable.
-- If fewer than 2 high-fit grants exist, fall back to the top 3 by `score`
-  regardless of fit level. The founder still benefits from provenance on the
-  best available leads.
+- If `ranked_recommendations.recommendations` is empty, publish an empty array.
+  Do not fall back to retrieval-ordered candidates; weak candidates belong in
+  `rejected_candidates`, not in the founder-facing recommendation set.
+- Cap explanation work at 5 recommendations. The ranker should already enforce
+  this, but keep the bound here too.
 - For each selected grant, invoke:
   ```bash
   grant-finder explain "<recommendation_id>" --json

@@ -7,17 +7,17 @@ kind: system
 
 ### Description
 
-Turn a natural-language startup brief into a deterministic, evidence-backed
-Research Packet of ranked non-dilutive funding opportunities — by driving the
-public `grant-finder` Go CLI as the deterministic engine. The CLI does the
-ledger work, source ingestion, dedupe, FTS5/usearch retrieval, and ranking.
-This OpenProse system handles only the agent-side work: turning a human brief
-into a Resolved Research Assignment, invoking the CLI, explaining the top
-picks, and formatting a human-readable report.
+Turn a natural-language startup brief into an evidence-backed grant radar
+report by combining deterministic ledger work with agent-side judgment. The
+public `grant-finder` Go CLI does source ingestion, dedupe, FTS5/usearch
+retrieval, source coverage, and provenance. This OpenProse system turns a
+human brief into a Research Assignment, invokes the CLI, reviews the candidate
+packet, ranks only credible opportunities, explains selected picks, and formats
+a readable report.
 
 The CLI itself never calls an LLM. All LLM work happens in this system, on the
-agent side. That boundary — agent-language in, deterministic ledger work, then
-agent-language out — is the point of the example.
+agent side. That boundary — agent-language in, deterministic evidence work,
+then agent judgment out — is the point of the example.
 
 ### Requires
 
@@ -30,11 +30,13 @@ agent-language out — is the point of the example.
 - `research_assignment`: schema-valid Research Assignment JSON, ready to feed
   back into the CLI on later runs without re-resolving the brief
 - `research_packet`: the deterministic Research Packet returned by
-  `grant-finder research` — ranked grants with evidence, provenance, deadline
-  certainty, fit rationale, effort estimate, coverage rows, and negative
-  evidence for must-check sources
+  `grant-finder research` — candidate grants with evidence, provenance,
+  deadline certainty, preliminary fit signals, effort estimate, coverage rows,
+  and negative evidence for must-check sources
+- `ranked_recommendations`: agent-reviewed recommendation set, including
+  rejected candidates when the CLI surfaced weak or contraindicated matches
 - `top_pick_explanations`: per-recommendation evidence and provenance for the
-  top high-fit grants, returned by `grant-finder explain`
+  agent-selected grants, returned by `grant-finder explain`
 - `markdown_report`: human-readable summary of the packet — for showing the
   founder or pasting into a Notion/Linear doc
 
@@ -42,6 +44,7 @@ agent-language out — is the point of the example.
 
 - `resolve-assignment`
 - `run-research`
+- `rank-opportunities`
 - `explain-top-picks`
 - `format-report`
 
@@ -61,7 +64,8 @@ agent-language out — is the point of the example.
 - **No LLM inside the CLI.** Every service that invokes `grant-finder`
   validates `retrieval.no_llm == true` (or `no_llm == true` on the explain
   packet) before publishing the result. The CLI is the deterministic engine;
-  agent judgment lives in `resolve-assignment` and `format-report` only.
+  agent judgment lives in `resolve-assignment`, `rank-opportunities`, and
+  `format-report`.
 - `resolve-assignment` validates output against
   `schemas/research-assignment.schema.json` before publishing it. The CLI
   rejects invalid assignments at the boundary; this system rejects them at

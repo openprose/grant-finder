@@ -33,12 +33,14 @@ prose run src/grant-radar.prose.md \
     non-dilutive R&D funding to <your goal>. Focus areas: <your areas>."
 ```
 
-You get back four bindings:
+You get back five bindings:
 
 - `research_assignment` — schema-valid JSON, reusable for follow-up runs
-- `research_packet` — the deterministic CLI output (ranked grants, evidence,
+- `research_packet` — the deterministic CLI output (candidate grants, evidence,
   coverage)
-- `top_pick_explanations` — per-recommendation evidence and provenance
+- `ranked_recommendations` — agent-reviewed recommendations and rejected weak
+  candidates
+- `top_pick_explanations` — per-selected-recommendation evidence and provenance
 - `markdown_report` — human-readable summary for the founder, formatted as
   markdown
 
@@ -54,13 +56,16 @@ resolve-assignment    ← brief → schema-valid Research Assignment JSON
 run-research          ← `grant-finder research --assignment -` (subprocess)
         │
         ▼
-explain-top-picks     ← `grant-finder explain <rec-id>` for each high-fit grant
+rank-opportunities    ← agent reviews candidates against assignment constraints
         │
         ▼
-format-report         ← Research Packet + explanations → markdown
+explain-top-picks     ← `grant-finder explain <rec-id>` for selected grants
         │
         ▼
-research_packet + top_pick_explanations + markdown_report
+format-report         ← assignment + packet + ranking + explanations → markdown
+        │
+        ▼
+research_packet + ranked_recommendations + top_pick_explanations + markdown_report
 ```
 
 ## Prerequisites
@@ -135,9 +140,9 @@ The example demonstrates the OSS-as-give-away pattern: the OSS path is the
 whole thing, self-runnable. The `grant-finder` CLI does the deterministic
 work (ledger, dedupe, FTS5/usearch retrieval, source-lane coverage); the
 OpenProse system handles the agent-side translation between human brief and
-structured assignment and formats the report at the end. LLM work is bounded
-to two phases: `resolve-assignment` and `format-report`. Everything between
-is the CLI.
+structured assignment, reviews candidate fit, and formats the report at the
+end. LLM work is bounded to `resolve-assignment`, `rank-opportunities`, and
+`format-report`. The CLI remains deterministic and never calls an LLM.
 
 For the architectural rationale (and the load-bearing constraints behind each
 service's `### Shape.prohibited` list) see the parent repo's

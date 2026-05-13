@@ -1,149 +1,29 @@
 {
   "assignment_id": "enact-lab-2026-05-13",
-  "generated_at": "2026-05-13T15:37:05Z",
+  "generated_at": "2026-05-13T17:07:16Z",
   "retrieval": {
     "backend": "fts5",
-    "query": "Find realistic non-dilutive federal, state, and foundation research funding for an academic Yale psychiatry lab studying psychedelic compounds in treatment-resistant psychiatric conditions. Academic research laboratory at Yale School of Medicine Department of Psychiatry and founding lab of the Yale Program for Psychedelic Science, running clinical and translational neuroscience studies on psilocybin, MDMA, ketamine, and related molecules as candidate treatments for OCD, PTSD, depression, and other treatment-resistant psychiatric conditions. academic research laboratory New Haven, Connecticut, United States psilocybin MDMA ketamine psychedelic pharmacology fMRI MRS EEG neurocognitive assessment clinical trials mental health psychiatry clinical neuroscience psychedelic pharmacology PTSD depression OCD clinical trials United States Connecticut",
+    "query": "psychiatry psychedelic medicine clinical neuroscience treatment-resistant depression PTSD OCD clinical trials mechanism of action psychedelic pharmacology psychiatry clinical neuroscience fMRI MRS EEG neurocognitive assessment United States Connecticut Find non-dilutive federal and foundation research funding for an academic clinical-neuroscience lab studying psychedelic compounds for treatment-resistant psychiatric conditions. An academic research laboratory at Yale School of Medicine, Department of Psychiatry — the founding lab of the Yale Program for Psychedelic Science. Conducts clinical and translational neuroscience research on psilocybin, MDMA, ketamine, and related psychedelic compounds as candidate treatments for OCD, PTSD, and depression. New Haven, Connecticut. Academic group; not an SBIR/STTR vehicle. academic research lab New Haven, Connecticut",
     "no_llm": true
   },
   "summary": {
     "total_potential_funding": "unknown from current evidence",
     "high_fit_count": 0,
-    "nearest_deadline": "02/06/2029",
+    "nearest_deadline": "10/11/2026",
     "notes": [
-      "ranking is deterministic; no LLM call was made inside the CLI",
+      "candidate retrieval is deterministic; no LLM call was made inside the CLI",
       "inactive opportunities are filtered by default; pass --include-inactive for historical comps"
     ]
   },
   "grants": [
     {
-      "recommendation_id": "rec-106",
-      "opportunity_id": 106,
-      "program_name": "Small Business Innovation Research (SBIR) program, Phase I",
-      "agency": "Administration for Community Living",
-      "amount": "unknown from current evidence",
-      "deadline": null,
-      "deadline_certainty": "unknown",
-      "eligibility_fit": {
-        "level": "medium",
-        "explanation": "Some assignment signals matched; agent should verify eligibility details against the official source."
-      },
-      "effort_estimate": {
-        "level": "low",
-        "explanation": "No high-effort application signals found in current evidence."
-      },
-      "activity_status": {
-        "level": "active",
-        "explanation": "Source status indicates posted or forecasted and no past deadline was found."
-      },
-      "url": "https://www.grants.gov/search-results-detail/360528",
-      "evidence": [
-        {
-          "source_id": "grants-gov-api",
-          "url": "https://www.grants.gov/search-results-detail/360528",
-          "claim": "Small Business Innovation Research (SBIR) program, Phase I Administration for Community Living forecasted"
-        }
-      ],
-      "score": 365
-    },
-    {
-      "recommendation_id": "rec-109",
-      "opportunity_id": 109,
-      "program_name": "NIH, CDC and FDA Small Business Innovation Research Grant (Parent SBIR [R43/R44] Clinical Trial Optional)",
+      "recommendation_id": "rec-120",
+      "opportunity_id": 120,
+      "program_name": "Forecast for NIH Blueprint and BRAIN Initiative ACTION Potential Program (F99/K00 Clinical Trial Not Allowed)",
       "agency": "National Institutes of Health",
       "amount": "unknown from current evidence",
       "deadline": null,
       "deadline_certainty": "unknown",
-      "eligibility_fit": {
-        "level": "medium",
-        "explanation": "Some assignment signals matched; agent should verify eligibility details against the official source."
-      },
-      "effort_estimate": {
-        "level": "low",
-        "explanation": "No high-effort application signals found in current evidence."
-      },
-      "activity_status": {
-        "level": "active",
-        "explanation": "Source status indicates posted or forecasted and no past deadline was found."
-      },
-      "url": "https://www.grants.gov/search-results-detail/359671",
-      "evidence": [
-        {
-          "source_id": "grants-gov-api",
-          "url": "https://www.grants.gov/search-results-detail/359671",
-          "claim": "NIH, CDC and FDA Small Business Innovation Research Grant (Parent SBIR [R43/R44] Clinical Trial Optional) National Institutes of Health forecasted"
-        }
-      ],
-      "score": 365
-    },
-    {
-      "recommendation_id": "rec-105",
-      "opportunity_id": 105,
-      "program_name": "Small Business Innovation Research Program (SBIR) Phase II",
-      "agency": "Administration for Community Living",
-      "amount": "unknown from current evidence",
-      "deadline": null,
-      "deadline_certainty": "unknown",
-      "eligibility_fit": {
-        "level": "medium",
-        "explanation": "Some assignment signals matched; agent should verify eligibility details against the official source."
-      },
-      "effort_estimate": {
-        "level": "medium",
-        "explanation": "Likely requires a structured application or technical proposal."
-      },
-      "activity_status": {
-        "level": "active",
-        "explanation": "Source status indicates posted or forecasted and no past deadline was found."
-      },
-      "url": "https://www.grants.gov/search-results-detail/360495",
-      "evidence": [
-        {
-          "source_id": "grants-gov-api",
-          "url": "https://www.grants.gov/search-results-detail/360495",
-          "claim": "Small Business Innovation Research Program (SBIR) Phase II Administration for Community Living forecasted"
-        }
-      ],
-      "score": 355
-    },
-    {
-      "recommendation_id": "rec-110",
-      "opportunity_id": 110,
-      "program_name": "NIH Small Business Innovation Research (SBIR) Phase IIB Strategic Breakthrough Award (Parent [R44] Clinical Trial Optional)",
-      "agency": "National Institutes of Health",
-      "amount": "unknown from current evidence",
-      "deadline": null,
-      "deadline_certainty": "unknown",
-      "eligibility_fit": {
-        "level": "medium",
-        "explanation": "Some assignment signals matched; agent should verify eligibility details against the official source."
-      },
-      "effort_estimate": {
-        "level": "medium",
-        "explanation": "Likely requires a structured application or technical proposal."
-      },
-      "activity_status": {
-        "level": "active",
-        "explanation": "Source status indicates posted or forecasted and no past deadline was found."
-      },
-      "url": "https://www.grants.gov/search-results-detail/359758",
-      "evidence": [
-        {
-          "source_id": "grants-gov-api",
-          "url": "https://www.grants.gov/search-results-detail/359758",
-          "claim": "NIH Small Business Innovation Research (SBIR) Phase IIB Strategic Breakthrough Award (Parent [R44] Clinical Trial Optional) National Institutes of Health forecasted"
-        }
-      ],
-      "score": 355
-    },
-    {
-      "recommendation_id": "rec-118",
-      "opportunity_id": 118,
-      "program_name": "Maximizing Investigators\u0026rsquo; Research Award (MIRA) for Early Stage Investigators (ESI)",
-      "agency": "National Institutes of Health",
-      "amount": "unknown from current evidence",
-      "deadline": "02/06/2029",
-      "deadline_certainty": "confirmed",
       "eligibility_fit": {
         "level": "low",
         "explanation": "Few explicit assignment signals matched in current ledger evidence."
@@ -154,26 +34,83 @@
       },
       "activity_status": {
         "level": "active",
-        "explanation": "Deadline is current: 2029-02-06."
+        "explanation": "Source status indicates posted or forecasted and no past deadline was found."
       },
-      "url": "https://www.grants.gov/search-results-detail/360593",
+      "url": "https://www.grants.gov/search-results-detail/359137",
       "evidence": [
         {
           "source_id": "grants-gov-api",
-          "url": "https://www.grants.gov/search-results-detail/360593",
-          "claim": "Maximizing Investigators\u0026rsquo; Research Award (MIRA) for Early Stage Investigators (ESI) National Institutes of Health posted"
+          "url": "https://www.grants.gov/search-results-detail/359137",
+          "claim": "Forecast for NIH Blueprint and BRAIN Initiative ACTION Potential Program (F99/K00 Clinical Trial Not Allowed) National Institutes of Health forecasted"
         }
-      ],
-      "score": 265
+      ]
     },
     {
-      "recommendation_id": "rec-125",
-      "opportunity_id": 125,
-      "program_name": "Pioneering Aerospace Capabilities, Engineering and Research (PACER)",
-      "agency": "Air Force -- Research Lab",
+      "recommendation_id": "rec-133",
+      "opportunity_id": 133,
+      "program_name": "Addressing Methodological Challenges with Clinical Trials of Rapid-Acting Psychotropic Interventional Drugs (RAPIDs) (R01 Clinical Trial Required)",
+      "agency": "National Institutes of Health",
       "amount": "unknown from current evidence",
-      "deadline": "05/10/2043",
+      "deadline": "10/11/2026",
       "deadline_certainty": "confirmed",
+      "eligibility_fit": {
+        "level": "medium",
+        "explanation": "Some assignment signals matched; agent should verify eligibility details against the official source."
+      },
+      "effort_estimate": {
+        "level": "low",
+        "explanation": "No high-effort application signals found in current evidence."
+      },
+      "activity_status": {
+        "level": "active",
+        "explanation": "Deadline is current: 2026-10-11."
+      },
+      "url": "https://www.grants.gov/search-results-detail/359202",
+      "evidence": [
+        {
+          "source_id": "grants-gov-api",
+          "url": "https://www.grants.gov/search-results-detail/359202",
+          "claim": "Addressing Methodological Challenges with Clinical Trials of Rapid-Acting Psychotropic Interventional Drugs (RAPIDs) (R01 Clinical Trial Required) National Institutes of Health posted"
+        }
+      ]
+    },
+    {
+      "recommendation_id": "rec-115",
+      "opportunity_id": 115,
+      "program_name": "Cooperative Agreement to Support Activities Related to Analgesics, Anesthetics, and Addiction (U01) Clinical Trials Allowed",
+      "agency": "Food and Drug Administration",
+      "amount": "unknown from current evidence",
+      "deadline": null,
+      "deadline_certainty": "unknown",
+      "eligibility_fit": {
+        "level": "medium",
+        "explanation": "Some assignment signals matched; agent should verify eligibility details against the official source."
+      },
+      "effort_estimate": {
+        "level": "low",
+        "explanation": "No high-effort application signals found in current evidence."
+      },
+      "activity_status": {
+        "level": "active",
+        "explanation": "Source status indicates posted or forecasted and no past deadline was found."
+      },
+      "url": "https://www.grants.gov/search-results-detail/356049",
+      "evidence": [
+        {
+          "source_id": "grants-gov-api",
+          "url": "https://www.grants.gov/search-results-detail/356049",
+          "claim": "Cooperative Agreement to Support Activities Related to Analgesics, Anesthetics, and Addiction (U01) Clinical Trials Allowed Food and Drug Administration forecasted"
+        }
+      ]
+    },
+    {
+      "recommendation_id": "rec-111",
+      "opportunity_id": 111,
+      "program_name": "Network of the National Library of Medicine Coordinating Center (U24 Clinical Trial Optional)",
+      "agency": "National Institutes of Health",
+      "amount": "unknown from current evidence",
+      "deadline": null,
+      "deadline_certainty": "unknown",
       "eligibility_fit": {
         "level": "low",
         "explanation": "Few explicit assignment signals matched in current ledger evidence."
@@ -184,116 +121,170 @@
       },
       "activity_status": {
         "level": "active",
-        "explanation": "Deadline is current: 2043-05-10."
+        "explanation": "Source status indicates posted or forecasted and no past deadline was found."
       },
-      "url": "https://www.grants.gov/search-results-detail/349554",
+      "url": "https://www.grants.gov/search-results-detail/361282",
       "evidence": [
         {
           "source_id": "grants-gov-api",
-          "url": "https://www.grants.gov/search-results-detail/349554",
-          "claim": "Pioneering Aerospace Capabilities, Engineering and Research (PACER) Air Force -- Research Lab posted"
+          "url": "https://www.grants.gov/search-results-detail/361282",
+          "claim": "Network of the National Library of Medicine Coordinating Center (U24 Clinical Trial Optional) National Institutes of Health forecasted"
         }
-      ],
-      "score": 265
+      ]
+    },
+    {
+      "recommendation_id": "rec-112",
+      "opportunity_id": 112,
+      "program_name": "Network of the National Library of Medicine Training Center (U24 Clinical Trial Not Allowed)",
+      "agency": "National Institutes of Health",
+      "amount": "unknown from current evidence",
+      "deadline": null,
+      "deadline_certainty": "unknown",
+      "eligibility_fit": {
+        "level": "low",
+        "explanation": "Few explicit assignment signals matched in current ledger evidence."
+      },
+      "effort_estimate": {
+        "level": "low",
+        "explanation": "No high-effort application signals found in current evidence."
+      },
+      "activity_status": {
+        "level": "active",
+        "explanation": "Source status indicates posted or forecasted and no past deadline was found."
+      },
+      "url": "https://www.grants.gov/search-results-detail/361281",
+      "evidence": [
+        {
+          "source_id": "grants-gov-api",
+          "url": "https://www.grants.gov/search-results-detail/361281",
+          "claim": "Network of the National Library of Medicine Training Center (U24 Clinical Trial Not Allowed) National Institutes of Health forecasted"
+        }
+      ]
+    },
+    {
+      "recommendation_id": "rec-113",
+      "opportunity_id": 113,
+      "program_name": "Network of the National Library of Medicine Regional Medical Libraries (UG4 Clinical Trial Not Allowed)",
+      "agency": "National Institutes of Health",
+      "amount": "unknown from current evidence",
+      "deadline": null,
+      "deadline_certainty": "unknown",
+      "eligibility_fit": {
+        "level": "low",
+        "explanation": "Few explicit assignment signals matched in current ledger evidence."
+      },
+      "effort_estimate": {
+        "level": "low",
+        "explanation": "No high-effort application signals found in current evidence."
+      },
+      "activity_status": {
+        "level": "active",
+        "explanation": "Source status indicates posted or forecasted and no past deadline was found."
+      },
+      "url": "https://www.grants.gov/search-results-detail/361284",
+      "evidence": [
+        {
+          "source_id": "grants-gov-api",
+          "url": "https://www.grants.gov/search-results-detail/361284",
+          "claim": "Network of the National Library of Medicine Regional Medical Libraries (UG4 Clinical Trial Not Allowed) National Institutes of Health forecasted"
+        }
+      ]
+    },
+    {
+      "recommendation_id": "rec-123",
+      "opportunity_id": 123,
+      "program_name": "Exploratory Clinical Neuroscience Research on Substance Use Disorders",
+      "agency": "National Institutes of Health",
+      "amount": "unknown from current evidence",
+      "deadline": null,
+      "deadline_certainty": "unknown",
+      "eligibility_fit": {
+        "level": "medium",
+        "explanation": "Some assignment signals matched; agent should verify eligibility details against the official source."
+      },
+      "effort_estimate": {
+        "level": "low",
+        "explanation": "No high-effort application signals found in current evidence."
+      },
+      "activity_status": {
+        "level": "active",
+        "explanation": "Source status indicates posted or forecasted and no past deadline was found."
+      },
+      "url": "https://www.grants.gov/search-results-detail/361518",
+      "evidence": [
+        {
+          "source_id": "grants-gov-api",
+          "url": "https://www.grants.gov/search-results-detail/361518",
+          "claim": "Exploratory Clinical Neuroscience Research on Substance Use Disorders National Institutes of Health forecasted"
+        }
+      ]
+    },
+    {
+      "recommendation_id": "rec-103",
+      "opportunity_id": 103,
+      "program_name": "NIMH Research Education Programs for Psychiatry Residents",
+      "agency": "National Institutes of Health",
+      "amount": "unknown from current evidence",
+      "deadline": null,
+      "deadline_certainty": "unknown",
+      "eligibility_fit": {
+        "level": "medium",
+        "explanation": "Some assignment signals matched; agent should verify eligibility details against the official source."
+      },
+      "effort_estimate": {
+        "level": "low",
+        "explanation": "No high-effort application signals found in current evidence."
+      },
+      "activity_status": {
+        "level": "active",
+        "explanation": "Source status indicates posted or forecasted and no past deadline was found."
+      },
+      "url": "https://www.grants.gov/search-results-detail/360571",
+      "evidence": [
+        {
+          "source_id": "grants-gov-api",
+          "url": "https://www.grants.gov/search-results-detail/360571",
+          "claim": "NIMH Research Education Programs for Psychiatry Residents National Institutes of Health forecasted"
+        }
+      ]
+    },
+    {
+      "recommendation_id": "rec-119",
+      "opportunity_id": 119,
+      "program_name": "Collaborative Opportunities for Multiple-disciplinary, Bold, and Innovative Neuroscience (COMBINE) (RM1 Clinical Trial Optional)",
+      "agency": "National Institutes of Health",
+      "amount": "unknown from current evidence",
+      "deadline": null,
+      "deadline_certainty": "unknown",
+      "eligibility_fit": {
+        "level": "low",
+        "explanation": "Few explicit assignment signals matched in current ledger evidence."
+      },
+      "effort_estimate": {
+        "level": "low",
+        "explanation": "No high-effort application signals found in current evidence."
+      },
+      "activity_status": {
+        "level": "active",
+        "explanation": "Source status indicates posted or forecasted and no past deadline was found."
+      },
+      "url": "https://www.grants.gov/search-results-detail/360396",
+      "evidence": [
+        {
+          "source_id": "grants-gov-api",
+          "url": "https://www.grants.gov/search-results-detail/360396",
+          "claim": "Collaborative Opportunities for Multiple-disciplinary, Bold, and Innovative Neuroscience (COMBINE) (RM1 Clinical Trial Optional) National Institutes of Health forecasted"
+        }
+      ]
     },
     {
       "recommendation_id": "rec-126",
       "opportunity_id": 126,
-      "program_name": "BROAD AGENCY ANNOUNCEMENT (BAA) for Extramural Biomedical and Human Performance Research and Development Department of Defense",
-      "agency": "Dept. of the Army -- USAMRAA",
-      "amount": "unknown from current evidence",
-      "deadline": "07/31/2028",
-      "deadline_certainty": "confirmed",
-      "eligibility_fit": {
-        "level": "low",
-        "explanation": "Few explicit assignment signals matched in current ledger evidence."
-      },
-      "effort_estimate": {
-        "level": "low",
-        "explanation": "No high-effort application signals found in current evidence."
-      },
-      "activity_status": {
-        "level": "active",
-        "explanation": "Deadline is current: 2028-07-31."
-      },
-      "url": "https://www.grants.gov/search-results-detail/349586",
-      "evidence": [
-        {
-          "source_id": "grants-gov-api",
-          "url": "https://www.grants.gov/search-results-detail/349586",
-          "claim": "BROAD AGENCY ANNOUNCEMENT (BAA) for Extramural Biomedical and Human Performance Research and Development Department of Defense Dept. of the Army -- USAMRAA posted"
-        }
-      ],
-      "score": 265
-    },
-    {
-      "recommendation_id": "rec-122",
-      "opportunity_id": 122,
-      "program_name": "Continuing Human Enabling Enhancing Restoring and Sustaining",
-      "agency": "Air Force -- Research Lab",
-      "amount": "unknown from current evidence",
-      "deadline": "08/22/2044",
-      "deadline_certainty": "confirmed",
-      "eligibility_fit": {
-        "level": "low",
-        "explanation": "Few explicit assignment signals matched in current ledger evidence."
-      },
-      "effort_estimate": {
-        "level": "low",
-        "explanation": "No high-effort application signals found in current evidence."
-      },
-      "activity_status": {
-        "level": "active",
-        "explanation": "Deadline is current: 2044-08-22."
-      },
-      "url": "https://www.grants.gov/search-results-detail/360258",
-      "evidence": [
-        {
-          "source_id": "grants-gov-api",
-          "url": "https://www.grants.gov/search-results-detail/360258",
-          "claim": "Continuing Human Enabling Enhancing Restoring and Sustaining Air Force -- Research Lab posted"
-        }
-      ],
-      "score": 265
-    },
-    {
-      "recommendation_id": "rec-121",
-      "opportunity_id": 121,
-      "program_name": "Fundamental Research to Counter Weapons of Mass Destruction",
-      "agency": "Defense Threat Reduction Agency",
-      "amount": "unknown from current evidence",
-      "deadline": "09/30/2034",
-      "deadline_certainty": "confirmed",
-      "eligibility_fit": {
-        "level": "low",
-        "explanation": "Few explicit assignment signals matched in current ledger evidence."
-      },
-      "effort_estimate": {
-        "level": "low",
-        "explanation": "No high-effort application signals found in current evidence."
-      },
-      "activity_status": {
-        "level": "active",
-        "explanation": "Deadline is current: 2034-09-30."
-      },
-      "url": "https://www.grants.gov/search-results-detail/356612",
-      "evidence": [
-        {
-          "source_id": "grants-gov-api",
-          "url": "https://www.grants.gov/search-results-detail/356612",
-          "claim": "Fundamental Research to Counter Weapons of Mass Destruction Defense Threat Reduction Agency posted"
-        }
-      ],
-      "score": 265
-    },
-    {
-      "recommendation_id": "rec-117",
-      "opportunity_id": 117,
-      "program_name": "BRAIN Initiative: Research Resource Grants for Technology Integration and Dissemination (U24 Clinical Trial Not Allowed)",
+      "program_name": "Forecast to Publish a Funding Opportunity Announcement for Copy of Integrative Neuroscience Initiative on Alcoholism (INIA) Consortia Research Resource (U24) (Clinical Trial Optional)",
       "agency": "National Institutes of Health",
       "amount": "unknown from current evidence",
-      "deadline": "10/06/2028",
-      "deadline_certainty": "confirmed",
+      "deadline": null,
+      "deadline_certainty": "unknown",
       "eligibility_fit": {
         "level": "low",
         "explanation": "Few explicit assignment signals matched in current ledger evidence."
@@ -304,17 +295,16 @@
       },
       "activity_status": {
         "level": "active",
-        "explanation": "Deadline is current: 2028-10-06."
+        "explanation": "Source status indicates posted or forecasted and no past deadline was found."
       },
-      "url": "https://www.grants.gov/search-results-detail/358859",
+      "url": "https://www.grants.gov/search-results-detail/358826",
       "evidence": [
         {
           "source_id": "grants-gov-api",
-          "url": "https://www.grants.gov/search-results-detail/358859",
-          "claim": "BRAIN Initiative: Research Resource Grants for Technology Integration and Dissemination (U24 Clinical Trial Not Allowed) National Institutes of Health posted"
+          "url": "https://www.grants.gov/search-results-detail/358826",
+          "claim": "Forecast to Publish a Funding Opportunity Announcement for Copy of Integrative Neuroscience Initiative on Alcoholism (INIA) Consortia Research Resource (U24) (Clinical Trial Optional) National Institutes of Health forecasted"
         }
-      ],
-      "score": 265
+      ]
     }
   ],
   "coverage": [
@@ -325,7 +315,7 @@
     },
     {
       "source_lane": "SBIR/STTR",
-      "status": "matched",
+      "status": "checked_no_match",
       "note": "small business funding lane"
     },
     {
