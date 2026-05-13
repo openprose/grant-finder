@@ -22,5 +22,12 @@ We want to focus on grants we can actually win and ship work against.
 Conservative on eligibility. Prefer programs without matching-fund
 requirements if possible; will consider those if the program fit is strong.
 
-Do not recommend grants we have already received or that are listed in our
-internal "known" list (the upstream agent will pass that list separately).
+Do not recommend grants on the known-grants list (the upstream agent supplies
+that list; this example fixture leaves it empty).
+
+---
+
+Sources for the public-info facts in this brief:
+polyspectra.com (homepage + COR Alpha product pages); shop.polyspectra.com;
+public press on Tethon & polySpectra ThOR-10 launch at RAPID 2025.
+

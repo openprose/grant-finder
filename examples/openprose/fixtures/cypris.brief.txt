@@ -22,5 +22,15 @@ and CalSEED programs in addition to federal SBIR/STTR.
 
 We want to focus on grants we can realistically win and execute. Conservative
 on eligibility. Prefer programs without matching-fund requirements; will
-consider those if program fit is strong. Do not recommend grants we have
-already received or that appear on our internal "known" list.
+consider those if program fit is strong. Do not recommend grants on the
+known-grants list (the upstream agent supplies that list; this example
+fixture leaves it empty).
+
+---
+
+Sources for the public-info facts in this brief:
+cyprismaterials.com (homepage + technology pages);
+calseed.fund/awardee/cypris-materials; EPA NCER abstract 11249 ("Color
+Without Pigments, Dyes, Metals, or PCBs"); UV+EB Technology magazine 2024
+feature; CBInsights public company profile.
+
