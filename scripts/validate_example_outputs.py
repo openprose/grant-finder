@@ -17,6 +17,8 @@ EXPECTED_FILES = [
     "06-markdown_report.md",
 ]
 
+# These phrases are part of the sample-output contract. They block regressions
+# toward the old "fill a report from weak fallback picks" behavior.
 BAD_REPORT_PHRASES = [
     "fallback",
     "top-3",
@@ -143,6 +145,8 @@ def validate_example(path: Path) -> list[str]:
     for phrase in BAD_REPORT_PHRASES:
         if phrase in lower_report:
             errors.append(f"{path}: report contains disallowed phrase {phrase!r}")
+    # This phrase is intentionally contractual so no-good reports stay direct
+    # and do not manufacture a recommendation section from weak candidates.
     if no_good is True and "no credible current recommendation" not in lower_report:
         errors.append(f"{path}: no-good report must say no credible recommendation was found")
     if len(report.splitlines()) > 200:

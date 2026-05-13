@@ -75,6 +75,11 @@ distinguishes a source coverage gap from a retrieval regression by seeding
 known-plausible candidates for the polySpectra, Cypris, and ENACT examples and
 asserting that `research` surfaces them.
 
+`validate-examples` also protects the OpenProse report contract. It rejects
+leaked CLI `score` fields, inconsistent `no_good_matches` state, explanation
+IDs that do not match selected recommendations, and stale fallback-language
+phrases such as "fallback", "top-3", "top scored", and "top picks".
+
 Run `make fuzz-smoke FUZZTIME=10s` when changing assignment parsing, feed/XML
 parsing, Federal Register hydration, JSON projection, or debug SQL validation.
 

@@ -14,6 +14,8 @@ from pathlib import Path
 FIT_ORDER = {"low": 0, "medium": 1, "high": 2}
 COMMAND_TIMEOUT_SECONDS = 60
 
+# When adding a new public example brief, add a recall case here if manual
+# source-audit work identified opportunities that must surface for that brief.
 CASES = [
     {
         "name": "polyspectra",
