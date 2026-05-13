@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+set -eu
+
+if ! command -v gitleaks >/dev/null 2>&1; then
+  echo "gitleaks is required for this repository's pre-commit secret scan." >&2
+  echo "Install gitleaks or intentionally bypass with git commit --no-verify." >&2
+  exit 1
+fi
+
+gitleaks protect --staged --source . --redact --no-banner

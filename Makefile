@@ -1,6 +1,6 @@
 FUZZTIME ?= 10s
 
-.PHONY: validate validate-product-cli dogfood-agent fuzz-smoke
+.PHONY: validate validate-product-cli dogfood-agent fuzz-smoke secret-scan
 
 validate:
 	cd cli/grant-finder && go test ./...
@@ -19,3 +19,7 @@ fuzz-smoke:
 	cd cli/grant-finder && go test -run=^$$ -fuzz=FuzzOpportunityFromFederalRegister -fuzztime=$(FUZZTIME) ./internal/grantfinder
 	cd cli/grant-finder && go test -run=^$$ -fuzz=FuzzSelectJSONFields -fuzztime=$(FUZZTIME) ./internal/cli
 	cd cli/grant-finder && go test -run=^$$ -fuzz=FuzzEnsureReadOnlySQL -fuzztime=$(FUZZTIME) ./internal/cli
+
+secret-scan:
+	gitleaks detect --source . --redact --no-banner
+	gitleaks detect --source . --no-git --redact --no-banner

@@ -55,6 +55,7 @@ make validate              # go test ./...
 make validate-product-cli  # build CLI + python3 scripts/validate_product_surface.py (checks command surface)
 make dogfood-agent         # end-to-end: seed fixture → research → explain → status
 make fuzz-smoke            # optional Go fuzz smoke for parsers/projection/read-only SQL guard
+make secret-scan           # gitleaks scan of history plus working tree
 ```
 
 The first three gates must pass before merging anything that touches the public
@@ -65,6 +66,12 @@ opportunities, provenance-bearing evidence, ARPA-E negative evidence, and
 
 Run `make fuzz-smoke FUZZTIME=10s` when changing assignment parsing, feed/XML
 parsing, Federal Register hydration, JSON projection, or debug SQL validation.
+
+This repo includes `.githooks/pre-commit`, which runs
+`gitleaks protect --staged --redact` before commits. On this machine the global
+Git pre-commit hook delegates to repo-local `.githooks/pre-commit`; elsewhere,
+install it with `git config core.hooksPath .githooks` or equivalent before
+committing.
 
 ## Debug surface (maintainer-only)
 
