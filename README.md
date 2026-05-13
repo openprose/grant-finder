@@ -176,14 +176,27 @@ automatically.
 ### Driving grant-finder from an AI agent (optional second step)
 
 If you want an AI agent (Claude Code, Codex, Gemini) to drive `grant-finder`
-end-to-end through the bundled OpenProse example, install the host-harness
-skill so the agent's container resolves the binary correctly:
+end-to-end through the bundled OpenProse example, install or refresh the
+host-harness skill from your current clone so the agent's container gets the
+current command instructions:
 
 ```bash
 # From your local clone of this repo
-ln -s "$PWD/skills/grant-finder" ~/.claude/skills/grant-finder
-#   Codex:  ~/.codex/skills/grant-finder
-#   Gemini: ~/.agents/skills/grant-finder
+install_skill_link() {
+  skills_dir="$1"
+  target="$skills_dir/grant-finder"
+  mkdir -p "$skills_dir"
+  if [ -e "$target" ] && [ ! -L "$target" ]; then
+    echo "Existing non-symlink skill path: $target"
+    echo "Leaving it untouched. Move it yourself if you want this repo's skill."
+    return 1
+  fi
+  ln -sfn "$PWD/skills/grant-finder" "$target"
+}
+
+install_skill_link "$HOME/.claude/skills"  # Claude Code
+install_skill_link "$HOME/.codex/skills"   # Codex
+install_skill_link "$HOME/.agents/skills"  # Gemini / other harnesses
 ```
 
 The skill teaches the agent the CLI's command surface. Combined with the

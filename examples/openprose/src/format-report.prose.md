@@ -34,6 +34,8 @@ clearly.
     source lane, with status and note columns
   - `## Negative Evidence`: an explicit callout listing coverage rows whose
     status is `checked_no_match`, especially the ARPA-E row when present
+  - `## Coverage Gaps`: required when any coverage row is `not_checked` or
+    `ranked_recommendations.search_inconclusive == true`
   - `## Provenance`: a line stating the retrieval backend, refresh policy, and
     `generated_at` timestamp from the packet
 
@@ -53,6 +55,11 @@ clearly.
 - If `ranked_recommendations.no_good_matches` is true, say so directly and do
   not create a fake Recommended Opportunities section. Explain which source
   lanes were checked and what a human should try next.
+- If `ranked_recommendations.search_inconclusive` is true, or if summary notes
+  say source refresh was inconclusive, do not say "no credible current
+  recommendation" as the main conclusion. Say the search is incomplete,
+  include the source/setup failure, and tell the user to fix the environment
+  or rerun before treating the result as funding advice.
 - For each recommended opportunity, link the program name to the packet URL and
   include one evidence URL from the matching explanation.
 - Do not dump every evidence field into the main body. Put source details in a
@@ -61,4 +68,7 @@ clearly.
   `status == "checked_no_match"` and `note` is non-empty. The CLI specifically
   encodes "no current ARPA-E programs match" as a load-bearing absence; do not
   filter it out.
+- For the Coverage Gaps section, surface every row where
+  `status == "not_checked"` and explain that these rows are not negative
+  evidence.
 - Keep the entire report under 200 lines for legibility.

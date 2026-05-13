@@ -79,6 +79,12 @@ type Stats struct {
 	LastRunCountsJSON  string `json:"last_run_counts_json,omitempty"`
 }
 
+type RunHealth struct {
+	Runs   int `json:"runs"`
+	Items  int `json:"items"`
+	Errors int `json:"errors"`
+}
+
 func DefaultDBPath() string {
 	if xdg := os.Getenv("XDG_DATA_HOME"); xdg != "" {
 		return filepath.Join(xdg, "grant-finder", DefaultDBName)
@@ -422,6 +428,45 @@ func (s *Store) Stats(ctx context.Context) (Stats, error) {
 	}
 	_ = s.DB.QueryRowContext(ctx, `SELECT COALESCE(started_at, ''), COALESCE(finished_at, ''), COALESCE(counts_json, '') FROM runs ORDER BY id DESC LIMIT 1`).Scan(&st.LastRunStartedAt, &st.LastRunFinishedAt, &st.LastRunCountsJSON)
 	return st, nil
+}
+
+func (s *Store) RecentRunHealth(ctx context.Context, limit int) (RunHealth, error) {
+	if limit <= 0 {
+		limit = 10
+	}
+	rows, err := s.DB.QueryContext(ctx, `SELECT counts_json FROM runs WHERE counts_json IS NOT NULL ORDER BY id DESC LIMIT ?`, limit)
+	if err != nil {
+		return RunHealth{}, err
+	}
+	defer rows.Close()
+	var health RunHealth
+	for rows.Next() {
+		var countsJSON string
+		if err := rows.Scan(&countsJSON); err != nil {
+			return RunHealth{}, err
+		}
+		var counts struct {
+			Items      int `json:"items"`
+			RawItems   int `json:"raw_items"`
+			Errors     int `json:"errors"`
+			FeedErrors int `json:"feed_errors"`
+			Seeded     int `json:"seeded"`
+		}
+		if err := json.Unmarshal([]byte(countsJSON), &counts); err != nil {
+			continue
+		}
+		health.Runs++
+		items := counts.Items
+		if items == 0 {
+			items = counts.RawItems
+		}
+		if items == 0 {
+			items = counts.Seeded
+		}
+		health.Items += items
+		health.Errors += counts.Errors + counts.FeedErrors
+	}
+	return health, rows.Err()
 }
 
 func (s *Store) StatsMap(ctx context.Context) (map[string]any, error) {

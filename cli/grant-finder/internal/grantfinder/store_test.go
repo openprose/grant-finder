@@ -466,6 +466,73 @@ func TestKeywordsForAssignmentDoesNotSeedSBIRWhenExcluded(t *testing.T) {
 	}
 }
 
+func TestBuildCoverageMarksRefreshFailureInconclusive(t *testing.T) {
+	ctx := context.Background()
+	store, err := OpenStore(ctx, filepath.Join(t.TempDir(), "coverage.sqlite"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer store.Close()
+	runID, err := store.StartRun(ctx, SyncOptions{IncludeGrants: true, Keyword: "advanced manufacturing", Limit: 10})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := store.FinishRun(ctx, runID, SyncReport{RunID: runID, Errors: 1}); err != nil {
+		t.Fatal(err)
+	}
+
+	rows := BuildCoverage(ctx, Assignment{TargetGeographies: []string{"California"}}, store)
+	if len(rows) == 0 {
+		t.Fatal("expected coverage rows")
+	}
+	for _, row := range rows {
+		if row.Status != "not_checked" {
+			t.Fatalf("expected failed empty refresh to be not_checked, got %+v", row)
+		}
+		if !strings.Contains(row.Note, "refresh failed") || !strings.Contains(row.Note, "inconclusive") {
+			t.Fatalf("expected coverage note to explain refresh failure, got %+v", row)
+		}
+	}
+}
+
+func TestResearchSummaryWarnsOnInconclusiveRefresh(t *testing.T) {
+	ctx := context.Background()
+	dbPath := filepath.Join(t.TempDir(), "research.sqlite")
+	store, err := OpenStore(ctx, dbPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	runID, err := store.StartRun(ctx, SyncOptions{IncludeGrants: true, Keyword: "advanced manufacturing", Limit: 10})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := store.FinishRun(ctx, runID, SyncReport{RunID: runID, Errors: 1}); err != nil {
+		t.Fatal(err)
+	}
+	if err := store.Close(); err != nil {
+		t.Fatal(err)
+	}
+
+	packet, err := Research(ctx, ResearchOptions{DBPath: dbPath, Refresh: "off", Semantic: "off", Limit: 5}, Assignment{
+		AssignmentID:     "mobility-startup-test",
+		ResearchQuestion: "Find funding for EV infrastructure robotics.",
+		CompanyProfile: CompanyProfile{
+			Name:        "Acme Mobility",
+			Description: "Startup building EV infrastructure and robotics.",
+			Stage:       "startup",
+		},
+		FocusAreas:        []string{"EV infrastructure", "robotics"},
+		TargetGeographies: []string{"United States", "California"},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	notes := strings.Join(packet.Summary.Notes, "\n")
+	if !strings.Contains(notes, "source refresh was inconclusive") {
+		t.Fatalf("expected inconclusive refresh note, got %q", notes)
+	}
+}
+
 func TestBuildAssignmentQueryPrioritizesDomainTerms(t *testing.T) {
 	assignment := Assignment{
 		ResearchQuestion: "Find non-dilutive R&D funding for an industrial 3D printing materials small business specializing in rugged photopolymer resins.",

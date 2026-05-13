@@ -67,10 +67,16 @@ grant-finder doctor --json
 ## Install
 
 ```bash
-# Binary
-go build -o "$HOME/.local/bin/grant-finder" ./cli/grant-finder/cmd/grant-finder
+# Binary, from the grant-finder repository root
+(cd cli/grant-finder && go build -o "$HOME/.local/bin/grant-finder" ./cmd/grant-finder)
 
-# Skill (this file)
-ln -s "$PWD/skills/grant-finder" ~/.claude/skills/grant-finder
-# (or your harness's equivalent skills dir for Codex / Gemini)
+# Skill (this file). Refresh old symlinks; do not overwrite custom directories.
+skills_dir="$HOME/.codex/skills"  # or ~/.claude/skills, ~/.agents/skills
+mkdir -p "$skills_dir"
+target="$skills_dir/grant-finder"
+if [ -e "$target" ] && [ ! -L "$target" ]; then
+  echo "Existing non-symlink skill path: $target"
+  exit 1
+fi
+ln -sfn "$PWD/skills/grant-finder" "$target"
 ```

@@ -62,7 +62,7 @@ else
 fi
 ```
 
-Build the CLI and make sure it is on PATH:
+Build the CLI from this clone and make sure this exact binary is used:
 
 ```bash
 mkdir -p "$HOME/.local/bin"
@@ -74,7 +74,8 @@ grant-finder version
 
 Install the host-harness skill for whichever agent harness is available. Do not
 overwrite an existing custom skill directory; if a path already exists and is
-not a symlink, stop and tell me.
+not a symlink, stop and tell me. Rerun this step after every `git pull`; it is
+meant to refresh stale symlinks that point at an older checkout.
 
 ```bash
 cd "$WORKDIR/grant-finder"
@@ -111,6 +112,7 @@ PROSE_CODEX_SANDBOX_MODE=workspace-write \
 PROSE_CODEX_APPROVAL_POLICY=never \
 PROSE_CODEX_ADD_DIR="$HOME/.local/share/grant-finder" \
 PROSE_CODEX_NETWORK=true \
+GRANT_FINDER_BIN="$HOME/.local/bin/grant-finder" \
 prose run examples/openprose/src/grant-radar.prose.md \
   --startup_brief "$(cat "$WORKDIR/funding-brief.txt")"
 ```
@@ -123,6 +125,7 @@ cd "$WORKDIR/grant-finder"
 
 PROSE_CODEX_SANDBOX_MODE=danger-full-access \
 PROSE_CODEX_APPROVAL_POLICY=never \
+GRANT_FINDER_BIN="$HOME/.local/bin/grant-finder" \
 prose run examples/openprose/src/grant-radar.prose.md \
   --startup_brief "$(cat "$WORKDIR/funding-brief.txt")"
 ```

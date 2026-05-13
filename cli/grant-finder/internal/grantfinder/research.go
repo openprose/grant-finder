@@ -177,6 +177,10 @@ func Research(ctx context.Context, opts ResearchOptions, assignment Assignment) 
 			break
 		}
 	}
+	summary := BuildSummary(recs, opts.IncludeInactive)
+	if health, err := store.RecentRunHealth(ctx, 10); err == nil {
+		summary.Notes = append(summary.Notes, refreshHealthNotes(health)...)
+	}
 	packet := ResearchPacket{
 		AssignmentID: assignment.AssignmentID,
 		GeneratedAt:  time.Now().UTC().Format(time.RFC3339),
@@ -185,7 +189,7 @@ func Research(ctx context.Context, opts ResearchOptions, assignment Assignment) 
 			Query:   query,
 			NoLLM:   true,
 		},
-		Summary:  BuildSummary(recs, opts.IncludeInactive),
+		Summary:  summary,
 		Grants:   recs,
 		Coverage: BuildCoverage(ctx, assignment, store),
 	}
@@ -492,6 +496,20 @@ func BuildSummary(recs []GrantRecommendation, includeInactive bool) ResearchSumm
 	}
 }
 
+func refreshHealthNotes(health RunHealth) []string {
+	if health.Errors == 0 {
+		return nil
+	}
+	if health.Items == 0 {
+		return []string{
+			fmt.Sprintf("source refresh was inconclusive: %d recent refresh lane(s) reported errors and returned zero records; do not treat empty results as negative evidence", health.Errors),
+		}
+	}
+	return []string{
+		fmt.Sprintf("source refresh completed with %d recent error(s); coverage may be partial", health.Errors),
+	}
+}
+
 // BuildCoverage reports per-source-lane coverage for a Research Assignment.
 //
 // The truthful question is "did the ledger get any records from this lane
@@ -502,43 +520,90 @@ func BuildSummary(recs []GrantRecommendation, includeInactive bool) ResearchSumm
 // When store is nil (e.g., a hypothetical preflight before any refresh) every
 // lane reports "not_checked".
 func BuildCoverage(ctx context.Context, a Assignment, store *Store) []CoverageRow {
-	arpae := statusFromLedger(ctx, store, "arpa-e", "advanced research projects agency energy")
+	health, _ := recentCoverageHealth(ctx, store)
+	status := func(needles ...string) (string, string) {
+		return statusFromLedger(ctx, store, health, needles...)
+	}
+	arpae, arpaeReason := status("arpa-e", "advanced research projects agency energy")
 	arpaeNote := "energy funding lane"
 	if arpae == "checked_no_match" {
 		// Negative-evidence call-out per docs/adr/0001 and product-surface:
 		// ARPA-E is a must-check lane, so surface absence explicitly.
 		arpaeNote = "No current ARPA-E programs match"
 	}
+	arpaeNote = coverageNote(arpaeNote, arpaeReason)
+	grantsStatus, grantsReason := status("grants.gov")
+	sbirStatus, sbirReason := status("sbir", "sttr", "small business innovation")
+	eereStatus, eereReason := status("eere", "energy efficiency and renewable energy")
+	nsfStatus, nsfReason := status("national science foundation", "nsf")
 	rows := []CoverageRow{
-		{SourceLane: "Grants.gov", Status: statusFromLedger(ctx, store, "grants.gov"), Note: "canonical federal opportunity lane"},
-		{SourceLane: "SBIR/STTR", Status: statusFromLedger(ctx, store, "sbir", "sttr", "small business innovation"), Note: "small business funding lane"},
+		{SourceLane: "Grants.gov", Status: grantsStatus, Note: coverageNote("canonical federal opportunity lane", grantsReason)},
+		{SourceLane: "SBIR/STTR", Status: sbirStatus, Note: coverageNote("small business funding lane", sbirReason)},
 		{SourceLane: "ARPA-E", Status: arpae, Note: arpaeNote},
-		{SourceLane: "DOE EERE", Status: statusFromLedger(ctx, store, "eere", "energy efficiency and renewable energy"), Note: "energy funding lane"},
-		{SourceLane: "NSF", Status: statusFromLedger(ctx, store, "national science foundation", "nsf"), Note: "research and commercialization lane"},
+		{SourceLane: "DOE EERE", Status: eereStatus, Note: coverageNote("energy funding lane", eereReason)},
+		{SourceLane: "NSF", Status: nsfStatus, Note: coverageNote("research and commercialization lane", nsfReason)},
 	}
 	for _, geo := range a.TargetGeographies {
 		geo = strings.TrimSpace(geo)
 		if geo == "" || strings.EqualFold(geo, "United States") {
 			continue
 		}
+		geoStatus, geoReason := status(strings.ToLower(geo))
 		rows = append(rows, CoverageRow{
 			SourceLane: "state economic development: " + geo,
-			Status:     statusFromLedger(ctx, store, strings.ToLower(geo)),
-			Note:       "state-specific source lane required by assignment geography",
+			Status:     geoStatus,
+			Note:       coverageNote("state-specific source lane required by assignment geography", geoReason),
 		})
 	}
 	return rows
 }
 
-func statusFromLedger(ctx context.Context, store *Store, needles ...string) string {
+type coverageHealth struct {
+	runs   int
+	items  int
+	errors int
+}
+
+func recentCoverageHealth(ctx context.Context, store *Store) (coverageHealth, error) {
 	if store == nil {
-		return "not_checked"
+		return coverageHealth{}, nil
+	}
+	health, err := store.RecentRunHealth(ctx, 10)
+	if err != nil {
+		return coverageHealth{}, err
+	}
+	return coverageHealth{runs: health.Runs, items: health.Items, errors: health.Errors}, nil
+}
+
+func (h coverageHealth) refreshFailedWithoutRecords() bool {
+	return h.runs > 0 && h.items == 0 && h.errors > 0
+}
+
+func statusFromLedger(ctx context.Context, store *Store, health coverageHealth, needles ...string) (string, string) {
+	if store == nil {
+		return "not_checked", "store was not opened"
 	}
 	matched, err := store.CoverageMatch(ctx, needles)
-	if err != nil || !matched {
-		return "checked_no_match"
+	if err != nil {
+		return "not_checked", "coverage query failed"
 	}
-	return "matched"
+	if matched {
+		return "matched", ""
+	}
+	if health.refreshFailedWithoutRecords() {
+		return "not_checked", "recent source refresh failed before loading records; coverage inconclusive"
+	}
+	return "checked_no_match", ""
+}
+
+func coverageNote(base, reason string) string {
+	if reason == "" {
+		return base
+	}
+	if base == "" {
+		return reason
+	}
+	return base + "; " + reason
 }
 
 func IsKnownGrant(a Assignment, rec OpportunityRecord) bool {

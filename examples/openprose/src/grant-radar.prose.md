@@ -86,26 +86,40 @@ above). Forme refuses to wire the system if the skill is not installed,
 returning `skill_unresolved` before any service runs. That guarantees the
 dependency is satisfied at wiring time rather than failing mid-run.
 
-**Two-step install:**
+**Two-step install:** run this from the `grant-finder` repository root after
+cloning or pulling. The skill install step refreshes old symlinks because a
+stale installed skill can make the host agent follow old instructions.
 
 ```bash
-# 1. Build the grant-finder CLI binary onto PATH
+# 1. Build the grant-finder CLI binary from this clone
 git clone https://github.com/openprose/grant-finder
-cd grant-finder/cli/grant-finder
-go build -o "$HOME/.local/bin/grant-finder" ./cmd/grant-finder
+cd grant-finder
+mkdir -p "$HOME/.local/bin"
+(cd cli/grant-finder && go build -o "$HOME/.local/bin/grant-finder" ./cmd/grant-finder)
 
-# 2. Install the grant-finder host-harness skill (symlink from the repo)
-cd ../..
-ln -s "$PWD/skills/grant-finder" ~/.claude/skills/grant-finder
-#   Codex: ~/.codex/skills/grant-finder
-#   Gemini / other agent harnesses: ~/.agents/skills/grant-finder
+# 2. Install or refresh the grant-finder host-harness skill
+install_skill_link() {
+  skills_dir="$1"
+  target="$skills_dir/grant-finder"
+  mkdir -p "$skills_dir"
+  if [ -e "$target" ] && [ ! -L "$target" ]; then
+    echo "Existing non-symlink skill path: $target"
+    echo "Leaving it untouched. Move it yourself if you want this repo's skill."
+    return 1
+  fi
+  ln -sfn "$PWD/skills/grant-finder" "$target"
+}
+
+install_skill_link "$HOME/.claude/skills"  # Claude Code
+install_skill_link "$HOME/.codex/skills"   # Codex
+install_skill_link "$HOME/.agents/skills"  # Gemini / other harnesses
 ```
 
 Confirm both halves are wired:
 
 ```bash
-grant-finder version
-ls -l ~/.claude/skills/grant-finder/SKILL.md
+"$HOME/.local/bin/grant-finder" version
+ls -l "$HOME/.codex/skills/grant-finder/SKILL.md"
 ```
 
 Optional: `usearch` on `PATH` enables local semantic retrieval. Without it,
@@ -129,6 +143,7 @@ PROSE_CODEX_SANDBOX_MODE=workspace-write \
 PROSE_CODEX_APPROVAL_POLICY=never \
 PROSE_CODEX_ADD_DIR=$HOME/.local/share/grant-finder \
 PROSE_CODEX_NETWORK=true \
+GRANT_FINDER_BIN=$HOME/.local/bin/grant-finder \
 prose run examples/openprose/src/grant-radar.prose.md \
   --startup_brief "$(cat examples/openprose/fixtures/polyspectra.brief.txt)"
 ```
@@ -138,6 +153,7 @@ prose run examples/openprose/src/grant-radar.prose.md \
 ```bash
 PROSE_CODEX_SANDBOX_MODE=danger-full-access \
 PROSE_CODEX_APPROVAL_POLICY=never \
+GRANT_FINDER_BIN=$HOME/.local/bin/grant-finder \
 prose run examples/openprose/src/grant-radar.prose.md \
   --startup_brief "$(cat examples/openprose/fixtures/polyspectra.brief.txt)"
 ```

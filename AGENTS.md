@@ -70,9 +70,9 @@ make secret-scan           # gitleaks scan of history plus working tree
 
 The first three gates must pass before merging anything that touches the public
 command surface or domain logic. `dogfood-agent` validates schema-shaped
-Research Packet output plus the Aeseon-style behavioral contract: candidate
-opportunities, provenance-bearing evidence, ARPA-E negative evidence, and
-`no_llm: true`.
+Research Packet output plus the synthetic deep-tech behavioral contract:
+candidate opportunities, provenance-bearing evidence, ARPA-E negative
+evidence, and `no_llm: true`.
 
 Run `make validate-recall` when changing retrieval, assignment query
 construction, source manifests, source-page adapters, or seeded fixtures. It
@@ -87,6 +87,15 @@ phrases such as "fallback", "top-3", "top scored", and "top picks".
 
 Run `make fuzz-smoke FUZZTIME=10s` when changing assignment parsing, feed/XML
 parsing, Federal Register hydration, JSON projection, or debug SQL validation.
+
+## Private holdout tests
+
+Do not commit private holdout organization names, user-test transcripts,
+scratch run directories, or one-off evaluation prompts. If a private holdout
+run exposes a real product bug, encode the generic failure mode in public
+tests and docs instead. Use synthetic fixture names such as `Acme Deep-Tech`
+or a plain category like "deep-tech mobility startup"; never turn the holdout
+itself into a public fixture or sample output.
 
 This repo includes `.githooks/pre-commit`, which runs
 `gitleaks protect --staged --redact` before commits. On this machine the global
