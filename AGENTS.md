@@ -4,6 +4,10 @@ For AI coding agents and contributors working **on** this repo (as opposed to
 *using* the CLI). If you are evaluating grant-finder as a user, read
 [`README.md`](./README.md) first.
 
+User-facing coding-assistant instructions live in
+[`docs/run-with-coding-agent.md`](./docs/run-with-coding-agent.md). Keep those
+instructions product-user oriented; keep this file contributor oriented.
+
 ## What this repo is
 
 A Go CLI (`grant-finder`) that an upstream AI agent calls to turn a startup's
@@ -123,6 +127,46 @@ meta description when available, a clean source-page existence claim when
 metadata is missing, and manifest signals. Do not use it for JavaScript-rendered
 portals, paid databases, or sources that require API keys; keep those as
 manifested gaps or debug-only lanes.
+
+## Mirroring the OpenProse example into `openprose/prose`
+
+`examples/openprose/` is the canonical OpenProse example. It is also mirrored
+into `openprose/prose` at `skills/open-prose/examples/grant-radar/` via a
+`git subtree` of the `examples-mirror` branch in this repo.
+
+The `examples-mirror` branch always tracks the contents of `examples/openprose/`
+as if that subdirectory were its own root. It is produced by `git subtree split`
+and is the *only* branch a downstream subtree consumer should subtree-pull from.
+
+**Refresh procedure** (run from this repo's main worktree after committing
+changes to `examples/openprose/`):
+
+```bash
+# Rebuild the split branch from current main
+git branch -D examples-mirror 2>/dev/null
+git subtree split --prefix=examples/openprose -b examples-mirror
+
+# Push the refreshed branch (force-with-lease since it's a rewritten history)
+git push --force-with-lease origin examples-mirror
+```
+
+Downstream `openprose/prose` then refreshes via:
+
+```bash
+git subtree pull --prefix=skills/open-prose/examples/grant-radar \
+  https://github.com/openprose/grant-finder examples-mirror --squash
+```
+
+The grant-finder Go CLI itself is **not** mirrored — `openprose/prose` only
+mirrors the OpenProse system + fixtures + sample-outputs that make the example
+runnable. The CLI is an external dependency declared via `### Skills:
+grant-finder` and installed separately. That keeps `openprose/prose` focused on
+prose-runtime artifacts; the CLI's Go source stays in this repo.
+
+When you edit anything under `examples/openprose/` and commit on main, run the
+refresh procedure above so the mirror catches up. A future GitHub Action could
+automate this, but a manual refresh on each release is fine while the example
+is stable.
 
 ## Mycelium notes
 
