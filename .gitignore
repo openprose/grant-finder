@@ -27,3 +27,7 @@ smoke-results.json
 # Local Go build and verification artifacts
 cli/**/grant-finder/grant-finder
 cli/**/dogfood-results.json
+
+# OpenProse runtime state (per-run bindings, manifests, etc.)
+.prose/runs/
+.prose/agents/

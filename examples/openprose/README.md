@@ -87,6 +87,40 @@ wiring time, not a half-run failure in the middle of `run-research`.
 Optional: `usearch` on `PATH` enables faster semantic retrieval; without it,
 the CLI falls back to SQLite FTS5 automatically.
 
+### Sandbox invocation
+
+`prose run` uses the codex-sdk harness by default, which sandboxes the
+spawned agent to read-only `$HOME` and blocks outbound network. The CLI
+needs both: it writes a SQLite ledger at `~/.local/share/grant-finder/`
+and fetches from Grants.gov and the Federal Register. Pick one of the
+invocations below depending on your prose version.
+
+**Granular (recommended once your prose CLI supports the env passthrough):**
+
+```bash
+PROSE_CODEX_SANDBOX_MODE=workspace-write \
+PROSE_CODEX_APPROVAL_POLICY=never \
+PROSE_CODEX_ADD_DIR=$HOME/.local/share/grant-finder \
+PROSE_CODEX_NETWORK=true \
+prose run src/grant-radar.prose.md \
+  --startup_brief "$(cat fixtures/polyspectra.brief.txt)"
+```
+
+**Fallback (works on any prose version, including 0.13.1):**
+
+```bash
+PROSE_CODEX_SANDBOX_MODE=danger-full-access \
+PROSE_CODEX_APPROVAL_POLICY=never \
+prose run src/grant-radar.prose.md \
+  --startup_brief "$(cat fixtures/polyspectra.brief.txt)"
+```
+
+The granular form is strictly less broad — it grants only the specific
+filesystem path and outbound network access this system declares in its
+`### Environment` block. The system file documents the full permission
+shape (filesystem.write, network.outbound, exec); Forme does not yet
+enforce that schema, but the documentation is forward-compatible.
+
 ## Environment
 
 - `GRANT_FINDER_BIN` — optional override for the `grant-finder` executable

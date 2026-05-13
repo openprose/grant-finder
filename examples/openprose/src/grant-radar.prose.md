@@ -105,7 +105,44 @@ ls -l ~/.claude/skills/grant-finder/SKILL.md
 Optional: `usearch` on `PATH` enables local semantic retrieval. Without it,
 the CLI falls back to SQLite FTS5 automatically. No API keys are required.
 
+### Sandbox invocation
+
+The default `codex-sdk` harness for `prose run` sandboxes the spawned agent
+to a read-only `$HOME` and blocks outbound network. The CLI cannot run
+under those defaults — it needs to create its SQLite ledger under
+`~/.local/share/grant-finder/` and reach public APIs (Grants.gov, Federal
+Register, agency RSS).
+
+**Recommended (granular permissions** — requires
+[openprose/prose#TBD](https://github.com/openprose/prose) with the
+`PROSE_CODEX_ADD_DIR` / `PROSE_CODEX_NETWORK` env-passthrough patch):
+
+```bash
+PROSE_CODEX_SANDBOX_MODE=workspace-write \
+PROSE_CODEX_APPROVAL_POLICY=never \
+PROSE_CODEX_ADD_DIR=$HOME/.local/share/grant-finder \
+PROSE_CODEX_NETWORK=true \
+prose run examples/openprose/src/grant-radar.prose.md \
+  --startup_brief "$(cat examples/openprose/fixtures/polyspectra.brief.txt)"
+```
+
+**Fallback (no sandbox** — works on any prose version, including 0.13.1):
+
+```bash
+PROSE_CODEX_SANDBOX_MODE=danger-full-access \
+PROSE_CODEX_APPROVAL_POLICY=never \
+prose run examples/openprose/src/grant-radar.prose.md \
+  --startup_brief "$(cat examples/openprose/fixtures/polyspectra.brief.txt)"
+```
+
+The granular form is strictly less broad — it grants only the specific
+filesystem path and outbound network access this system declares in
+`### Environment`. Use it as soon as your prose CLI supports the
+passthrough env vars.
+
 ### Environment
+
+**Env vars (read by the system services):**
 
 - `GRANT_FINDER_BIN`: optional override for the `grant-finder` executable path.
   When unset, services resolve `grant-finder` from `PATH`.
@@ -113,3 +150,30 @@ the CLI falls back to SQLite FTS5 automatically. No API keys are required.
   the CLI uses `~/.local/share/grant-finder/grant-finder.sqlite`. Sharing the
   ledger across runs makes subsequent research packets faster and surfaces
   changes between runs.
+
+**Host harness sandbox requirements (soft documentation today; intended to
+become Forme-enforced):**
+
+The `grant-finder` CLI requires permissions that a stock sandboxed Prose VM
+agent run does not grant by default. Forme today does not parse a structured
+permission schema here — the entries below are documentation. Once Forme
+gains the schema, they should become enforced.
+
+```
+filesystem.write:
+  - ~/.local/share/grant-finder/    # SQLite ledger
+  - ${GRANT_FINDER_DB%/*}/          # if GRANT_FINDER_DB is set, its parent
+
+network.outbound:
+  - api.grants.gov                  # Grants.gov search + fetchOpportunity
+  - www.federalregister.gov         # Federal Register document hydration
+  - grants.gov                      # XML bulk extract page
+  # plus the per-feed RSS URLs declared in cli/grant-finder/internal/grantfinder/data/feeds.json
+
+exec:
+  - grant-finder                    # the CLI binary itself
+```
+
+If the host harness does not grant these (e.g., the default codex-sdk
+sandbox), the run reaches `run-research` and stalls trying to create the
+ledger or fetch sources. See `## Prerequisites` for the sandbox invocation.
