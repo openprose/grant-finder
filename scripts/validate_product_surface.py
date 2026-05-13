@@ -117,6 +117,7 @@ def validate_cli(binary: Path, surface: dict) -> list[str]:
         text=True,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
+        timeout=30,
     )
     if proc.returncode != 0:
         return [f"{binary}: --help failed: {proc.stderr.strip()}"]
@@ -137,7 +138,7 @@ def validate_cli(binary: Path, surface: dict) -> list[str]:
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--surface", default="printing-press/product-surface.json")
+    parser.add_argument("--surface", default="docs/product-surface.json")
     parser.add_argument("--repo", default=".")
     parser.add_argument("--check-cli", help="Optional compiled CLI binary to check against the surface")
     args = parser.parse_args()

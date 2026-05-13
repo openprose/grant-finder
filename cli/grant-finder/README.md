@@ -1,7 +1,8 @@
 # grant-finder
 
-The CLI binary. Returns ranked non-dilutive funding opportunities for a
-startup, with citations. Top-level repo docs are at
+The CLI binary. Returns source-cited candidate non-dilutive funding
+opportunities for a startup. Final ranking and recommendation judgment belong
+to the calling agent. Top-level repo docs are at
 [`../../README.md`](../../README.md); contributor docs at
 [`../../AGENTS.md`](../../AGENTS.md).
 
@@ -15,7 +16,7 @@ go build -o "$HOME/.local/bin/grant-finder" ./cmd/grant-finder
 
 | Command | What it does |
 |---|---|
-| `research` | Returns ranked grants for a startup assignment, with evidence and provenance |
+| `research` | Returns candidate grants for a startup assignment, with evidence and provenance |
 | `explain` | Shows the source trail behind one recommendation |
 | `status` | Reports ledger freshness and source-lane coverage |
 | `doctor` | Checks the CLI's local health (SQLite, FTS5, optional `usearch`) |
@@ -56,5 +57,5 @@ verification gates.
   intentionally does not configure.
 - Feed hits are leads, not eligibility decisions. Always inspect the official
   source URL before applying.
-- Results are deterministic — ranking, fit scoring, dedupe, and coverage
-  don't use an LLM.
+- Results are deterministic: retrieval, preliminary fit signals, dedupe, and
+  coverage do not use an LLM. Final ranking belongs to the caller.

@@ -505,8 +505,8 @@ func BuildCoverage(ctx context.Context, a Assignment, store *Store) []CoverageRo
 	arpae := statusFromLedger(ctx, store, "arpa-e", "advanced research projects agency energy")
 	arpaeNote := "energy funding lane"
 	if arpae == "checked_no_match" {
-		// Negative-evidence call-out per docs/adr/0001 and printing-press
-		// absorb manifest — must-check lane, surface absence explicitly.
+		// Negative-evidence call-out per docs/adr/0001 and product-surface:
+		// ARPA-E is a must-check lane, so surface absence explicitly.
 		arpaeNote = "No current ARPA-E programs match"
 	}
 	rows := []CoverageRow{

@@ -8,7 +8,7 @@
     {
       "name": "research",
       "role": "agent-facing",
-      "input": "Resolved Agent Request / Research Assignment JSON",
+      "input": "Research Assignment JSON",
       "output": "Research Packet JSON",
       "description": "Return candidate funding opportunities with evidence, provenance, preliminary fit signals, negative evidence, and freshness."
     },
@@ -61,7 +61,7 @@
     {
       "name": "usearch semantic retrieval",
       "automation": "internal",
-      "description": "Use local usearch over the opportunity/evidence corpus as the preferred semantic candidate finder; fall back to FTS5 when unavailable."
+      "description": "Use local usearch over the opportunity/evidence corpus as a semantic candidate finder; fall back to FTS5 when unavailable."
     },
     {
       "name": "read-only sql",
@@ -89,22 +89,23 @@
     "the upstream LLM agent uses the CLI",
     "the CLI itself must not call an LLM",
     "semantic retrieval prefers local usearch and falls back to SQLite FTS5",
+    "final ranking, rejection, and no-good-match judgment live in the caller",
     "agent JSON output supports --select and --compact"
   ],
   "acceptance_artifacts": [
     "CONTEXT.md",
     "docs/adr/0001-agent-facing-grant-deep-research.md",
-    "printing-press/research/grant-finder-brief.md",
-    "printing-press/research/grant-finder-absorb-manifest.md",
     "schemas/research-assignment.schema.json",
-    "schemas/research-packet.schema.json"
+    "schemas/research-packet.schema.json",
+    "examples/openprose/src/grant-radar.prose.md",
+    "skills/grant-finder/SKILL.md"
   ],
   "sample_assignments": [
     "fixtures/acme-deeptech-assignment.sample.json"
   ],
   "prototype_cli": {
     "path": "cli/grant-finder",
-    "status": "agent-surface-prototype",
-    "reason": "The current CLI has research/explain/status, source plumbing under debug, Grants.gov API/XML ingestion, Federal Register hydration, and a passing agent dogfood harness. Ship hardening remains focused on freshness scheduling, richer source-lane coverage, and Printing Press acceptance."
+    "status": "agent-surface-ready",
+    "reason": "The current CLI exposes research/explain/status, keeps source plumbing under debug, ingests key-free public sources, emits provenance-backed candidate packets, and passes validate, product-surface, recall-audit, and dogfood-agent gates. Final recommendation ranking belongs to the caller."
   }
 }

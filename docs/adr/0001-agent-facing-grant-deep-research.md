@@ -64,8 +64,8 @@ debugging the research substrate.
 upstream agent passes that context in the assignment payload.
 - Product acceptance requires a sample Research Packet, not just successful
 source ingestion.
-- The existing generated Go CLI is retained only as a prototype ledger substrate
-until it is regenerated or reworked against this ADR.
+- The command surface is accepted when `research`, `explain`, and `status`
+  remain the public agent-facing commands and the validation gates pass.
 
 ## Alternatives Considered
 

@@ -36,7 +36,7 @@ The agent-facing product behavior that finds, ranks, explains, and tracks opport
 _Avoid_: Source monitor, RSS inbox
 
 **Research Packet**:
-The structured answer Grant Finder returns to an upstream agent: ranked opportunities, fit rationale, evidence, provenance, negative evidence, freshness, and suggested next steps.
+The structured answer Grant Finder returns to an upstream agent: candidate opportunities, preliminary fit rationale, evidence, provenance, negative evidence, freshness, and suggested next steps. Final ranking and recommendation judgment belong to the caller.
 _Avoid_: Search results page, scrape output, raw export
 
 **Grant Deep Research**:

@@ -23,7 +23,7 @@ never inside the CLI.
 | `schemas/` | JSON Schema for Research Assignment input and Research Packet output |
 | `fixtures/` | Sample assignment + opportunities (generic deep-tech startup) used by the harness |
 | `docs/adr/` | Architecture Decision Records. `0001-agent-facing-grant-deep-research.md` is the foundational one — read it before changing the public command surface |
-| `printing-press/` | Product-thesis docs: brief, absorb manifest, plan, ship checklist, current status. This is the *why* behind the public command surface |
+| `docs/product-surface.json` | Machine-checked public command-surface contract used by `validate-product-cli` |
 | `examples/openprose/` | A runnable OpenProse `kind: system` system that drives the CLI end-to-end |
 | `skills/grant-finder/` | Host-harness skill (SKILL.md) that wires the CLI as a Forme dependency. Users symlink this into `~/.claude/skills/`, `~/.codex/skills/`, or `~/.agents/skills/` |
 | `scripts/` | Validation harness (`validate_product_surface.py`, `validate_agent_dogfood.py`) |
@@ -191,7 +191,7 @@ If you rename the binary or change the Go module path, you must:
 2. Update `cmd/<binary>/main.go` path.
 3. Update the Makefile build targets.
 4. Update `workflow_verify.yaml` (fixture paths).
-5. Update `printing-press/product-surface.json` (`prototype_cli.path`).
+5. Update `docs/product-surface.json` (`prototype_cli.path`).
 6. Update both READMEs and `examples/openprose/src/grant-radar.prose.md`
    (the `## Prerequisites` install commands).
 7. Run all three `make` gates.
