@@ -24,6 +24,7 @@ judgment lives on the caller side, never inside the CLI.
 | `docs/adr/` | Architecture Decision Records. `0001-agent-facing-grant-deep-research.md` is the foundational one — read it before changing the public command surface |
 | `printing-press/` | Product-thesis docs: brief, absorb manifest, plan, ship checklist, current status. This is the *why* behind the public command surface |
 | `examples/openprose/` | A runnable OpenProse `kind: system` system that drives the CLI end-to-end |
+| `skills/grant-finder/` | Host-harness skill (SKILL.md) that wires the CLI as a Forme dependency. Users symlink this into `~/.claude/skills/`, `~/.codex/skills/`, or `~/.agents/skills/` |
 | `scripts/` | Validation harness (`validate_product_surface.py`, `validate_agent_dogfood.py`) |
 | `CONTEXT.md` | Domain glossary. The vocabulary in here is load-bearing — use it verbatim in code, commits, docs |
 
@@ -95,11 +96,15 @@ mycelium.sh find decision          # find all decision-kind notes
 mycelium.sh note <file> -k decision -t "Title" -m "Why this matters"
 ```
 
-Key existing notes:
+Retrieve all notes with `mycelium.sh dump`. Notable ones:
 
-- `examples/openprose/src/grant-radar.prose.md` — soft-doc CLI dep pattern + no-API-key invariant
+- `examples/openprose/src/grant-radar.prose.md` — skill-wrapped CLI dep + no-API-key invariant
 - `examples/openprose/src/format-report.prose.md` — render-only constraint (no re-ranking)
 - `examples/openprose/fixtures/polyspectra.brief.txt` — canonical sample brief, public info only
+- `cli/grant-finder/internal/grantfinder/research.go` — evidenceScore weights + academic-stage routing
+- `cli/grant-finder/internal/grantfinder/grants.go` — forecasted|posted default
+- `cli/grant-finder/internal/grantfinder/store.go` — CoverageMatch ledger-level check
+- `skills/grant-finder/SKILL.md` — agent-facing contract for the CLI
 
 When you make a non-obvious design decision or recover from a mistake, leave a
 mycelium note so the next agent does not relearn the lesson.
@@ -108,12 +113,34 @@ mycelium note so the next agent does not relearn the lesson.
 
 `examples/openprose/` is a runnable OpenProse `kind: system` system
 (`grant-radar`) that demonstrates how an upstream AI agent drives the CLI.
-Five services: `resolve-assignment`, `run-research`, `explain-top-picks`,
-`format-report`, plus the top-level system that wires them. The CLI binary is
-declared as a runtime dependency via the soft-doc pattern in the system's
-frontmatter (`requires: grant-finder CLI tool in PATH`) — Forme has no
-first-class `### Binaries` section as of writing. See `printing-press/` for
-the architectural reasoning.
+Four services: `resolve-assignment`, `run-research`, `explain-top-picks`,
+`format-report`, plus the top-level system that wires them.
+
+The CLI binary is wired as a Forme dependency via the `grant-finder`
+**host-harness skill** at `skills/grant-finder/SKILL.md`, declared in the
+top-level system's `### Skills` block and in the two services that shell out
+(`run-research`, `explain-top-picks`). Forme's `skill_unresolved` path makes
+this fail-closed at wiring time — if the skill is not installed in the host
+harness's skills dir, the system refuses to run rather than failing mid-flow
+inside a service.
+
+This is the workaround for Forme not having a first-class `### Binaries`
+section (see contract-markdown.md:127-162). The earlier soft-doc
+`requires: grant-finder CLI tool in PATH` frontmatter approach was
+*documentation* and did not enforce; switching to skill-wrapped fixed a
+real bug where `prose run` would fail mid-execution with no clear signal.
+
+## The grant-finder host-harness skill
+
+`skills/grant-finder/SKILL.md` is shipped with this repo so users can
+symlink it into their agent harness's skills directory. It teaches an agent
+the CLI's command surface — what subcommands matter (`research`, `explain`,
+`status`), key flags, the `no_llm: true` drift guard, and where to read
+more. The README's "Driving grant-finder from an AI agent" section
+documents the install step.
+
+If you change the CLI's public command surface, update the skill SKILL.md
+in the same change — the skill is the agent-facing contract.
 
 ## Renaming or restructuring
 

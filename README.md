@@ -146,6 +146,24 @@ install [`usearch`](https://github.com/unum-cloud/usearch) on `PATH` for
 faster semantic retrieval; without it the CLI falls back to SQLite FTS5
 automatically.
 
+### Driving grant-finder from an AI agent (optional second step)
+
+If you want an AI agent (Claude Code, Codex, Gemini) to drive `grant-finder`
+end-to-end through the bundled OpenProse example, install the host-harness
+skill so the agent's container resolves the binary correctly:
+
+```bash
+# From your local clone of this repo
+ln -s "$PWD/skills/grant-finder" ~/.claude/skills/grant-finder
+#   Codex:  ~/.codex/skills/grant-finder
+#   Gemini: ~/.agents/skills/grant-finder
+```
+
+The skill teaches the agent the CLI's command surface. Combined with the
+binary install above, this is what `examples/openprose/` needs to wire
+cleanly. You do **not** need the skill if you're calling the CLI directly
+from a shell or a script.
+
 ## What's in the box
 
 | Path | What |

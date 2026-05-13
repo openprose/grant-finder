@@ -1,7 +1,6 @@
 ---
 name: grant-radar
 kind: system
-requires: grant-finder CLI tool in PATH (>= 0.1.0)
 ---
 
 # Grant Radar
@@ -46,6 +45,10 @@ agent-language out — is the point of the example.
 - `explain-top-picks`
 - `format-report`
 
+### Skills
+
+- grant-finder
+
 ### Invariants
 
 - **No API keys.** This system must run end-to-end with zero third-party API
@@ -72,24 +75,31 @@ agent-language out — is the point of the example.
 
 ## Prerequisites
 
-The `grant-finder` Go CLI must be available on `PATH`. Install with one of:
+This system declares the `grant-finder` host-harness skill (see `### Skills`
+above). Forme refuses to wire the system if the skill is not installed,
+returning `skill_unresolved` before any service runs. That guarantees the
+dependency is satisfied at wiring time rather than failing mid-run.
+
+**Two-step install:**
 
 ```bash
-go install github.com/openprose/grant-finder/cli/grant-finder/cmd/grant-finder@latest
-```
-
-Or build from a local clone:
-
-```bash
+# 1. Build the grant-finder CLI binary onto PATH
 git clone https://github.com/openprose/grant-finder
 cd grant-finder/cli/grant-finder
 go build -o "$HOME/.local/bin/grant-finder" ./cmd/grant-finder
+
+# 2. Install the grant-finder host-harness skill (symlink from the repo)
+cd ../..
+ln -s "$PWD/skills/grant-finder" ~/.claude/skills/grant-finder
+#   Codex: ~/.codex/skills/grant-finder
+#   Gemini / other agent harnesses: ~/.agents/skills/grant-finder
 ```
 
-Confirm the binary resolves:
+Confirm both halves are wired:
 
 ```bash
 grant-finder version
+ls -l ~/.claude/skills/grant-finder/SKILL.md
 ```
 
 Optional: `usearch` on `PATH` enables local semantic retrieval. Without it,

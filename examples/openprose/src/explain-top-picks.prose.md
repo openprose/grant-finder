@@ -28,6 +28,10 @@ dedupe rationale) that the agent should use when drafting an application.
   - `notes`: any notes the CLI emitted (e.g., dedupe rationale)
   - `no_llm`: must be `true` on every record
 
+### Skills
+
+- grant-finder
+
 ### Shape
 
 - `self`: select up to 5 high-fit recommendations, invoke `explain` for each,
