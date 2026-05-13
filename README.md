@@ -65,12 +65,24 @@ research_packet + top_pick_explanations + markdown_report
 
 ## Prerequisites
 
-The `grant-finder` Go CLI must be on `PATH`:
+Two-step install — both are required for this example to wire cleanly:
 
 ```bash
+# 1. The grant-finder CLI on PATH
 go install github.com/openprose/grant-finder/cli/grant-finder/cmd/grant-finder@latest
 grant-finder version
+
+# 2. The grant-finder host-harness skill, installed for your agent harness.
+#    From this repo:
+ln -s "$PWD/skills/grant-finder" ~/.claude/skills/grant-finder
+#    Codex:  ~/.codex/skills/grant-finder
+#    Gemini: ~/.agents/skills/grant-finder
 ```
+
+The skill is wired into the OpenProse system via `### Skills: - grant-finder`.
+Forme refuses to wire the system if the skill is not installed (fail-closed
+via `skill_unresolved`) — so missing the skill produces a clear error at
+wiring time, not a half-run failure in the middle of `run-research`.
 
 Optional: `usearch` on `PATH` enables faster semantic retrieval; without it,
 the CLI falls back to SQLite FTS5 automatically.

@@ -31,6 +31,10 @@ CLI does the work; this service just bridges JSON across the process boundary.
   - `coverage`: per-source-lane status rows including negative evidence for
     must-check lanes (e.g., ARPA-E)
 
+### Skills
+
+- grant-finder
+
 ### Shape
 
 - `self`: shell out to the `grant-finder` binary, pass the assignment via
