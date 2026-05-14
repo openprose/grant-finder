@@ -66,8 +66,6 @@ def validate_source_paths(path: Path, text: str) -> list[str]:
 
 def main() -> int:
     errors: list[str] = []
-    if not (ROOT / "MIRROR.md").exists():
-        errors.append(f"{ROOT / 'MIRROR.md'}: missing mirror provenance note")
     for path in markdown_files():
         text = path.read_text(encoding="utf-8")
         errors.extend(validate_links(path, text))

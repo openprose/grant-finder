@@ -1,0 +1,40 @@
+name: Sync OpenProse Example Split
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "examples/openprose/**"
+      - ".github/workflows/sync-openprose-example-split.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-openprose-example-split
+  cancel-in-progress: true
+
+jobs:
+  split:
+    name: Refresh examples-mirror branch
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Refresh subtree split
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git branch -D examples-mirror 2>/dev/null || true
+          git subtree split --prefix=examples/openprose -b examples-mirror
+          git push origin examples-mirror --force-with-lease

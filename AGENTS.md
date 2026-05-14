@@ -168,8 +168,9 @@ push to main. The flow there is:
 git checkout -b feat/mirror-grant-radar-example
 git subtree add --prefix=skills/open-prose/examples/grant-radar \
   https://github.com/openprose/grant-finder examples-mirror --squash
-# Add a MIRROR.md at skills/open-prose/examples/grant-radar/ noting the
-# upstream and refresh command, plus a CODEOWNERS entry for the path.
+# Do not add mirror-mechanics docs inside the example. The example should read
+# like a normal runnable OpenProse example; sync/provenance belongs in
+# contributor docs and automation, not user-facing example files.
 # Open a PR against openprose/prose main.
 
 # Subsequent refresh (run in openprose/prose):
@@ -185,10 +186,10 @@ runnable. The CLI is an external dependency declared via `### Skills:
 grant-finder` and installed separately. That keeps `openprose/prose` focused on
 prose-runtime artifacts; the CLI's Go source stays in this repo.
 
-When you edit anything under `examples/openprose/` and commit on main, run the
-refresh procedure above so the mirror catches up. A future GitHub Action could
-automate this, but a manual refresh on each release is fine while the example
-is stable.
+When you edit anything under `examples/openprose/` and commit on main, keep the
+mirror mechanics invisible to users. Refresh the split branch and downstream PR
+through maintainer automation or contributor workflow; do not surface sync
+internals in the example README or service files.
 
 ## Mycelium notes
 
